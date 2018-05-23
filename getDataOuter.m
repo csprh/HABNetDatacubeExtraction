@@ -1,9 +1,17 @@
-function getDataOute;
+function getDataOuter;
 clear; close all;
 
-filename = '../work/florida_2013-2016v2';
+mac = ismac;
 
-
+if mac ==1 
+    filename = '../../WORK/florida_2013-2016';
+    wgetStringBase = '/usr/local/bin/wget ';
+    outDir = '../../WORK/HAB/florida1/';
+else
+    filename = '../work/florida_2013-2016v2';
+    wgetStringBase = '/usr/bin/wget ';
+    outDir = '/mnt/storage/scratch/csprh/HAB/florida1/'
+end
 
 
 distance1 = 50000;     resolution = 2000;
@@ -65,7 +73,7 @@ for ii = 3289: lenData %Loop through all the ground truth entries
         thisLine = thisInput{thisIndex}.line;
         thisDate = thisInput{thisIndex}.date;
         thisDeltaDate = thisInput{thisIndex}.deltadate;
-        wgetString = ['/usr/bin/wget ' thisLine];
+        wgetString = [wgetStringBase thisLine];
         unix(wgetString);
         [filepath,name,ext] = fileparts(thisLine);
         fileName = [name ext];       
@@ -84,8 +92,7 @@ for ii = 3289: lenData %Loop through all the ground truth entries
 
     
 thisName = num2str(ii);
-outDir = '~/scratch/HAB/florida1/';
-outDir = '/mnt/storage/scratch/csprh/HAB/florida1/'
+
 h5name = [outDir 'flor' thisName '.h5']
 
 hdf5write(h5name,['/thisCount'],thisCount);
