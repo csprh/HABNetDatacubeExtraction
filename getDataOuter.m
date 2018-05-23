@@ -18,7 +18,7 @@ distance1 = 50000;     resolution = 2000;
 numberOfDaysInPast = 3;
 load(filename);
 lenData = length(count2);
-for ii = 3289: lenData %Loop through all the ground truth entries
+for ii = 1: 2 %Loop through all the ground truth entries
    try 
     thisLat = latitude(ii);
     thisLon = longitude(ii);
