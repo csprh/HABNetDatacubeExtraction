@@ -13,3 +13,7 @@ NASA interface (using fd_matchup.py).  Loop through all of the .nc files,
 download using wget and and call getData on each.  Delete downloaded .nc file.
 * **getData**: Get the actual datacubes from a .nc file (called from getDataOuter)
 * **fd_matchup.py**: Modified Seadas code to access CMR NASA interface
+* **configHAB.xml**: Configuration file input by getDataOuter
+* **configHABmac.xml**: Configuration file input by getDataOuter (on a mac)
+* **testData1.sh**: shell script to run getDataOuter (on blue crystal)
+* **testData2.sh**: shell script to run getDataOuter (on blue crystal)
