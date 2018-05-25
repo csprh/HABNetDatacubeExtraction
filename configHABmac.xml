@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<confgData>
+   <inputFilename>../../WORK/florida_2013-2016v2</inputFilename>
+   <wgetStringBase>/usr/local/bin/wget</wgetStringBase>
+   <outDir>../../WORK/HAB/florida1/</outDir>
+   <resolution>2000</resolution>
+   <distance1>50000</distance1>
+   <numberOfDaysInPast>3</numberOfDaysInPast>
+   <numberOfSamples>-1</numberOfSamples>
+</confgData>

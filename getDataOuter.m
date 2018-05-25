@@ -4,35 +4,37 @@ clear; close all;
 mac = ismac;
 
 if mac ==1
-    filename = '../../WORK/florida_2013-2016v2';
-    wgetStringBase = '/usr/local/bin/wget ';
-    outDir = '../../WORK/HAB/florida1/';
+    tmpStruct = xml2struct('configHABmac.xml');
 else
-    filename = '../work/florida_2013-2016v2';
-    wgetStringBase = '/usr/bin/wget ';
-    outDir = '/mnt/storage/scratch/csprh/HAB/florida1/'
+    tmpStruct = xml2struct('configHAB.xml');
 end
 
+confgData.inputFilename = tmpStruct.confgData.inputFilename.Text;
+confgData.wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;
+confgData.outDir = tmpStruct.confgData.outDir.Text;
+confgData.distance1 = str2double(tmpStruct.confgData.distance1.Text);
+confgData.resolution = str2double(tmpStruct.confgData.resolution.Text);
+confgData.numberOfDaysInPast = str2double(tmpStruct.confgData.numberOfDaysInPast.Text);
+confgData.numberOfSamples = str2double(tmpStruct.confgData.numberOfSamples.Text);
 
-distance1 = 50000;     resolution = 2000;
-numberOfDaysInPast = 3;
-load(filename);
-lenData = length(count2);
-for ii = 1: 2 %Loop through all the ground truth entries
+load(confgData.inputFilename);
+if confgData.numberOfSamples == -1;   confgData.numberOfSamples = length(count2); end;
+for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
     try
         thisLat = latitude(ii);
         thisLon = longitude(ii);
         thisCount = count2(ii);
-        
-        inputDay = sample_date(ii)+0.5;  %  'datenum' date from 0-Jan-0000 (Gregorian)
-        dayStart = inputDay-numberOfDaysInPast;
-        dayEnd = inputDay+1;
+        zoneHrDiff = timezone(thisLon); % Try to limit the end date to 11pm on the day of capture (local time).
+        endTimeUTC = 23+zoneHrDiff;
+        dayEnd = sample_date(ii);
+        if (endTimeUTC) > 24; endTimeUTC = endTimeUTC - 24; dayEnd = dayEnd + 1; end;
+        dayStart = dayEnd - confgData.numberOfDaysInPast;   
         dayStartS = datestr(dayStart,29);
         dayEndS = datestr(dayEnd,29);
+        UTCTime = sprintf('T%02d:00:00Z', endTimeUTC);
         
-        % Search for "granules" at a particular lat, long and date range
-        % (output goes in Output.txt)
-        exeName = ['python  fd_matchup.py --data_type=oc --sat=modisa ' '--slat=' num2str(thisLat) ' --slon=' num2str(thisLon) ' --stime=' dayStartS 'T12:00:00Z --etime=' dayEndS 'T12:00:00Z'];
+        % Search for "granules" at a particular lat, long and date range (output goes in Output.txt)
+        exeName = ['python  fd_matchup.py --data_type=oc --sat=modisa ' '--slat=' num2str(thisLat) ' --slon=' num2str(thisLon) ' --stime=' dayStartS UTCTime '--etime=' dayEndS UTCTime];
         system(exeName);
         
         % Extract OC lines from output
@@ -68,12 +70,12 @@ for ii = 1: 2 %Loop through all the ground truth entries
             thisLine = thisInput{thisIndex}.line;
             thisDate = thisInput{thisIndex}.date;
             thisDeltaDate = thisInput{thisIndex}.deltadate;
-            wgetString = [wgetStringBase thisLine];
+            wgetString = [confgData.wgetStringBase ' ' thisLine];
             unix(wgetString);
             [filepath,name,ext] = fileparts(thisLine);
             fileName = [name ext];
             thisVar = 'chlor_a';
-            [theseImages{iii} thesePoints] = getData(fileName,  thisLat, thisLon, distance1, resolution, ['/geophysical_data/' thisVar]);
+            [theseImages{iii} thesePoints] = getData(fileName,  thisLat, thisLon, confgData.distance1, confgData.resolution, ['/geophysical_data/' thisVar]);
             theseDates{iii} = thisDate;
             theseDeltaDates{iii} = thisDeltaDate;
             thesePointsNew = [thesePoints ones(size(thesePoints,1),1)*thisDeltaDate];
@@ -84,7 +86,7 @@ for ii = 1: 2 %Loop through all the ground truth entries
         end
         
         thisName = num2str(ii);
-        h5name = [outDir 'flor' thisName '.h5']
+        h5name = [confgData.outDir 'flor' thisName '.h5']
         
         hdf5write(h5name,['/thisCount'],thisCount);
         hdf5write(h5name,['/inputDay'],inputDay, 'WriteMode','append');
