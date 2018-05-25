@@ -34,7 +34,7 @@ for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
         UTCTime = sprintf('T%02d:00:00Z', endTimeUTC);
         
         % Search for "granules" at a particular lat, long and date range (output goes in Output.txt)
-        exeName = ['python  fd_matchup.py --data_type=oc --sat=modisa ' '--slat=' num2str(thisLat) ' --slon=' num2str(thisLon) ' --stime=' dayStartS UTCTime '--etime=' dayEndS UTCTime];
+        exeName = ['python  fd_matchup.py --data_type=oc --sat=modisa ' '--slat=' num2str(thisLat) ' --slon=' num2str(thisLon) ' --stime=' dayStartS UTCTime ' --etime=' dayEndS UTCTime];
         system(exeName);
         
         % Extract OC lines from output
