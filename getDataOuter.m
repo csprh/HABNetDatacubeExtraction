@@ -99,7 +99,7 @@ for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
         
         %Put images, count, dates and deltadates into output .H5 file
         hdf5write(h5name,['/thisCount'],thisCount);
-        hdf5write(h5name,['/inputDay'],inputDay, 'WriteMode','append');
+        hdf5write(h5name,['/dayEndFraction'],dayEndFraction, 'WriteMode','append');
         hdf5write(h5name,['/' thisVar '/Ims'],theseImages, 'WriteMode','append');
         hdf5write(h5name,['/' thisVar '/theseDates'],theseDates, 'WriteMode','append');
         hdf5write(h5name,['/' thisVar '/theseDeltaDates'],theseDeltaDates, 'WriteMode','append');
