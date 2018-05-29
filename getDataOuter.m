@@ -32,8 +32,9 @@ for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
         thisLon = longitude(ii);
         thisCount = count2(ii);
         zoneHrDiff = timezone(thisLon); 
-        endTimeUTC = 12+zoneHrDiff; % Assume that the sample is taken at midday
+        endTimeUTC = 23+zoneHrDiff; % Assume that the sample is taken at 11pm
         dayEnd = sample_date(ii);
+        if endTimeUTC > 24; endTimeUTC = endTimeUTC-24; dayEnd=dayEnd+1; end;
         dayEndFraction = dayEnd+endTimeUTC/24;
         dayStart = dayEnd - confgData.numberOfDaysInPast;   
         dayStartS = datestr(dayStart,29);
@@ -54,7 +55,7 @@ for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
             if strcmp(endOfLine,'OC.nc')
                 thisInput{indInput}.line = tline;
                 thisInput{indInput}.date = thisDate;
-                thisInput{indInput}.deltadate = thisDate-dayEndFraction;
+                thisInput{indInput}.deltadate = dayEndFraction-thisDate;
                 indInput = indInput + 1;
             end
             tline = fgetl(fid);
@@ -65,9 +66,9 @@ for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
         end
         [sorted sortIndex] = sort(thisList);
         
-        closeest = find(min(abs(thisList))==abs(thisList));
+        closeest = find(max(abs(thisList))==abs(thisList));
         closeestIndex = find(sortIndex==closeest);
-        historicalIndex = fliplr(sortIndex(1:closeestIndex));
+        historicalIndex = (sortIndex(1:closeestIndex));
         %% Loop through previous times and extract images and points from .nc files
         % iyyyydddhhmmss.L2_rrr_ppp,
         % where i is the instrument identifier  yyyydddhhmmss
