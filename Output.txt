@@ -1,3 +1,11 @@
-https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2013303182500.L2_LAC_OC.nc
-https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2013304191000.L2_LAC_OC.nc
-https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2013305181500.L2_LAC_OC.nc
+https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2013304081000.L2_LAC_SST.nc
+https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2013304081000.L2_LAC_SST4.nc
+https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2013303073000.L2_LAC_SST.nc
+https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2013303073000.L2_LAC_SST4.nc
+https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2013304063500.L2_LAC_SST4.nc
+https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2013304063500.L2_LAC_SST.nc
+https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2013305071500.L2_LAC_SST4.nc
+https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2013305071500.L2_LAC_SST.nc
+https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2013303182500.L2_LAC_SST.nc
+https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2013304191000.L2_LAC_SST.nc
+https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2013305181500.L2_LAC_SST.nc
