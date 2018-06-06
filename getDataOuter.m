@@ -75,7 +75,7 @@ UTCTime = inStruc.UTCTime;
 dayEndS = inStruc.dayEndS;
 
 %% Loop through all the modulations
-for modIndex = 8:numberOfMods
+for modIndex = 1:numberOfMods
     thisMod = confgData.mods{modIndex}.Text;
     subMods = strsplit(thisMod,'-');
     % product suites are either oc, iop or sst
@@ -130,11 +130,11 @@ for modIndex = 8:numberOfMods
         thesePointsNew = [thesePoints ones(size(thesePoints,1),1)*thisDeltaDate];
         thesePointsOutput = [thesePointsOutput; thesePointsNew];
     end
-    
-    hdf5write(inStruc.h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
+
+    hdf5write(inStruc.h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append', 'ChunkSize',[50 50],'Deflate',9);
     hdf5write(inStruc.h5name,['/' thisMod  '/theseDates'],theseDates, 'WriteMode','append');
     hdf5write(inStruc.h5name,['/' thisMod  '/theseDeltaDates'],theseDeltaDates, 'WriteMode','append');
-    hdf5write(inStruc.h5name,['/' thisMod  '/Points'],thesePointsOutput, 'WriteMode','append');
+    hdf5write(inStruc.h5name,['/' thisMod  '/Points'],thesePointsOutput, 'WriteMode','append','ChunkSize',[1024 4],'Deflate',9);
     
     h5disp(inStruc.h5name);
 end
