@@ -139,7 +139,7 @@ for modIndex = 1:numberOfMods
     
 end
 gzip(inStruc.h5name);
-system([confgData.outDir 'del *.h5']);
+system(['rm ' confgData.outDir '*.h5']);
 
 %% julian2time takes the julian day of the year contained in the .nc granule
 %  and converts it to integer datenum (as output by datestr).
