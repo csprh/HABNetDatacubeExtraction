@@ -73,7 +73,9 @@ thisLon = inStruc.thisLon;
 dayStartS = inStruc.dayStartS;
 UTCTime = inStruc.UTCTime;
 dayEndS = inStruc.dayEndS;
-for modIndex = 1:numberOfMods
+
+%% Loop through all the modulations
+for modIndex = 8:numberOfMods
     thisMod = confgData.mods{modIndex}.Text;
     subMods = strsplit(thisMod,'-');
     % product suites are either oc, iop or sst
@@ -88,11 +90,13 @@ for modIndex = 1:numberOfMods
     indInput = 1;  clear thisInput; clear thisList;
     while ischar(tline)
         [filepath,thisName,ext] = fileparts(tline);
-        thisDate=julian2time(thisName(2:14));
-        thisInput{indInput}.line = tline;
-        thisInput{indInput}.date = thisDate;
-        thisInput{indInput}.deltadate = inStruc.dayEndFraction-thisDate;
-        indInput = indInput + 1;
+        if thisName(end) ~= '4'   %ignore SST4
+            thisDate=julian2time(thisName(2:14));
+            thisInput{indInput}.line = tline;
+            thisInput{indInput}.date = thisDate;
+            thisInput{indInput}.deltadate = inStruc.dayEndFraction-thisDate;
+            indInput = indInput + 1;
+        end
         tline = fgetl(fid);
     end
     
