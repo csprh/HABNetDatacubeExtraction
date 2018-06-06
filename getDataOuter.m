@@ -4,10 +4,7 @@ function getDataOuter;
 %  CMR interface).  Datacubes are formed from all the local .nc granules
 
 clear; close all;
-% Delete any .nc files hangingin around
-wdelString = 'rm *.nc';  unix(wdelString);
-wdelString = 'rm *.nc.1';  unix(wdelString);
-wdelString = 'rm *.nc.2';  unix(wdelString);
+
 mac = ismac;
 
 if mac ==1
@@ -33,6 +30,12 @@ if confgData.numberOfSamples == -1;   confgData.numberOfSamples = length(count2)
 %% Loop through all samples in .mat Ground Truth File
 for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
     try
+        if rem(ii,10) == 1        % Delete the .nc files
+            wdelString = 'rm *.nc';  unix(wdelString);
+            wdelString = 'rm *.nc.1';  unix(wdelString);
+            wdelString = 'rm *.nc.2';  unix(wdelString);
+        end
+        
         inStruc.thisLat = latitude(ii);
         inStruc.thisLon = longitude(ii);
         inStruc.thisCount = count2(ii);
@@ -55,10 +58,7 @@ for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
         hdf5write(inStruc.h5name,['/thisCount'],inStruc.thisCount);
         hdf5write(inStruc.h5name,['/dayEndFraction'],inStruc.dayEndFraction, 'WriteMode','append');
         getModData(inStruc, confgData);
-        % Delete the .nc files
-        wdelString = 'rm *.nc';  unix(wdelString);
-        wdelString = 'rm *.nc.1';  unix(wdelString);
-        wdelString = 'rm *.nc.2';  unix(wdelString);
+
     catch
     end
 end
@@ -110,7 +110,7 @@ for modIndex = 1:numberOfMods
     % where i is the instrument identifier  yyyydddhhmmss
     clear theseDates theseDeltaDates theseImages;
     thesePointsOutput = [];
-    for iii = 1:length(sortIndex)
+    for iii = 1:1
         thisIndex = sortIndex(iii);
         thisLine = thisInput{thisIndex}.line;
         thisDate = thisInput{thisIndex}.date;

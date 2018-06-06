@@ -14,7 +14,7 @@
    <Modality>oc-modisa-Rrs_443</Modality>
    <Modality>oc-modisa-Rrs_488</Modality>
    <Modality>oc-modisa-Rrs_531</Modality>
-   <Modality>oc-modisa-Rrs_551</Modality>
+   <Modality>oc-modisa-Rrs_555</Modality>
    <Modality>oc-modisa-par</Modality>
    <Modality>sst-modisa-sstref</Modality>
    <Modality>oc-modist-chlor_a</Modality>
@@ -22,7 +22,7 @@
    <Modality>oc-modist-Rrs_443</Modality>
    <Modality>oc-modist-Rrs_488</Modality>
    <Modality>oc-modist-Rrs_531</Modality>
-   <Modality>oc-modist-Rrs_551</Modality>
+   <Modality>oc-modist-Rrs_555</Modality>
    <Modality>oc-modist-par</Modality>
    <Modality>sst-modist-sstref</Modality>
 </confgData>
