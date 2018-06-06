@@ -6,6 +6,8 @@ function getDataOuter;
 clear; close all;
 % Delete any .nc files hangingin around
 wdelString = 'rm *.nc';  unix(wdelString);
+wdelString = 'rm *.nc.1';  unix(wdelString);
+wdelString = 'rm *.nc.2';  unix(wdelString);
 mac = ismac;
 
 if mac ==1
@@ -48,13 +50,15 @@ for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
         
         thisName = num2str(ii);
         inStruc.h5name = [confgData.outDir 'flor' thisName '.h5'];
-        if exist(inStruc.h5name, 'file')==2
-            delete(inStruc.h5name);
-        end
+        if exist(inStruc.h5name, 'file')==2;  delete(inStruc.h5name);  end
         %Put images, count, dates and deltadates into output .H5 file
         hdf5write(inStruc.h5name,['/thisCount'],inStruc.thisCount);
         hdf5write(inStruc.h5name,['/dayEndFraction'],inStruc.dayEndFraction, 'WriteMode','append');
         getModData(inStruc, confgData);
+        % Delete the .nc files
+        wdelString = 'rm *.nc';  unix(wdelString);
+        wdelString = 'rm *.nc.1';  unix(wdelString);
+        wdelString = 'rm *.nc.2';  unix(wdelString);
     catch
     end
 end
@@ -107,17 +111,20 @@ for modIndex = 1:numberOfMods
         thisLine = thisInput{thisIndex}.line;
         thisDate = thisInput{thisIndex}.date;
         thisDeltaDate = thisInput{thisIndex}.deltadate;
-        wgetString = [confgData.wgetStringBase ' ' thisLine];
-        unix(wgetString);
         [filepath,name,ext] = fileparts(thisLine);
         fileName = [name ext];
+        
+        %wget file if it hasn't previously been downloaded
+        if exist(fileName, 'file')~=2;   
+            wgetString = [confgData.wgetStringBase ' ' thisLine]; 
+            unix(wgetString);
+        end
+        
         [theseImages{iii} thesePoints] = getData(fileName,  thisLat, thisLon, confgData.distance1, confgData.resolution, ['/geophysical_data/' subMods{3}]);
         theseDates{iii} = thisDate;
         theseDeltaDates{iii} = thisDeltaDate;
         thesePointsNew = [thesePoints ones(size(thesePoints,1),1)*thisDeltaDate];
         thesePointsOutput = [thesePointsOutput; thesePointsNew];
-        % Delete the .nc file
-        wdelString = 'rm *.nc';  unix(wdelString);
     end
     
     hdf5write(inStruc.h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
