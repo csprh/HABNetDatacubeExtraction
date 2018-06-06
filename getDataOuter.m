@@ -26,7 +26,7 @@ confgData.numberOfDaysInPast = str2double(tmpStruct.confgData.numberOfDaysInPast
 confgData.numberOfSamples = str2double(tmpStruct.confgData.numberOfSamples.Text);
 confgData.mods = tmpStruct.confgData.Modality;
 
-
+system(['rm ' confgData.outDir '*.h5']);
 load(confgData.inputFilename);
 if confgData.numberOfSamples == -1;   confgData.numberOfSamples = length(count2); end;
 
@@ -131,14 +131,15 @@ for modIndex = 1:numberOfMods
         thesePointsOutput = [thesePointsOutput; thesePointsNew];
     end
 
-    hdf5write(inStruc.h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append', 'ChunkSize',[50 50],'Deflate',9);
+    hdf5write(inStruc.h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
     hdf5write(inStruc.h5name,['/' thisMod  '/theseDates'],theseDates, 'WriteMode','append');
     hdf5write(inStruc.h5name,['/' thisMod  '/theseDeltaDates'],theseDeltaDates, 'WriteMode','append');
-    hdf5write(inStruc.h5name,['/' thisMod  '/Points'],thesePointsOutput, 'WriteMode','append','ChunkSize',[1024 4],'Deflate',9);
-    
+    hdf5write(inStruc.h5name,['/' thisMod  '/Points'],thesePointsOutput, 'WriteMode','append');
     h5disp(inStruc.h5name);
+    
 end
-
+gzip(inStruc.h5name);
+system([confgData.outDir 'del *.h5']);
 
 %% julian2time takes the julian day of the year contained in the .nc granule
 %  and converts it to integer datenum (as output by datestr).
