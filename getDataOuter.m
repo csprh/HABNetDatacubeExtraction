@@ -110,7 +110,7 @@ for modIndex = 1:numberOfMods
     % where i is the instrument identifier  yyyydddhhmmss
     clear theseDates theseDeltaDates theseImages;
     thesePointsOutput = [];
-    for iii = 1:1
+    for iii = 1:length(sortIndex)
         thisIndex = sortIndex(iii);
         thisLine = thisInput{thisIndex}.line;
         thisDate = thisInput{thisIndex}.date;
