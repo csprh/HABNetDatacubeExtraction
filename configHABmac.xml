@@ -2,7 +2,7 @@
 <!-- oc: 412, 443, 488, 531, and 551, chlro_a (not chr_ocx) par? -->
 <!-- sst: sst4 (for sst4) and sst (for sst files), sstref for both -->
 <confgData>
-   <inputFilename>../../WORK/florida_2013-2016v2</inputFilename>
+   <inputFilename>./work/florida_2003-2018-50K</inputFilename>
    <wgetStringBase>/usr/local/bin/wget</wgetStringBase>
    <outDir>../../WORK/HAB/florida1/</outDir>
    <resolution>2000</resolution>

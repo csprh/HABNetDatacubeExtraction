@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <confgData>
-   <inputFilename>../work/florida_2013-2016v2</inputFilename>
+   <inputFilename>./work/florida_2003-2018-50K</inputFilename>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
    <outDir>/mnt/storage/scratch/csprh/HAB/florida1/</outDir>
    <resolution>2000</resolution>
