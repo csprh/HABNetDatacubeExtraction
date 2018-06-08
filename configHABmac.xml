@@ -7,7 +7,7 @@
    <outDir>../../WORK/HAB/florida1/</outDir>
    <resolution>2000</resolution>
    <distance1>50000</distance1>
-   <numberOfDaysInPast>3</numberOfDaysInPast>
+   <numberOfDaysInPast>5</numberOfDaysInPast>
    <numberOfSamples>-1</numberOfSamples>
    <Modality>oc-modisa-chlor_a</Modality>
    <Modality>oc-modisa-Rrs_412</Modality>

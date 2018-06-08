@@ -1,4 +1,6 @@
 https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2003006181000.L2_LAC_OC.nc
 https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2003005173000.L2_LAC_OC.nc
+https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2003003192000.L2_LAC_OC.nc
 https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2003004182500.L2_LAC_OC.nc
+https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2003002183500.L2_LAC_OC.nc
 https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/A2003005190500.L2_LAC_OC.nc

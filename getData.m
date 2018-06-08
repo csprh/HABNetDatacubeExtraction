@@ -1,5 +1,12 @@
 function [outputIm tripleOut] = getData(file,  outLat, outLon, distance1, resolution, thisVar)
 
+%file: H5 file containing granule
+%outLat: latitude centre of the HAB
+%outLon: longitude centre of the HAB
+%distance1: Distance (in meters left and right and up and down from the HAB
+%centre
+%resolution: Bin size (in meters) of the outputIm
+%thisVar: character string name of the variable to be output (from H5)
 
 lon_dd = ncread(file, '/navigation_data/longitude'); lon_dd = lon_dd(:);
 lat_dd = ncread(file, '/navigation_data/latitude'); lat_dd = lat_dd(:);
@@ -22,7 +29,7 @@ n = centerY + distance1;s = centerY - distance1;
 %Determine output shape, normalise the projected data so each output pixel
 %is of length 1 and starts at 0.
 destShape = [round(abs(e - w) /double(resolution)); round(abs(n - s) / double(resolution))];
-aff = affine2d([resolution 0.0 w; 0.0 -resolution n; 0 0 1]');
+aff = affine2d([resolution 0.0 w; 0.0 resolution s; 0 0 1]');
 
 
 %Define the projected coordianate 2*ROI that's double the size (to retain
@@ -64,8 +71,8 @@ XbnCntrs = -0.5:destShape(1)+0.5;
 YbnCntrs = -0.5:destShape(2)+0.5;
 
 % Count number of datapoints in bins.  Then accumulate their values
-cnt = hist3([destIds1, destIds2], {XbnCntrs YbnCntrs});
-weightsH = hist2w([destIds1, destIds2], inVarROI2,XbnCntrs,YbnCntrs);
+cnt = hist3([destIds2, destIds1], {YbnCntrs XbnCntrs});
+weightsH = hist2w([destIds2, destIds1], inVarROI2,YbnCntrs,XbnCntrs);
 
 % We must then reduce the size of the output to get rid of the edge bins
 weightsH = weightsH(2:end-1,2:end-1);
@@ -78,7 +85,6 @@ ign = ((cnt==0)|(isnan(weightsH)));
 outputIm = weightsH./cnt;
 
 outputIm(ign) = 0;
-outputIm = outputIm';
 
 
 function indROI = getMinMaxLatLon(e2, w2, n2, s2, lon_dd, lat_dd, utmstruct)
