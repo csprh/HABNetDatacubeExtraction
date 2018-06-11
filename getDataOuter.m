@@ -75,7 +75,7 @@ UTCTime = inStruc.UTCTime;
 dayEndS = inStruc.dayEndS;
 
 %% Loop through all the modulations
-for modIndex = 8:numberOfMods
+for modIndex = 1:numberOfMods
     thisMod = confgData.mods{modIndex}.Text;
     subMods = strsplit(thisMod,'-');
     % product suites are either oc, iop or sst
