@@ -75,7 +75,7 @@ UTCTime = inStruc.UTCTime;
 dayEndS = inStruc.dayEndS;
 
 %% Loop through all the modulations
-for modIndex = 1:numberOfMods
+for modIndex = 8:numberOfMods
     thisMod = confgData.mods{modIndex}.Text;
     subMods = strsplit(thisMod,'-');
     % product suites are either oc, iop or sst
@@ -105,6 +105,7 @@ for modIndex = 1:numberOfMods
     for iii = 1: length(thisInput); thisList(iii) = thisInput{iii}.deltadate; end;
     [sorted sortIndex] = sort(thisList);
     
+    if strcmp(subMods{1},'sst'); sortIndex = sortIndex(1);  end
     %% Loop through previous times and extract images and points from .nc files
     % iyyyydddhhmmss.L2_rrr_ppp,
     % where i is the instrument identifier  yyyydddhhmmss
