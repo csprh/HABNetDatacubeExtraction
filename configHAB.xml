@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <confgData>
    <inputFilename>./work/florida_2003-2018-50K</inputFilename>
+   <gebcoFilename>~/scratch/HAB/GEBCO/GEBCO.nc</gebcoFilename>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
    <outDir>/mnt/storage/scratch/csprh/HAB/florida1/</outDir>
    <resolution>2000</resolution>
    <distance1>50000</distance1>
    <numberOfDaysInPast>3</numberOfDaysInPast>
    <numberOfSamples>-1</numberOfSamples>
+   <Modality>gebco</Modality>
    <Modality>oc-modisa-chlor_a</Modality>
    <Modality>oc-modisa-Rrs_412</Modality>
    <Modality>oc-modisa-Rrs_443</Modality>

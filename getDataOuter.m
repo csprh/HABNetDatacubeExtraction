@@ -12,9 +12,10 @@ if mac ==1
 else
     tmpStruct = xml2struct('configHAB.xml');
 end
-
+%1273
 %% load all config from XML file
 confgData.inputFilename = tmpStruct.confgData.inputFilename.Text;
+confgData.gebcoFilename = tmpStruct.confgData.gebcoFilename.Text;
 confgData.wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;
 confgData.outDir = tmpStruct.confgData.outDir.Text;
 confgData.distance1 = str2double(tmpStruct.confgData.distance1.Text);
@@ -28,16 +29,17 @@ load(confgData.inputFilename);
 if confgData.numberOfSamples == -1;   confgData.numberOfSamples = length(count2); end;
 
 %% Loop through all samples in .mat Ground Truth File
-for ii = 89: confgData.numberOfSamples %Loop through all the ground truth entries
+outputIndex = 1;
+for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
     try
         if rem(ii,10) == 1        % Delete the .nc files
             wdelString = 'rm *.nc';  unix(wdelString);
-            wdelString = 'rm *.nc.1';  unix(wdelString);
-            wdelString = 'rm *.nc.2';  unix(wdelString);
         end
         
         inStruc.thisLat = latitude(ii);
         inStruc.thisLon = longitude(ii);
+        
+        if isLandGEBCO(inStruc, confgData);  continue;  end;
         inStruc.thisCount = count2(ii);
         inStruc.zoneHrDiff = timezone(inStruc.thisLon);
         % Adjust input time / date: Assume that the sample is taken at 11pm
@@ -51,14 +53,15 @@ for ii = 89: confgData.numberOfSamples %Loop through all the ground truth entrie
         inStruc.dayEndS = datestr(inStruc.dayEnd,29);
         inStruc.UTCTime = sprintf('T%02d:00:00Z', inStruc.endTimeUTC);
         
-        thisName = num2str(ii);
+        thisName = num2str(outputIndex);
+        outputIndex = outputIndex+1;
         inStruc.h5name = [confgData.outDir 'flor' thisName '.h5'];
         if exist(inStruc.h5name, 'file')==2;  delete(inStruc.h5name);  end
         %Put images, count, dates and deltadates into output .H5 file
         hdf5write(inStruc.h5name,['/thisCount'],inStruc.thisCount);
         hdf5write(inStruc.h5name,['/dayEndFraction'],inStruc.dayEndFraction, 'WriteMode','append');
         getModData(inStruc, confgData);
-
+        
     catch
     end
 end
@@ -76,8 +79,17 @@ dayEndS = inStruc.dayEndS;
 
 %% Loop through all the modulations
 for modIndex = 1:numberOfMods
+    
+    
     thisMod = confgData.mods{modIndex}.Text;
+    
     subMods = strsplit(thisMod,'-');
+    
+    if strcmp(subMods{1},'gebco')
+        [elevationIm elevationPoints] = getGEBCOData(confgData, thisLat, thisLon);
+        addToH5(inStruc.h5name, thisMod, elevationIm, 0, 0, elevationPoints);
+        continue;
+    end
     % product suites are either oc, iop or sst
     % sensors are either modisa,modist,viirsn,goci,meris,czcs,octs or 'seawifs'
     % sst: sstref, sst4, sst 1Km resolution for all sst
@@ -120,8 +132,8 @@ for modIndex = 1:numberOfMods
         fileName = [name ext];
         
         %wget file if it hasn't previously been downloaded
-        if exist(fileName, 'file')~=2;   
-            wgetString = [confgData.wgetStringBase ' ' thisLine]; 
+        if exist(fileName, 'file')~=2;
+            wgetString = [confgData.wgetStringBase ' ' thisLine];
             unix(wgetString);
         end
         
@@ -131,11 +143,8 @@ for modIndex = 1:numberOfMods
         thesePointsNew = [thesePoints ones(size(thesePoints,1),1)*thisDeltaDate];
         thesePointsOutput = [thesePointsOutput; thesePointsNew];
     end
-
-    hdf5write(inStruc.h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
-    hdf5write(inStruc.h5name,['/' thisMod  '/theseDates'],theseDates, 'WriteMode','append');
-    hdf5write(inStruc.h5name,['/' thisMod  '/theseDeltaDates'],theseDeltaDates, 'WriteMode','append');
-    hdf5write(inStruc.h5name,['/' thisMod  '/Points'],thesePointsOutput, 'WriteMode','append');
+    
+    addToH5(inStruc.h5name, thisMod, theseImages, theseDates, theseDeltaDates, theseDeltaDates, thesePointsOutput);
     h5disp(inStruc.h5name);
     
 end
@@ -150,3 +159,10 @@ function t=julian2time(str)
 ddd=str2double(str(5:7));
 jan1=[str(1:4),'0101',str(8:13)];  % day 1
 t=datenum(jan1,'yyyymmddHHMMSS')+ddd-1;
+
+function addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput)
+hdf5write(h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
+hdf5write(h5name,['/' thisMod  '/theseDates'],theseDates, 'WriteMode','append');
+hdf5write(h5name,['/' thisMod  '/theseDeltaDates'],theseDeltaDates, 'WriteMode','append');
+hdf5write(h5name,['/' thisMod  '/Points'],thesePointsOutput, 'WriteMode','append');
+
