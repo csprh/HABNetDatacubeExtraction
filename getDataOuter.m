@@ -144,9 +144,8 @@ for modIndex = 1:numberOfMods
         thesePointsOutput = [thesePointsOutput; thesePointsNew];
     end
     
-    addToH5(inStruc.h5name, thisMod, theseImages, theseDates, theseDeltaDates, theseDeltaDates, thesePointsOutput);
+    addToH5(inStruc.h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput);
     h5disp(inStruc.h5name);
-    
 end
 gzip(inStruc.h5name);
 system(['rm ' confgData.outDir '*.h5']);
