@@ -33,7 +33,7 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
     theseImages = cat(3,Ims{7},Ims{14});
     theseImages(theseImages==0)=NaN;
      
-    thisImage = nanmean(theseImages, Ims{7});
+    thisImage = nanmean(Ims{7}, 3);
     fullNumber = prod(size(thisImage));
     nanNumber = sum(isnan(thisImage(:)));
     
