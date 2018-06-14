@@ -16,12 +16,13 @@ HAB = 0;
 NoHAB = 0;
 thisInd = 1;
 for ii = 1: numberOfH5s %Loop through all the ground truth entries
+    try
     gzh5name = [filenameBase 'flor' num2str(ii) '.h5.gz'];
     gunzip(gzh5name);
 	h5name = [filenameBase 'flor' num2str(ii) '.h5'];
 	
 	%h5disp(h5name);
-	try
+	
 
     thisCount= h5read(h5name,'/thisCount');
     thisH5Info = h5info(h5name);
