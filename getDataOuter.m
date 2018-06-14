@@ -63,6 +63,7 @@ for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
         getModData(inStruc, confgData);
         
     catch
+        a;
     end
 end
 

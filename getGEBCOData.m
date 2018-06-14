@@ -3,18 +3,15 @@ function [outputIm tripleOut] = getGEBCOData(config,  outLat, outLon)
 %config: H5 file containing gebco bathymetry
 %outLat: latitude centre of the HAB
 %outLon: longitude centre of the HAB
-%distance1: Distance (in meters left and right and up and down from the HAB
-%centre
-%resolution: Bin size (in meters) of the outputIm
-%If the bathymetry is greater than 0 (ie its on land) then return -1 for
-%both
+%ouputIm: Image of the bathymetry at the resolution defined in config
+%tripleOut: x,y and depth triplet bathymetry output
 
 distance1 = config.distance1;
 resolution = config.resolution;
 
+%gebco nc lat and lon are 1D arrays (not as 2D in NASA .nc files)
 lon1D = ncread(config.gebcoFilename, '/lon'); 
-lat1D = ncread(config.gebcoFilename, '/lat'); 
-%inVar = ncread(config.gebcoFilename, '/elevation'); 
+lat1D = ncread(config.gebcoFilename, '/lat');  
 
 zone = utmzone(outLat,outLon);
 utmstruct = defaultm('utm');
@@ -22,9 +19,8 @@ utmstruct.zone = zone;
 utmstruct.geoid = wgs84Ellipsoid; %almanac('earth','grs80','meters');
 utmstruct = defaultm(utmstruct);
 
-[centerX, centerY] = mfwdtran( utmstruct, outLat,outLon);
-
 %Define the projected coordinate ROI
+[centerX, centerY] = mfwdtran( utmstruct, outLat,outLon);
 e = centerX + distance1; w = centerX - distance1;
 n = centerY + distance1; s = centerY - distance1;
 
@@ -34,16 +30,11 @@ aff = affine2d([resolution 0.0 w; 0.0 resolution s; 0 0 1]');
 
 %Define the projected coordianate 2*ROI that's double the size (to retain
 %data)
-e2 = centerX + distance1*2;w2 = centerX - distance1*2;
-n2 = centerY + distance1*2;s2 = centerY - distance1*2;
+e2 = centerX + distance1*2; w2 = centerX - distance1*2;
+n2 = centerY + distance1*2; s2 = centerY - distance1*2;
 
 %Inverse trans ROI to get max and min lat and lon
 [minLon maxLon maxLat minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct);
-
-wholeWidth = length(lon1D);
-wholeHeight = length(lat1D);
-
-
 [thislon lonIndx] = getIndx(minLon, maxLon, lon1D);
 [thislat latIndx] = getIndx(minLat, maxLat, lat1D);
 
@@ -66,8 +57,8 @@ lon_ddROI1 = meshlon(indROI);
 lat_ddROI1 = meshlat(indROI);
 inVarROI1 = bathPatch(indROI);
 
-[lon_projROI3,lat_projROI3] = mfwdtran( utmstruct, lat_ddROI1,lon_ddROI1);
-[destIds1,destIds2] = transformPointsInverse(aff,lon_projROI3,lat_projROI3);
+[lon_projROI2,lat_projROI2] = mfwdtran( utmstruct, lat_ddROI1,lon_ddROI1);
+[destIds1,destIds2] = transformPointsInverse(aff,lon_projROI2,lat_projROI2);
 
 tripleOut = [destIds1 destIds2 inVarROI1];
 
@@ -97,10 +88,12 @@ outputIm(ign) = 0;
 
 
 function indROI = getMinMaxLatLonROI(e2, w2, n2, s2, lon_dd, lat_dd, utmstruct)
+%Obtain an index of the defined ROI
 [minLon maxLon maxLat minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct);
 indROI = (lon_dd>=minLon)&(lon_dd<=maxLon)&(lat_dd>=minLat)&(lat_dd<=maxLat);
 
 function [minLon maxLon maxLat minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct)
+%Obtain min and max of ROI
 tl = [w2 n2]; bl = [w2 s2];
 tr = [e2 n2]; br = [e2 s2];
 [tlLat, tlLon] = minvtran(utmstruct, tl(1), tl(2));
@@ -114,7 +107,7 @@ maxLat = max([tlLat blLat trLat brLat]);
 
 
 function [thislatlon, lonlatIndx] = getIndx(minlonlat, maxlonlat, lonlat1D)
-thisIndx = (lonlat1D>=minlonlat) & (lonlat1D<maxlonlat);
+thisIndx = (lonlat1D>=minlonlat) & (lonlat1D<=maxlonlat);
 lonlatIndx = 1:length(lonlat1D);
 lonlatIndx = lonlatIndx(thisIndx);
 thislatlon = lonlat1D(thisIndx);
