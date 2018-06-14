@@ -10,21 +10,18 @@ outPutHAB = [filenameBase 'cnnData/1/'];
 outPutNoHAB = [filenameBase 'cnnData/0/'];
 
 h5files=dir([filenameBase '*.h5.gz']);
-numberOfH5s=size(h5files,1);
-allMin = 100000; allMax = 0; 
+numberOfH5s=size(h5files,1); 
 HAB = 0;
 NoHAB = 0;
 thisInd = 1;
 for ii = 1: numberOfH5s %Loop through all the ground truth entries
     try
-    gzh5name = [filenameBase 'flor' num2str(ii) '.h5.gz'];
+    gzh5name = [filenameBase h5files(ii).name];
     gunzip(gzh5name);
-	h5name = [filenameBase 'flor' num2str(ii) '.h5'];
-	
-	%h5disp(h5name);
-	
+	h5name = gzh5name(1:end-3);
 
     thisCount= h5read(h5name,'/thisCount');
+    [ 'thisCount = ' num2str(thisCount) ]  
     thisH5Info = h5info(h5name);
     thisH5Groups = thisH5Info.Groups;
     numberOfGroups = size(thisH5Groups,1);
@@ -32,11 +29,11 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
         thisGroupName{groupIndex} = thisH5Groups(groupIndex).Name;
         Ims{groupIndex}= h5read(h5name, [thisGroupName{groupIndex} '/Ims']);
     end
-    isHAB(thisInd) = thisCount >0;
+    isHAB(thisInd) = thisCount > 0;
     theseImages = cat(3,Ims{7},Ims{14});
     theseImages(theseImages==0)=NaN;
      
-    thisImage = nanmean(theseImages,3);
+    thisImage = nanmean(theseImages, Ims{7});
     fullNumber = prod(size(thisImage));
     nanNumber = sum(isnan(thisImage(:)));
     
@@ -56,13 +53,13 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
         HAB = HAB +1;
     end
     thisInd = thisInd + 1;
-    ['thisInd = ' num2str(thisInd) ' max = ' num2str(max(thisMax))]
-    [ 'min = '    num2str(min(thisMin))]
+    %['thisInd = ' num2str(thisInd) ' max = ' num2str(max(thisMax))]
+    %[ 'min = '    num2str(min(thisMin))]
     catch
-        ii
+        [ 'caught at = ' num2str(ii) ]
     end
 end
-allMax
+
 
 function t=julian2time(str)
 % convert NASA yyyydddHHMMSS to datenum
