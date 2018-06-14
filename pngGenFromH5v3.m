@@ -8,8 +8,9 @@ else
 end
 outPutHAB = [filenameBase 'cnnData/1/'];
 outPutNoHAB = [filenameBase 'cnnData/0/'];
-numberOfH5s = 9;
 
+h5files=dir([filenameBase '*.h5.gz']);
+numberOfH5s=size(h5files,1);
 allMin = 100000; allMax = 0; 
 HAB = 0;
 NoHAB = 0;
