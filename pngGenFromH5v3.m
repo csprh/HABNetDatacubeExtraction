@@ -41,12 +41,12 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
     nanNumber = sum(isnan(thisImage(:)));
     
     thisRatio = nanNumber / fullNumber;
-    if thisRatio > 0.8
-        continue;
-    end
+    %if thisRatio > 0.8
+    %    continue;
+    %end
     thisMax(thisInd) = max(thisImage(:));
     thisMin(thisInd) = min(thisImage(:));
-    thisImage(thisImage==NaN)=0;
+    thisImage(isnan(thisImage))=0;
     thisImage = round(thisImage*(255/466.5));
     if isHAB(thisInd)==0
         imwrite(uint8(thisImage),[outPutNoHAB num2str(NoHAB) '.jpg']);
@@ -59,6 +59,7 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
     ['thisInd = ' num2str(thisInd) ' max = ' num2str(max(thisMax))]
     [ 'min = '    num2str(min(thisMin))]
     catch
+        ii
     end
 end
 allMax
