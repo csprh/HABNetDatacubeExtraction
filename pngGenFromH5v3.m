@@ -6,8 +6,8 @@ if ismac
 else
     filenameBase = '/mnt/storage/home/csprh/scratch/HAB/florida1/';
 end
-outPutHAB = [filenameBase 'cnnData/1/'];
-outPutNoHAB = [filenameBase 'cnnData/0/'];
+outPutHAB = [filenameBase 'cnnData4/1/'];
+outPutNoHAB = [filenameBase 'cnnData4/0/'];
 
 h5files=dir([filenameBase '*.h5.gz']);
 numberOfH5s=size(h5files,1); 
@@ -44,7 +44,14 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
     thisMax(thisInd) = max(thisImage(:));
     thisMin(thisInd) = min(thisImage(:));
     thisImage(isnan(thisImage))=0;
-    thisImage = round(thisImage*(255/466.5));
+
+    %thisImage = round(thisImage*(255/466.5));
+    thisImage = round(thisImage*(255/128.5));
+    thisImage(thisImage>255) = 255;
+    %hist(thisImage(:),100); pause(0.5);
+    if (sum(thisImage(:)==0)) > 2000
+        continue;
+    end
     if isHAB(thisInd)==0
         imwrite(uint8(thisImage),[outPutNoHAB num2str(NoHAB) '.jpg']);
         NoHAB = NoHAB +1;
