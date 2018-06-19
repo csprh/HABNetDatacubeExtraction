@@ -44,12 +44,12 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
     thisMax(thisInd) = max(thisImage(:));
     thisMin(thisInd) = min(thisImage(:));
     thisImage(isnan(thisImage))=0;
-
+    thisImage = imresize(thisImage,[128 128]);
     %thisImage = round(thisImage*(255/466.5));
-    thisImage = round(thisImage*(255/68.5));
+    thisImage = round(thisImage*(255/78.5));
     thisImage(thisImage>255) = 255;
     %hist(thisImage(:),100); pause(0.5);
-    if (sum(thisImage(:)==0)) > 1250
+    if (sum(thisImage(:)==0)) > 8100
         continue;
     end
     if isHAB(thisInd)==0
