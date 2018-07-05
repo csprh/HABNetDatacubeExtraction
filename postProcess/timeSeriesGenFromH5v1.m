@@ -7,7 +7,8 @@ else
     filenameBase = '/mnt/storage/home/csprh/scratch/HAB/florida1/';
 end
 
-outH5name = [filenameBase 'LSTMData/LSTMFlor1.h5']
+outH5name = [filenameBase 'LSTMData/LSTMFlor1.h5'];
+outMatBase = [filenameBase 'LSTMData/'];
 distanceOffset = [1 1 1];
 
 h5files=dir([filenameBase '*.h5.gz']);
@@ -50,7 +51,7 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
     else
         sortedTimeOrdOut  = [sortedTimeOrdOut; zeros(limitLength-thisLength,size(sortedTimeOrdOut,2))];
     end
-    outData(:,:,ii) = sortedTimeOrdOut';
+    outData(thisInd,:,:) = sortedTimeOrdOut;
     lengthTime(thisInd) =size(sortedTimeOrdOut,1);
     
     isHAB(thisInd) = thisCount > 0;
@@ -62,10 +63,12 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
     end
 end
 
-
+isHAB = double(isHAB); isHAB = isHAB';
 if exist(outH5name, 'file')==2;  delete(outH5name);  end
 hdf5write(outH5name,'/XLSTMData',outData);
+save ([outMatBase 'LSTMData.mat'], 'outData', 'isHAB')
 hdf5write(outH5name,'/YLSTMData',double(isHAB), 'WriteMode','append');
+
 
 function t=julian2time(str)
 % convert NASA yyyydddHHMMSS to datenum
