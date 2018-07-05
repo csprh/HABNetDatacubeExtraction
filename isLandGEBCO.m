@@ -1,8 +1,14 @@
 function land = isLandGEBCO(inStruc, config)
+% Input lat and lon (defined in inStruc), output if is land (bathymetry > 10m)
+%
+% USAGE:
+%   land = isLandGEBCO(inStruc, config)
+% INPUT:
+%   inStruc - contains lat and lon
+%   config - contains gebcoFilename of gebco netCDF file
+% OUTPUT:
+%   land - boolean is land variable
 
-%config: H5 file containing gebco bathymetry
-%If the bathymetry is greater than 0 (ie its on land) then return -1 for
-%both
 outLat = inStruc.thisLat;
 outLon = inStruc.thisLon;
         

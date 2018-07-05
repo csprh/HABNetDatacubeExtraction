@@ -1,10 +1,20 @@
 function [outputIm tripleOut] = getGEBCOData(config,  outLat, outLon)
+% Extract binned image and value triplet array from GEBCO netCDF file
+%
+% USAGE:
+%   [outputIm tripleOut] = getGEBCOData(config,  outLat, outLon)
+% INPUT:
+%   config - input configuration
+%      config.gebcoFilename: H5 file containing gebco bathymetry
+%   outLat - latitude centre of the HAB
+%   outLon - longitude centre of the HAB
 
-%config: H5 file containing gebco bathymetry
-%outLat: latitude centre of the HAB
-%outLon: longitude centre of the HAB
-%ouputIm: Image of the bathymetry at the resolution defined in config
-%tripleOut: x,y and depth triplet bathymetry output
+% OUTPUT:
+%   outputIm - Image of the bathymetry at the resolution defined in config
+%   tripleOut - x,y and depth triplet bathymetry output
+%
+% THE UNIVERSITY OF BRISTOL: HAB PROJECT
+% Author Dr Paul Hill 26th June 2018
 
 distance1 = config.distance1;
 resolution = config.resolution;
@@ -88,12 +98,40 @@ outputIm(ign) = 0;
 
 
 function indROI = getMinMaxLatLonROI(e2, w2, n2, s2, lon_dd, lat_dd, utmstruct)
-%Obtain an index of the defined ROI
+% Generate Region of Interest (ROI) index from input parameters
+%
+% USAGE:
+%   indROI = getMinMaxLatLon(e2, w2, n2, s2, lon_dd, lat_dd, utmstruct)
+% INPUT:
+%   e2 - minimum east
+%   w2 - maximum west
+%   n2 - minimum north
+%   s2 - maximum south
+%   lon_dd - input lattitude index array
+%   lat_dd - input longitude index array
+%   utmstruct - reprojection definition
+% OUTPUT:
+%   indROI - index output
 [minLon maxLon maxLat minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct);
 indROI = (lon_dd>=minLon)&(lon_dd<=maxLon)&(lat_dd>=minLat)&(lat_dd<=maxLat);
 
 function [minLon maxLon maxLat minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct)
-%Obtain min and max of ROI
+% Obtain min and max lat and lon of ROI
+%
+% USAGE:
+%   [minLon maxLon maxLat minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct)
+% INPUT:
+%   e2 - minimum east
+%   w2 - maximum west
+%   n2 - minimum north
+%   s2 - maximum south
+%   utmstruct - reprojection definition
+% OUTPUT:
+%   minLon - minimum lon
+%   maxLon - maximum lon
+%   minLat - minimum lat
+%   maxLat - maximum lat
+
 tl = [w2 n2]; bl = [w2 s2];
 tr = [e2 n2]; br = [e2 s2];
 [tlLat, tlLon] = minvtran(utmstruct, tl(1), tl(2));

@@ -1,7 +1,16 @@
-function getDataOuter;
+function getDataOuter
 %% Top level code that loads config, loads .mat ground truth file,
 %  searches for all relevant .nc granules (using fd_matchup.py and NASA's
 %  CMR interface).  Datacubes are formed from all the local .nc granules
+%
+% USAGE:
+%   getDataOuter
+% INPUT:
+%   -
+% OUTPUT:
+%   -
+% THE UNIVERSITY OF BRISTOL: HAB PROJECT
+% Author Dr Paul Hill 26th June 2018
 
 clear; close all;
 
@@ -12,7 +21,7 @@ if mac ==1
 else
     tmpStruct = xml2struct('configHAB.xml');
 end
-%1273
+
 %% load all config from XML file
 confgData.inputFilename = tmpStruct.confgData.inputFilename.Text;
 confgData.gebcoFilename = tmpStruct.confgData.gebcoFilename.Text;
@@ -61,16 +70,21 @@ for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
         hdf5write(inStruc.h5name,['/thisCount'],inStruc.thisCount);
         hdf5write(inStruc.h5name,['/dayEndFraction'],inStruc.dayEndFraction, 'WriteMode','append');
         getModData(inStruc, confgData);
-        
-    catch
-        
+    catch        
     end
 end
 
-
-%% getModData in Data Retrieval Over the ground Truth Datapoints
-%  Generates one H5 file per datapoint in ground truth
 function getModData(inStruc, confgData)
+%% getModData in Data Retrieval Over the ground Truth Datapoints
+%  Adds extracted information to one H5 file per datapoint in ground truth
+%
+% USAGE:
+%   getModData(inStruc, confgData)
+% INPUT:
+%   inStruc - Contains all the input parameters for the function
+%   confgData - Configuration information extracted from XML
+% OUTPUT:
+%   - 
 numberOfMods = length(confgData.mods);
 thisLat = inStruc.thisLat;
 thisLon = inStruc.thisLon;
@@ -81,9 +95,7 @@ dayEndS = inStruc.dayEndS;
 %% Loop through all the modulations
 for modIndex = 1:numberOfMods
     
-    
     thisMod = confgData.mods{modIndex}.Text;
-    
     subMods = strsplit(thisMod,'-');
     
     if strcmp(subMods{1},'gebco')
@@ -118,7 +130,7 @@ for modIndex = 1:numberOfMods
     for iii = 1: length(thisInput); thisList(iii) = thisInput{iii}.deltadate; end;
     [sorted sortIndex] = sort(thisList);
     
-    if strcmp(subMods{1},'sst'); sortIndex = sortIndex(1);  end
+    if strcmp(subMods{1},'sst'); sortIndex = sortIndex(1);  end % Needed to prevent issues with SST4
     %% Loop through previous times and extract images and points from .nc files
     % iyyyydddhhmmss.L2_rrr_ppp,
     % where i is the instrument identifier  yyyydddhhmmss
@@ -148,19 +160,39 @@ for modIndex = 1:numberOfMods
     addToH5(inStruc.h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput);
     h5disp(inStruc.h5name);
 end
+% Zip up the data and delete the original
 gzip(inStruc.h5name);
 system(['rm ' confgData.outDir '*.h5']);
 
+function t=julian2time(str)
 %% julian2time takes the julian day of the year contained in the .nc granule
 %  and converts it to integer datenum (as output by datestr).
-function t=julian2time(str)
-% convert NASA yyyydddHHMMSS to datenum
-% ddd starts with 1 (therefore we have to take 1 away
+%  convert NASA yyyydddHHMMSS to datenum
+%  ddd starts with 1 (therefore we have to take 1 away
+%
+% USAGE:
+%   t=julian2time(str)
+% INPUT:
+%   str - input string containing time in julian format
+% OUTPUT:
+%   t - output time
 ddd=str2double(str(5:7));
 jan1=[str(1:4),'0101',str(8:13)];  % day 1
 t=datenum(jan1,'yyyymmddHHMMSS')+ddd-1;
 
 function addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput)
+%% add Ims, theseDates, theseDeltaDates and Points to output H5 file
+%
+% USAGE:
+%   addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput)
+% INPUT:
+%   h5name - name of H5 name to be output
+%   theseImages - Cell array of output binned images (for this modality)
+%   theseDates - The actual capture dates of the points and images output
+%   theseDeltaDates - The delta dates (difference from capture date) of the points and images output
+%   thesePointsOutput - 4D Array of points output
+% OUTPUT:
+%   - 
 hdf5write(h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
 hdf5write(h5name,['/' thisMod  '/theseDates'],theseDates, 'WriteMode','append');
 hdf5write(h5name,['/' thisMod  '/theseDeltaDates'],theseDeltaDates, 'WriteMode','append');
