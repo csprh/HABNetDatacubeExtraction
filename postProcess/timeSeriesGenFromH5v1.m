@@ -13,6 +13,7 @@ distanceOffset = [1 1 1];
 
 h5files=dir([filenameBase '*.h5.gz']);
 numberOfH5s=size(h5files,1); 
+numberOfH5s = 200;
 limitLength = 10000;
 
 thisInd = 1;
