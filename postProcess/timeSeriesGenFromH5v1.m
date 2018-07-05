@@ -1,4 +1,4 @@
-function getDataOuter;
+function timeSeriesGenFromH5v1;
 clear; close all;
 
 if ismac
