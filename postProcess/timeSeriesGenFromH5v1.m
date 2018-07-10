@@ -52,7 +52,7 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
     else
         sortedTimeOrdOut  = [sortedTimeOrdOut; zeros(limitLength-thisLength,size(sortedTimeOrdOut,2))];
     end
-    outData(thisInd,:,:) = sortedTimeOrdOut;
+    outData(:,:,thisInd) = sortedTimeOrdOut;
     lengthTime(thisInd) =size(sortedTimeOrdOut,1);
     
     isHAB(thisInd) = thisCount > 0;

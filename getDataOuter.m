@@ -58,7 +58,7 @@ for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
         if inStruc.endTimeUTC > 24; inStruc.endTimeUTC = inStruc.endTimeUTC-24; inStruc.dayEnd=inStruc.dayEnd+1; end;
         inStruc.dayEndFraction = inStruc.dayEnd+inStruc.endTimeUTC/24;
         inStruc.dayStart = inStruc.dayEnd - confgData.numberOfDaysInPast;
-        inStruc.dayStartS = datestr(inStruc.dayStart,29);
+        inStruc.dayStartS = str(inStruc.dayStart,29);
         inStruc.dayEndS = datestr(inStruc.dayEnd,29);
         inStruc.UTCTime = sprintf('T%02d:00:00Z', inStruc.endTimeUTC);
         
