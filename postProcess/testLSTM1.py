@@ -8,8 +8,13 @@ from tensorflow.python.keras.preprocessing import sequence
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense, Embedding
 from tensorflow.python.keras.layers import LSTM
+import platform
 
-hf = h5py.File('/Users/csprh/Dlaptop/MATLAB/MYCODE/HAB/WORK/HAB/florida1/LSTMData/LSTMFlor1.h5', 'r');
+if platform.system() == "Darwin":
+   hf = h5py.File('/Users/csprh/Dlaptop/MATLAB/MYCODE/HAB/WORK/HAB/florida1/LSTMData/LSTMFlor1.h5', 'r')
+else:
+   hf = h5py.File('/mnt/storage/home/csprh/scratch/HAB/florida1/LSTMData/LSTMFlor1.h5','r')
+
 
 dataX = hf.get('XLSTMData')
 dataY = hf.get('YLSTMData')
