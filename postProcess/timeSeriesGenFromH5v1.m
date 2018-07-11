@@ -7,13 +7,13 @@ else
     filenameBase = '/mnt/storage/home/csprh/scratch/HAB/florida1/';
 end
 
-outH5name = [filenameBase 'LSTMData/LSTMFlor1.h5'];
+outH5name = [filenameBase 'LSTMData/LSTMFlor2.h5'];
 outMatBase = [filenameBase 'LSTMData/'];
 distanceOffset = [1 1 1];
 
 h5files=dir([filenameBase '*.h5.gz']);
 numberOfH5s=size(h5files,1); 
-numberOfH5s = 200;
+%numberOfH5s = 200;
 limitLength = 10000;
 
 thisInd = 1;
