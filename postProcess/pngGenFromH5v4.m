@@ -15,14 +15,14 @@ outPutNoHABVal = [filenameBase2 'val_dir/0/'];
 
 valProp = 0.2;
 h5files=dir([filenameBase1 '*.h5.gz']);
-numberOfH5s=size(h5files,1);
-valIndex = round(numberOfH5s-numberOfH5s*valProp);
+numberOfH5s=size(h5files,1)
+valIndex = round(numberOfH5s-(numberOfH5s*valProp))
 HAB = 0;
 NoHAB = 0;
 thisInd = 1;
 for ii = 1: numberOfH5s %Loop through all the ground truth entries    
     try
-    gzh5name = [filenameBase h5files(ii).name];
+    gzh5name = [filenameBase1 h5files(ii).name];
     gunzip(gzh5name);
 	h5name = gzh5name(1:end-3);
 
@@ -60,7 +60,7 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
     end
     if ii > valIndex
         if isHAB(thisInd)==0
-            imwrite(uint8(thisImage),[outPutNoHABTrain num2str(NoHAB) '.jpg']);
+            imwrite(uint8(thisImage),[outPutNoHABTrain  num2str(NoHAB) '.jpg']);
             NoHAB = NoHAB +1;
         else
             imwrite(uint8(thisImage),[outPutHABTrain num2str(HAB) '.jpg']);
