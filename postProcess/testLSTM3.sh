@@ -1,8 +1,8 @@
 #! /bin/bash
 
-#SBATCH --nodes=2
+#SBATCH --nodes=1
 #SBATCH --gres=gpu:1
-#SBATCH --partition gpu
+#SBATCH --partition gpu_veryshort
 #SBATCH --job-name=gpujob
 #SBATCH --mem=16G
 
