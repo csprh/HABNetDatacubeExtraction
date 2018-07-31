@@ -3,7 +3,7 @@
    <inputFilename>./work/florida_2003-2018-50K</inputFilename>
    <gebcoFilename>~/HABCODE/scratch/HAB/GEBCO/GEBCO.nc</gebcoFilename>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
-   <outDir>~/HABCODE/scratch/csprh/HAB/florida2/</outDir>
+   <outDir>~/HABCODE/scratch/HAB/florida2/</outDir>
    <resolution>2000</resolution>
    <distance1>50000</distance1>
    <numberOfDaysInPast>3</numberOfDaysInPast>
