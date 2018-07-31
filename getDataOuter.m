@@ -18,7 +18,7 @@ if ismac
     tmpStruct = xml2struct('configHABmac.xml');
 elseif isunix
     [dummy, thisCmd] = system('rpm --query centos-release');
-    isUnderDesk = strcmp(pp(1:end-1),'centos-release-7-5.1804.el7.centos.2.x86_64');
+    isUnderDesk = strcmp(thisCmd(1:end-1),'centos-release-7-5.1804.el7.centos.2.x86_64');
     if isUnderDesk == 1
         tmpStruct = xml2struct('configHABunderDesk.xml');
     else
