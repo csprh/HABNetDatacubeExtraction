@@ -14,12 +14,20 @@ function getDataOuter
 
 clear; close all;
 
-mac = ismac;
-
-if mac ==1
+if ismac
     tmpStruct = xml2struct('configHABmac.xml');
+elseif isunix
+    [dummy, thisCmd] = system('rpm --query centos-release');
+    isUnderDesk = strcmp(pp(1:end-1),'centos-release-7-5.1804.el7.centos.2.x86_64');
+    if isUnderDesk == 1
+        tmpStruct = xml2struct('configHABunderDesk.xml');
+    else
+        tmpStruct = xml2struct('configHAB.xml');
+    end
+elseif ispc
+    % Code to run on Windows platform
 else
-    tmpStruct = xml2struct('configHAB.xml');
+    disp('Platform not supported')
 end
 
 %% load all config from XML file
