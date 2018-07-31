@@ -72,7 +72,7 @@ for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
         
         thisName = num2str(outputIndex);
         outputIndex = outputIndex+1;
-        inStruc.h5name = [confgData.outDir 'flor' thisName '.h5'];
+        inStruc.h5name = [confgData.outDir 'flor' thisName '.h5']
         if exist(inStruc.h5name, 'file')==2;  delete(inStruc.h5name);  end
         %Put images, count, dates and deltadates into output .H5 file
         hdf5write(inStruc.h5name,['/thisCount'],inStruc.thisCount);
