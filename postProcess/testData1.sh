@@ -14,5 +14,5 @@ cd $SLURM_SUBMIT_DIR
 echo $SLURM_SUBMIT_DIR
 cd /mnt/storage/home/csprh/code/HAB/extractData/postProcess
 #matlab -nodisplay -nosplash -r getDataOuter > outfile.txt < /dev/null 
-matlab -nodisplay -nosplash -r timeSeriesGenFromH5v1 
+matlab -nodisplay -nosplash -r pngGenFromH5v4 
 
