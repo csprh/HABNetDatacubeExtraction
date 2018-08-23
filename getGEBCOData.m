@@ -1,8 +1,8 @@
-function [outputIm tripleOut] = getGEBCOData(config,  outLat, outLon)
+function [outputIm, tripleOut, tripleOutProj ] = getGEBCOData(config,  outLat, outLon, utmstruct)
 % Extract binned image and value triplet array from GEBCO netCDF file
 %
 % USAGE:
-%   [outputIm tripleOut] = getGEBCOData(config,  outLat, outLon)
+%   [outputIm tripleOutProj] = getGEBCOData(config,  outLat, outLon)
 % INPUT:
 %   config - input configuration
 %      config.gebcoFilename: H5 file containing gebco bathymetry
@@ -23,12 +23,6 @@ resolution = config.resolution;
 lon1D = ncread(config.gebcoFilename, '/lon'); 
 lat1D = ncread(config.gebcoFilename, '/lat');  
 
-zone = utmzone(outLat,outLon);
-utmstruct = defaultm('utm');
-utmstruct.zone = zone;
-utmstruct.geoid = wgs84Ellipsoid; %almanac('earth','grs80','meters');
-utmstruct = defaultm(utmstruct);
-
 %Define the projected coordinate ROI
 [centerX, centerY] = mfwdtran( utmstruct, outLat,outLon);
 e = centerX + distance1; w = centerX - distance1;
@@ -44,9 +38,9 @@ e2 = centerX + distance1*2; w2 = centerX - distance1*2;
 n2 = centerY + distance1*2; s2 = centerY - distance1*2;
 
 %Inverse trans ROI to get max and min lat and lon
-[minLon maxLon maxLat minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct);
-[thislon lonIndx] = getIndx(minLon, maxLon, lon1D);
-[thislat latIndx] = getIndx(minLat, maxLat, lat1D);
+[minLon, maxLon, maxLat, minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct);
+[thislon, lonIndx] = getIndx(minLon, maxLon, lon1D);
+[thislat, latIndx] = getIndx(minLat, maxLat, lat1D);
 
 start_row = min(latIndx);
 start_col = min(lonIndx);
@@ -56,7 +50,7 @@ width = max(lonIndx)-min(lonIndx)+1;
 bathPatch = ncread(config.gebcoFilename, '/elevation', [start_col start_row], [width height]);
 bathPatch = bathPatch';
 %Determine output shape, normalise the projected data so each output pixel
-[meshlon meshlat] = meshgrid(thislon, thislat);
+[meshlon, meshlat] = meshgrid(thislon, thislat);
 meshlon = meshlon(:); meshlat=meshlat(:); bathPatch = bathPatch(:);
 
 %Inverse trans ROI*2 to get max and min lat and lon
@@ -70,7 +64,8 @@ inVarROI1 = bathPatch(indROI);
 [lon_projROI2,lat_projROI2] = mfwdtran( utmstruct, lat_ddROI1,lon_ddROI1);
 [destIds1,destIds2] = transformPointsInverse(aff,lon_projROI2,lat_projROI2);
 
-tripleOut = [destIds1 destIds2 inVarROI1];
+tripleOut =     [lon_ddROI1 lat_ddROI1 inVarROI1];
+tripleOutProj = [destIds1 destIds2 inVarROI1];
 
 [lon_projROI3,lat_projROI3] = mfwdtran(utmstruct, meshlat,meshlon);
 [destIds1,destIds2] = transformPointsInverse(aff,lon_projROI3,lat_projROI3);

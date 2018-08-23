@@ -1,4 +1,4 @@
-function [outputIm tripleOut] = getData(file,  outLat, outLon, distance1, resolution, thisVar)
+function [outputIm, tripleOut, tripleOutProj] = getData(file,  outLat, outLon, distance1, resolution, thisVar, utmstruct)
 % Extract binned image and value triplet array from netCDF input file
 %
 % USAGE:
@@ -23,13 +23,6 @@ lon_dd = ncread(file, '/navigation_data/longitude'); lon_dd = lon_dd(:);
 lat_dd = ncread(file, '/navigation_data/latitude'); lat_dd = lat_dd(:);
 inVar = ncread(file, thisVar); inVar = inVar(:);
 
-zone = utmzone(outLat,outLon);
-
-utmstruct = defaultm('utm');
-utmstruct.zone = zone;
-utmstruct.geoid = wgs84Ellipsoid; %almanac('earth','grs80','meters');
-utmstruct = defaultm(utmstruct);
-
 
 [centerX, centerY] = mfwdtran( utmstruct, outLat,outLon);
 
@@ -53,7 +46,7 @@ indROI1 = getMinMaxLatLon(e, w, n, s, lon_dd, lat_dd, utmstruct);
 %Inverse trans ROI*2 to get max and min lat and lon
 indROI2 = getMinMaxLatLon(e2, w2, n2, s2, lon_dd, lat_dd, utmstruct);
 
-%Get all the lat and lon data points within 2*ROI then project back
+%Get all the lat and lon data points within ROI then project back
 lon_ddROI1 = lon_dd(indROI1);
 lat_ddROI1 = lat_dd(indROI1);
 inVarROI1 = inVar(indROI1);
@@ -64,12 +57,12 @@ inVarROI3 = inVarROI1(indROI3);
 [lon_projROI3,lat_projROI3] = mfwdtran( utmstruct, lat_ddROI3,lon_ddROI3);
 [destIds1,destIds2] = transformPointsInverse(aff,lon_projROI3,lat_projROI3);
 
-tripleOut = [destIds1 destIds2 inVarROI3];
+tripleOut = [lon_ddROI3 lat_ddROI3 inVarROI3];
+tripleOutProj = [destIds1 destIds2 inVarROI3];
 %Get all the lat and lon data points within 2*ROI then project back
 lon_ddROI2 = lon_dd(indROI2);
 lat_ddROI2 = lat_dd(indROI2);
 inVarROI2 = inVar(indROI2);
-
 
 [lon_projROI, lat_projROI] = mfwdtran(utmstruct,lat_ddROI2,lon_ddROI2);
 [destIds1,destIds2] = transformPointsInverse(aff,lon_projROI,lat_projROI);

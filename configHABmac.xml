@@ -5,7 +5,7 @@
    <inputFilename>./work/florida_2003-2018-50K</inputFilename>
    <gebcoFilename>/Users/csprh/seadas-7.4/DATA/GEBCO.nc</gebcoFilename>
    <wgetStringBase>/usr/local/bin/wget</wgetStringBase>
-   <outDir>../../WORK/HAB/florida1/</outDir>
+   <outDir>../../WORK/HAB/florida2/</outDir>
    <resolution>2000</resolution>
    <distance1>50000</distance1>
    <numberOfDaysInPast>5</numberOfDaysInPast>

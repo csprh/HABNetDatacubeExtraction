@@ -47,9 +47,10 @@ if confgData.numberOfSamples == -1;   confgData.numberOfSamples = length(count2)
 
 %% Loop through all samples in .mat Ground Truth File
 outputIndex = 1;
-for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
+%for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
+for ii = 1: 10 %Loop through all the ground truth entries
     try
-        if rem(ii,10) == 1        % Delete the .nc files
+        if rem(ii,10) == 1        % Delete the .nc files (every tenth one)
             wdelString = 'rm *.nc';  unix(wdelString);
         end
         
@@ -66,6 +67,7 @@ for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
         if inStruc.endTimeUTC > 24; inStruc.endTimeUTC = inStruc.endTimeUTC-24; inStruc.dayEnd=inStruc.dayEnd+1; end;
         inStruc.dayEndFraction = inStruc.dayEnd+inStruc.endTimeUTC/24;
         inStruc.dayStart = inStruc.dayEnd - confgData.numberOfDaysInPast;
+        inStruc.dayStartFraction = inStruc.dayEndFraction - confgData.numberOfDaysInPast;
         inStruc.dayStartS = datestr(inStruc.dayStart,29);
         inStruc.dayEndS = datestr(inStruc.dayEnd,29);
         inStruc.UTCTime = sprintf('T%02d:00:00Z', inStruc.endTimeUTC);
@@ -75,12 +77,35 @@ for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
         inStruc.h5name = [confgData.outDir 'flor' thisName '.h5']
         if exist(inStruc.h5name, 'file')==2;  delete(inStruc.h5name);  end
         %Put images, count, dates and deltadates into output .H5 file
-        hdf5write(inStruc.h5name,['/thisCount'],inStruc.thisCount);
-        hdf5write(inStruc.h5name,['/dayEndFraction'],inStruc.dayEndFraction, 'WriteMode','append');
+        
+        addDataH5(inStruc, confgData);
         getModData(inStruc, confgData);
     catch        
     end
 end
+
+function addDataH5(inStruc, confgData)
+    fid = H5F.create(inStruc.h5name);
+    plist = 'H5P_DEFAULT';
+    gid = H5G.create(fid,'GroundTruth',plist,plist,plist);
+    H5G.close(gid);
+    H5F.close(fid);
+    h5writeatt(inStruc.h5name,'/GroundTruth', 'thisLat', inStruc.thisLat);
+    h5writeatt(inStruc.h5name,'/GroundTruth', 'thisLon', inStruc.thisLon);
+    h5writeatt(inStruc.h5name,'/GroundTruth', 'thisCount', inStruc.thisCount);
+    h5writeatt(inStruc.h5name,'/GroundTruth', 'dayEnd', inStruc.dayEnd);
+    h5writeatt(inStruc.h5name,'/GroundTruth', 'dayStart', inStruc.dayStart);
+    h5writeatt(inStruc.h5name,'/GroundTruth', 'dayEndFraction', inStruc.dayEndFraction);
+    h5writeatt(inStruc.h5name,'/GroundTruth', 'dayStartFraction', inStruc.dayStartFraction);
+    h5writeatt(inStruc.h5name,'/GroundTruth', 'resolution', confgData.resolution);
+    h5writeatt(inStruc.h5name,'/GroundTruth', 'distance1', confgData.distance1);
+    numberOfMods = length(confgData.mods);
+
+    %% Loop through all the modulations
+    for modIndex = 1:numberOfMods
+        theseMods{modIndex} = confgData.mods{modIndex}.Text;
+    end
+    hdf5write(inStruc.h5name,['/Modnames'],theseMods, 'WriteMode','append');
 
 function getModData(inStruc, confgData)
 %% getModData in Data Retrieval Over the ground Truth Datapoints
@@ -106,9 +131,17 @@ for modIndex = 1:numberOfMods
     thisMod = confgData.mods{modIndex}.Text;
     subMods = strsplit(thisMod,'-');
     
+    zone = utmzone(thisLat, thisLon);
+    utmstruct = defaultm('utm');
+    utmstruct.zone = zone;
+    utmstruct.geoid = wgs84Ellipsoid; %almanac('earth','grs80','meters');
+    utmstruct = defaultm(utmstruct);
+    
+    h5writeatt(inStruc.h5name,'/GroundTruth', 'Projection', ['utm wgs84Ellipsoid ' zone] );
+    
     if strcmp(subMods{1},'gebco')
-        [elevationIm elevationPoints] = getGEBCOData(confgData, thisLat, thisLon);
-        addToH5(inStruc.h5name, thisMod, elevationIm, 0, 0, elevationPoints);
+        [elevationIm, elevationPoints, elevationPointsProj] = getGEBCOData(confgData, thisLat, thisLon, utmstruct);
+        addToH5(inStruc.h5name, thisMod, elevationIm, 0, 0, elevationPoints, elevationPointsProj);
         continue;
     end
     % product suites are either oc, iop or sst
@@ -143,7 +176,7 @@ for modIndex = 1:numberOfMods
     % iyyyydddhhmmss.L2_rrr_ppp,
     % where i is the instrument identifier  yyyydddhhmmss
     clear theseDates theseDeltaDates theseImages;
-    thesePointsOutput = [];
+    thesePointsOutput = []; thesePointsProjOutput = [];
     for iii = 1:length(sortIndex)
         thisIndex = sortIndex(iii);
         thisLine = thisInput{thisIndex}.line;
@@ -158,14 +191,16 @@ for modIndex = 1:numberOfMods
             unix(wgetString);
         end
         
-        [theseImages{iii} thesePoints] = getData(fileName,  thisLat, thisLon, confgData.distance1, confgData.resolution, ['/geophysical_data/' subMods{3}]);
+        [theseImages{iii}, thesePoints, thesePointsProj] = getData(fileName,  thisLat, thisLon, confgData.distance1, confgData.resolution, ['/geophysical_data/' subMods{3}], utmstruct);
         theseDates{iii} = thisDate;
         theseDeltaDates{iii} = thisDeltaDate;
         thesePointsNew = [thesePoints ones(size(thesePoints,1),1)*thisDeltaDate];
+        thesePointsProjNew = [thesePoints ones(size(thesePoints,1),1)*thisDeltaDate];
         thesePointsOutput = [thesePointsOutput; thesePointsNew];
+        thesePointsProjOutput = [thesePointsProjOutput; thesePointsProjNew];
     end
     
-    addToH5(inStruc.h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput);
+    addToH5(inStruc.h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsProjOutput);
     h5disp(inStruc.h5name);
 end
 % Zip up the data and delete the original
@@ -188,7 +223,7 @@ ddd=str2double(str(5:7));
 jan1=[str(1:4),'0101',str(8:13)];  % day 1
 t=datenum(jan1,'yyyymmddHHMMSS')+ddd-1;
 
-function addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput)
+function addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsOutputProj)
 %% add Ims, theseDates, theseDeltaDates and Points to output H5 file
 %
 % USAGE:
@@ -205,4 +240,5 @@ hdf5write(h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
 hdf5write(h5name,['/' thisMod  '/theseDates'],theseDates, 'WriteMode','append');
 hdf5write(h5name,['/' thisMod  '/theseDeltaDates'],theseDeltaDates, 'WriteMode','append');
 hdf5write(h5name,['/' thisMod  '/Points'],thesePointsOutput, 'WriteMode','append');
+hdf5write(h5name,['/' thisMod  '/PointsProj'],thesePointsOutputProj, 'WriteMode','append');
 
