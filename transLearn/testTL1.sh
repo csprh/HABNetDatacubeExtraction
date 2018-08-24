@@ -1,6 +1,6 @@
 #! /bin/bash
 
-#SBATCH --nodes=2
+#SBATCH --nodes=1
 #SBATCH --gres=gpu:1
 #SBATCH --partition gpu
 #SBATCH --job-name=gpujob
@@ -12,7 +12,4 @@ module add languages/anaconda3/3.5-4.2.0-tflow-1.7
 #which python
 #onda list
 cd /mnt/storage/home/csprh/code/HAB/extractData/transLearn
-pythonn fine-tune.py --train_dir /mnt/storage/home/csprh/scratch/HAB/CNNIms/florida1/train_dir --val_dir /mnt/storage/home/csprh/scratch/HAB/CNNIms/florida1/val_dir
-~                                                                               
-~                                                                               
-~          
+python fine-tune.py --val_dir /mnt/storage/home/csprh/scratch/HAB/CNNIms/florida1/train_dir --train_dir /mnt/storage/home/csprh/scratch/HAB/CNNIms/florida1/val_dir

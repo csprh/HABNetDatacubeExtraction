@@ -47,13 +47,14 @@ if confgData.numberOfSamples == -1;   confgData.numberOfSamples = length(count2)
 
 %% Loop through all samples in .mat Ground Truth File
 outputIndex = 1;
-%for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
-for ii = 1: 10 %Loop through all the ground truth entries
+for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
+%for ii = 1: 10 %Loop through all the ground truth entries
     try
         if rem(ii,10) == 1        % Delete the .nc files (every tenth one)
             wdelString = 'rm *.nc';  unix(wdelString);
         end
         
+        inStruc.ii = ii;
         inStruc.thisLat = latitude(ii);
         inStruc.thisLon = longitude(ii);
         
@@ -72,9 +73,10 @@ for ii = 1: 10 %Loop through all the ground truth entries
         inStruc.dayEndS = datestr(inStruc.dayEnd,29);
         inStruc.UTCTime = sprintf('T%02d:00:00Z', inStruc.endTimeUTC);
         
-        thisName = num2str(outputIndex);
+        
+        thisName = ['Cube_' sprintf('%05d',outputIndex) '_' sprintf('%05d',ii) '_' num2str(sample_date(ii)) '.h5'];
         outputIndex = outputIndex+1;
-        inStruc.h5name = [confgData.outDir 'flor' thisName '.h5']
+        inStruc.h5name = [confgData.outDir thisName ];
         if exist(inStruc.h5name, 'file')==2;  delete(inStruc.h5name);  end
         %Put images, count, dates and deltadates into output .H5 file
         
@@ -90,6 +92,8 @@ function addDataH5(inStruc, confgData)
     gid = H5G.create(fid,'GroundTruth',plist,plist,plist);
     H5G.close(gid);
     H5F.close(fid);
+    h5writeatt(inStruc.h5name,'/GroundTruth', 'MatlabGroundTruthFile', confgData.inputFilename);
+    h5writeatt(inStruc.h5name,'/GroundTruth', 'lineInGrouthTruthMatlab', inStruc.ii);
     h5writeatt(inStruc.h5name,'/GroundTruth', 'thisLat', inStruc.thisLat);
     h5writeatt(inStruc.h5name,'/GroundTruth', 'thisLon', inStruc.thisLon);
     h5writeatt(inStruc.h5name,'/GroundTruth', 'thisCount', inStruc.thisCount);
@@ -105,7 +109,7 @@ function addDataH5(inStruc, confgData)
     for modIndex = 1:numberOfMods
         theseMods{modIndex} = confgData.mods{modIndex}.Text;
     end
-    hdf5write(inStruc.h5name,['/Modnames'],theseMods, 'WriteMode','append');
+    hdf5write(inStruc.h5name,'/Modnames',theseMods, 'WriteMode','append');
 
 function getModData(inStruc, confgData)
 %% getModData in Data Retrieval Over the ground Truth Datapoints
