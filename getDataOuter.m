@@ -46,8 +46,8 @@ load(confgData.inputFilename);
 if confgData.numberOfSamples == -1;   confgData.numberOfSamples = length(count2); end;
 
 %% Loop through all samples in .mat Ground Truth File
-outputIndex = 8013;
-for ii = 8020: confgData.numberOfSamples %Loop through all the ground truth entries
+outputIndex = 1;
+for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
 %for ii = 1: 10 %Loop through all the ground truth entries
     try
         if rem(ii,10) == 1        % Delete the .nc files (every tenth one)
@@ -152,7 +152,7 @@ for modIndex = 1:numberOfMods
     % sensors are either modisa,modist,viirsn,goci,meris,czcs,octs or 'seawifs'
     % sst: sstref, sst4, sst 1Km resolution for all sst
     % Search for "granules" at a particular lat, long and date range (output goes in Output.txt)
-    exeName = ['python  fd_matchup.py --data_type=' subMods{1} ' --sat=' subMods{2} ' --slat=' num2str(thisLat) ' --slon=' num2str(thisLon) ' --stime=' dayStartS UTCTime ' --etime=' dayEndS UTCTime];
+    exeName = ['/usr/local/bin/python3  fd_matchup.py --data_type=' subMods{1} ' --sat=' subMods{2} ' --slat=' num2str(thisLat) ' --slon=' num2str(thisLon) ' --stime=' dayStartS UTCTime ' --etime=' dayEndS UTCTime];
     system(exeName);
     
     %% Loop through .nc files, veryify and download / extract
