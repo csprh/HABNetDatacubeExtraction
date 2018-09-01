@@ -13,9 +13,9 @@ numberOfH5s=size(h5files,1);
 %numberOfH5s = 200;
 
 totalDeltaDates  = [];
-thisInd = 1;
+totalDiscount = 0;
 for ii = 1: numberOfH5s %Loop through all the ground truth entries
-    ii
+
     try
     system(['rm ' filenameBase '*.h5']);
     gzh5name = [filenameBase h5files(ii).name];
@@ -36,40 +36,50 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
     % - Create an image for each day (averaged over all inputs)
     % - Create a zero image for day that does not exist
     % - Find number of days from XML file
+    % - Create directory structure: (test, train)(HAB,
+    % noHAB)(Modality)(PNGs for each time)
     % For each band
     % - Create train / test structure
     % - Create class structure
     % - Output JPGs into the structure
     % - Modify data.py to get the data into the same structure
-    for groupIndex = 3: numberOfGroups
-        thisGroupName{groupIndex} = thisH5Groups(groupIndex).Name;
-        theseIms = h5read(h5name, [thisGroupName{groupIndex} '/Ims']);
-        firstIm = theseIms(:,:,1);
+    
+    % Loop through all groups (apart from GEBCO) and discount
+    groupIndex = 3;  %Just choose one.  This should reflect 
+    thisGroupName{groupIndex} = thisH5Groups(groupIndex).Name;
+    theseIms = h5read(h5name, [thisGroupName{groupIndex} '/Ims']);
+    
+    numberOfIms = size(theseIms,3);
+    for iii = 1:numberOfIms
+        firstIm = theseIms(:,:,iii);
         centrePatchP = size(firstIm)/2+2;
         centrePatchM = size(firstIm)/2-1;
         centrePatch = firstIm(centrePatchM(1):centrePatchP(:),centrePatchM(2):centrePatchP(2));
         
-        totNumberCP(ii,groupIndex-2) = prod(size(centrePatch));
-        zNumberCP(ii,groupIndex-2) = sum(centrePatch(:)==0);
-        quotCP(ii,groupIndex-2) = zNumberCP(ii,groupIndex-2) / totNumberCP(ii,groupIndex-2);
+        totNumberCP(iii) = prod(size(centrePatch));
+        zNumberCP(iii) = sum(centrePatch(:)==0);
+        quotCP(iii) = zNumberCP(iii) / totNumberCP(iii);
         
-        totNumber(ii,groupIndex-2) = prod(size(theseIms));
-        zNumber(ii,groupIndex-2) = sum(theseIms(:)==0);
-        quot(ii,groupIndex-2) = zNumber(ii,groupIndex-2) / totNumber(ii,groupIndex-2);
-        
-        
-        theseDeltaDates = h5read(h5name, [thisGroupName{groupIndex} '/theseDeltaDates']);
-        totalDeltaDates = [ totalDeltaDates theseDeltaDates];
-        DDsize(ii,groupIndex-2) = length(theseDeltaDates);
-        
+        totNumber(iii) = prod(size(theseIms));
+        zNumber(iii) = sum(theseIms(:)==0);
+        quot(iii) = zNumber(iii) / totNumber(iii);
     end
+    allThereCP = (quotCP>0.2);
+    allThere = (quot>0.5);
+    allThereTotal = [ allThereCP allThere ];
+    thisDiscount = (sum(allThereTotal) ~= length(allThereTotal));
+    
+    if thisDiscount == 1
+        totalDiscount= totalDiscount+1;
+    end
+    totalDiscount
+    clear totNumberCP zNumberCP quotCP totNumber zNumber quot 
     catch
         [ 'caught at = ' num2str(ii) ]
     end
 end
 
-save analysis  totNumberCP zNumberCP quotCP totNumber zNumber quot totalDeltaDates DDsize;
-hist(quotCP(:),100);
+
 
 
 function t=julian2time(str)
