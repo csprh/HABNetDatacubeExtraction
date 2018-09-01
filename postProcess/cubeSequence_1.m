@@ -15,7 +15,7 @@ numberOfH5s=size(h5files,1);
 totalDeltaDates  = [];
 totalDiscount = 0;
 for ii = 1: numberOfH5s %Loop through all the ground truth entries
-
+    ii
     try
     system(['rm ' filenameBase '*.h5']);
     gzh5name = [filenameBase h5files(ii).name];
@@ -64,7 +64,7 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
         zNumber(iii) = sum(theseIms(:)==0);
         quot(iii) = zNumber(iii) / totNumber(iii);
     end
-    allThereCP = (quotCP>0.2);
+    allThereCP = (quotCP>0.5);
     allThere = (quot>0.5);
     allThereTotal = [ allThereCP allThere ];
     thisDiscount = (sum(allThereTotal) ~= length(allThereTotal));
