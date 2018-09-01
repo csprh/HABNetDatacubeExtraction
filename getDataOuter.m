@@ -16,7 +16,9 @@ clear; close all;
 
 if ismac
     tmpStruct = xml2struct('configHABmac.xml');
+    pythonStr = '/usr/local/bin/python3';
 elseif isunix
+    pythonStr = 'python';
     [dummy, thisCmd] = system('rpm --query centos-release');
     isUnderDesk = strcmp(thisCmd(1:end-1),'centos-release-7-5.1804.el7.centos.2.x86_64');
     if isUnderDesk == 1
@@ -152,7 +154,8 @@ for modIndex = 1:numberOfMods
     % sensors are either modisa,modist,viirsn,goci,meris,czcs,octs or 'seawifs'
     % sst: sstref, sst4, sst 1Km resolution for all sst
     % Search for "granules" at a particular lat, long and date range (output goes in Output.txt)
-    exeName = ['/usr/local/bin/python3  fd_matchup.py --data_type=' subMods{1} ' --sat=' subMods{2} ' --slat=' num2str(thisLat) ' --slon=' num2str(thisLon) ' --stime=' dayStartS UTCTime ' --etime=' dayEndS UTCTime];
+    
+    exeName = [pythonStr '  fd_matchup.py --data_type=' subMods{1} ' --sat=' subMods{2} ' --slat=' num2str(thisLat) ' --slon=' num2str(thisLon) ' --stime=' dayStartS UTCTime ' --etime=' dayEndS UTCTime];
     system(exeName);
     
     %% Loop through .nc files, veryify and download / extract
