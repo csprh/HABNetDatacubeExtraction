@@ -1,34 +1,47 @@
 function cubeAnalysis_1
 clear; close all;
 
+
 if ismac
-    filenameBase = '/Users/csprh/tmp/florida2/';
+    filenameBase1 = '/Users/csprh/tmp/florida2/';
+    filenameBase2 = '/Users/csprh/tmp/CNNIms/florida2/';
 else
-    filenameBase = '/mnt/storage/home/csprh/scratch/HAB/florida2/';
+    filenameBase1 = '/mnt/storage/home/csprh/scratch/HAB/florida2/';
+    filenameBase2 = '/mnt/storage/home/csprh/scratch/HAB/CNNIms/florida2/';
 end
 
+trainTestStr = {'Test','Train'};
 
-h5files=dir([filenameBase '*.h5.gz']);
+h5files=dir([filenameBase1 '*.h5.gz']);
 numberOfH5s=size(h5files,1); 
 %numberOfH5s = 200;
 
 totalDeltaDates  = [];
 totalDiscount = 0;
+minmaxind = 1;
+
+trainTestR = randi([0 1],1,numberOfH5s);
 for ii = 1: numberOfH5s %Loop through all the ground truth entries
     ii
     try
-    system(['rm ' filenameBase '*.h5']);
-    gzh5name = [filenameBase h5files(ii).name];
+        
+    
+    system(['rm ' filenameBase1 '*.h5']);
+    gzh5name = [filenameBase1 h5files(ii).name];
     gunzip(gzh5name);
 	h5name = gzh5name(1:end-3);
 
     thisCount = h5readatt(h5name,'/GroundTruth/','thisCount');
-    [ 'thisCount = ' num2str(thisCount) ];  
+    [ 'thisCount = ' num2str(thisCount) ]; 
+    
+    isHAB  = thisCount > 0; 
     thisH5Info = h5info(h5name);
     thisH5Groups = thisH5Info.Groups;
     numberOfGroups = size(thisH5Groups,1);
 
-    
+    dayEnd = h5readatt(h5name,'/GroundTruth/','dayEnd');
+    dayStart = h5readatt(h5name,'/GroundTruth/','dayStart');
+    numberOfDays = dayEnd - dayStart;
     % Find Unreliable datapoins
     % - loop through all groups
     % - Find if central position contains nothing (in all bands)
@@ -51,10 +64,10 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
     
     numberOfIms = size(theseIms,3);
     for iii = 1:numberOfIms
-        firstIm = theseIms(:,:,iii);
-        centrePatchP = size(firstIm)/2+2;
-        centrePatchM = size(firstIm)/2-1;
-        centrePatch = firstIm(centrePatchM(1):centrePatchP(:),centrePatchM(2):centrePatchP(2));
+        thisIm = theseIms(:,:,iii);
+        centrePatchP = size(thisIm)/2+2;
+        centrePatchM = size(thisIm)/2-1;
+        centrePatch = thisIm(centrePatchM(1):centrePatchP(:),centrePatchM(2):centrePatchP(2));
         
         totNumberCP(iii) = prod(size(centrePatch));
         zNumberCP(iii) = sum(centrePatch(:)==0);
@@ -65,20 +78,55 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
         quot(iii) = zNumber(iii) / totNumber(iii);
     end
     allThereCP = (quotCP>0.5);
-    allThere = (quot>0.5);
+    allThere = (quot>0.2);
     allThereTotal = [ allThereCP allThere ];
     thisDiscount = (sum(allThereTotal) ~= length(allThereTotal));
-    
+   
     if thisDiscount == 1
         totalDiscount= totalDiscount+1;
+        continue;
     end
     totalDiscount
+    
+    
+    baseDirectory = [ filenameBase2 trainTestStr{trainTestR(ii)+1 } '/' num2str(isHAB) '/' ] ;
+    thisBaseDirectory = [baseDirectory '/', num2str(ii) '/'];
+    mkdir(thisBaseDirectory);
+    
+    
+    for groupIndex = 2: numberOfGroups
+        thisGroupName{groupIndex} = thisH5Groups(groupIndex).Name;
+        theseIms = h5read(h5name, [thisGroupName{groupIndex} '/Ims']);
+        theseDeltaDates = h5read(h5name, [thisGroupName{groupIndex} '/theseDeltaDates']);
+        for thisDay  = 1:numberOfDays
+            quantEdge1 = thisDay-1; quantEdge2 = thisDay;
+            theseIndices = (theseDeltaDates>=quantEdge1) & (theseDeltaDates<quantEdge2);
+            
+            if sum(theseIndices)==0
+                quantIms = zeros(size(theseIms(:,:,1)));
+            end
+            quantIms = theseIms(:,:,theseIndices);
+
+            quantIms(quantIms==0)=NaN;
+            quantIms = nanmean(quantIms, 3);
+
+            thisMax(groupIndex-1,minmaxind) = max(quantIms(:));
+            thisMin(groupIndex-1,minmaxind) = min(quantIms(:));
+            minmaxind = minmaxind + 1;
+            quantIms(isnan(quantIms))=0;
+              
+            quantIms = round(quantIms*(255/78.5));
+            quantIms(quantIms>255) = 255;
+            imwrite(uint8(quantIms),[thisBaseDirectory  sprintf('%02d_%02d',groupIndex-1,thisDay),'.jpg']);
+
+        end
+    end
     clear totNumberCP zNumberCP quotCP totNumber zNumber quot 
     catch
         [ 'caught at = ' num2str(ii) ]
     end
 end
-
+save groupMaxAndMin thisMax thisMin
 
 
 
