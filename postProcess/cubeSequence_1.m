@@ -21,6 +21,9 @@ totalDiscount = 0;
 minmaxind = 1;
 
 trainTestR = randi([0 1],1,numberOfH5s);
+
+load groupMaxAndMin
+groupMinMax = getMinMax(thisMax, thisMin);
 for ii = 1: numberOfH5s %Loop through all the ground truth entries
     ii
     try
@@ -95,6 +98,7 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
     
     
     for groupIndex = 2: numberOfGroups
+        thisGroupIndex = groupIndex-1;
         thisGroupName{groupIndex} = thisH5Groups(groupIndex).Name;
         theseIms = h5read(h5name, [thisGroupName{groupIndex} '/Ims']);
         theseDeltaDates = h5read(h5name, [thisGroupName{groupIndex} '/theseDeltaDates']);
@@ -104,20 +108,22 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
             
             if sum(theseIndices)==0
                 quantIms = zeros(size(theseIms(:,:,1)));
+            else
+                quantIms = theseIms(:,:,theseIndices);
             end
-            quantIms = theseIms(:,:,theseIndices);
-
+            
             quantIms(quantIms==0)=NaN;
             quantIms = nanmean(quantIms, 3);
 
-            thisMax(groupIndex-1,minmaxind) = max(quantIms(:));
-            thisMin(groupIndex-1,minmaxind) = min(quantIms(:));
+            thisMax(thisGroupIndex,minmaxind) = max(quantIms(:));
+            thisMin(thisGroupIndex,minmaxind) = min(quantIms(:));
             minmaxind = minmaxind + 1;
-            quantIms(isnan(quantIms))=0;
-              
-            quantIms = round(quantIms*(255/78.5));
+            
+            quantIms = quantIms-groupMinMax(thisGroupIndex,1);
+            quantIms = 255*(quantIms./(groupMinMax(thisGroupIndex,2)-groupMinMax(thisGroupIndex,1)));
             quantIms(quantIms>255) = 255;
-            imwrite(uint8(quantIms),[thisBaseDirectory  sprintf('%02d_%02d',groupIndex-1,thisDay),'.jpg']);
+            quantIms(isnan(quantIms))=0;
+            imwrite(uint8(quantIms),[thisBaseDirectory  sprintf('%02d_%02d',groupIndex-1,thisDay),'.jpg'],'Quality',100);
 
         end
     end
@@ -135,3 +141,9 @@ function t=julian2time(str)
 ddd=str2double(str(5:7));
 jan1=[str(1:4),'0101',str(8:13)];  % day 1 
 t=datenum(jan1,'yyyymmddHHMMSS')+ddd-1;
+
+
+function groupMinMax = getMinMax(thisMax, thisMin)
+
+groupMinMax = [ min(thisMin') ; max(thisMax')]';
+
