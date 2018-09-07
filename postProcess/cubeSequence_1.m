@@ -93,12 +93,12 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
     
     
     baseDirectory = [ filenameBase2 trainTestStr{trainTestR(ii)+1 } '/' num2str(isHAB) '/' ] ;
-    thisBaseDirectory = [baseDirectory '/', num2str(ii) '/'];
-    mkdir(thisBaseDirectory);
-    
     
     for groupIndex = 2: numberOfGroups
         thisGroupIndex = groupIndex-1;
+        thisBaseDirectory = [baseDirectory '/', num2str(ii) '/' num2str(thisGroupIndex) '/'];
+        mkdir(thisBaseDirectory);
+        
         thisGroupName{groupIndex} = thisH5Groups(groupIndex).Name;
         theseIms = h5read(h5name, [thisGroupName{groupIndex} '/Ims']);
         theseDeltaDates = h5read(h5name, [thisGroupName{groupIndex} '/theseDeltaDates']);
@@ -123,7 +123,8 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
             quantIms = 255*(quantIms./(groupMinMax(thisGroupIndex,2)-groupMinMax(thisGroupIndex,1)));
             quantIms(quantIms>255) = 255;
             quantIms(isnan(quantIms))=0;
-            imwrite(uint8(quantIms),[thisBaseDirectory  sprintf('%02d_%02d',groupIndex-1,thisDay),'.jpg'],'Quality',100);
+            quantIms = imfill(quantIms);
+            imwrite(uint8(quantIms),[thisBaseDirectory  sprintf('%02d',thisDay),'.jpg'],'Quality',100);
 
         end
     end
