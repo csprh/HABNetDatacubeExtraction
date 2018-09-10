@@ -43,7 +43,7 @@ confgData.numberOfSamples = str2double(tmpStruct.confgData.numberOfSamples.Text)
 confgData.mods = tmpStruct.confgData.Modality;
 
 system(['rm ' confgData.outDir '*.h5']);
-load(confgData.inputFilename);
+load(confgData.inputFilename); 
 if confgData.numberOfSamples == -1;   confgData.numberOfSamples = length(count2); end;
 
 %% Loop through all samples in .mat Ground Truth File
