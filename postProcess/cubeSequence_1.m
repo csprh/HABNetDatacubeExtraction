@@ -6,8 +6,8 @@ if ismac
     filenameBase1 = '/Users/csprh/tmp/florida2/';
     filenameBase2 = '/Users/csprh/tmp/CNNIms/florida2/';
 else
-    filenameBase1 = '/mnt/storage/home/csprh/scratch/HAB/florida2/';
-    filenameBase2 = '/mnt/storage/home/csprh/scratch/HAB/CNNIms/florida2/';
+    filenameBase1 = '/mnt/storage/home/csprh/scratch/HAB/florida3/';
+    filenameBase2 = '/mnt/storage/home/csprh/scratch/HAB/CNNIms/florida3/';
 end
 
 trainTestStr = {'Test','Train'};
@@ -28,7 +28,6 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
     ii
     try
         
-    
     system(['rm ' filenameBase1 '*.h5']);
     gzh5name = [filenameBase1 h5files(ii).name];
     gunzip(gzh5name);
@@ -45,6 +44,7 @@ for ii = 1: numberOfH5s %Loop through all the ground truth entries
     dayEnd = h5readatt(h5name,'/GroundTruth/','dayEnd');
     dayStart = h5readatt(h5name,'/GroundTruth/','dayStart');
     numberOfDays = dayEnd - dayStart;
+    numberOfDays = 5;
     % Find Unreliable datapoins
     % - loop through all groups
     % - Find if central position contains nothing (in all bands)
