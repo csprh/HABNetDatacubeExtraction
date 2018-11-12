@@ -7,7 +7,7 @@ function cubeSequence
 % and once to output the final data images
 %
 % USAGE:
-%   cubeSequence_1
+%   cubeSequence
 % INPUT:
 %   -
 % OUTPUT:
@@ -129,7 +129,8 @@ for ii = 1: numberOfH5s
             thisMax(thisGroupIndex,minmaxind) = max(quantIms(:));
             thisMin(thisGroupIndex,minmaxind) = min(quantIms(:));
             minmaxind = minmaxind + 1;
-            
+           
+	    % Quantisation Image Scaling and Infill 
             quantIms = quantIms-groupMinMax(thisGroupIndex,1);
             quantIms = 255*(quantIms./(groupMinMax(thisGroupIndex,2)-groupMinMax(thisGroupIndex,1)));
             quantIms(quantIms>255) = 255;
@@ -150,5 +151,12 @@ end
 save groupMaxAndMin thisMax thisMin
 
 function groupMinMax = getMinMax(thisMax, thisMin)
+% USAGE:
+%   groupMinMax = getMinMax(thisMax, thisMin)
+% INPUT:
+%   thisMax = array of maxima
+%   thisMin = array of minima
+% OUTPUT:
+%   groupMinMax = group together the minimum and maximum of input min and max
 groupMinMax = [ min(thisMin') ; max(thisMax')]';
 

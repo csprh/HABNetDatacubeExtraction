@@ -11,6 +11,7 @@ function [outputIm, tripleOut, tripleOutProj] = getData(file,  outLat, outLon, d
 %              centre
 %   resolution - Bin size (in meters) of the outputIm
 %   thisVar - character string name of the variable to be output (from H5)
+%   utmstruct - UTM structure for projection
 % OUTPUT:
 %   outputIm - Binned output image
 %   tripleOut - Array of tiplets (lat, lon, value)

@@ -242,10 +242,12 @@ function addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thes
 %   addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput)
 % INPUT:
 %   h5name - name of H5 name to be output
+%   thisMod = Name of the output modality
 %   theseImages - Cell array of output binned images (for this modality)
 %   theseDates - The actual capture dates of the points and images output
 %   theseDeltaDates - The delta dates (difference from capture date) of the points and images output
 %   thesePointsOutput - 4D Array of points output
+%   thesePointsOutputProj - 4D Array of projected points output
 % OUTPUT:
 %   - 
 hdf5write(h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
