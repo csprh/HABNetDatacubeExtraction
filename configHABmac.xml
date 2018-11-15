@@ -10,6 +10,7 @@
    <distance1>50000</distance1>
    <numberOfDaysInPast>5</numberOfDaysInPast>
    <numberOfSamples>-1</numberOfSamples>
+   <Modality>modisa-Chl_a-BMA</Modality>
    <Modality>gebco</Modality>
    <Modality>oc-modisa-chlor_a</Modality>
    <Modality>oc-modisa-Rrs_412</Modality>
