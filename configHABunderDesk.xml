@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <confgData>
    <inputFilename>./work/florida_2003-2018-50K</inputFilename>
-   <gebcoFilename>~/HABCODE/scratch/HAB/GEBCO/GEBCO.nc</gebcoFilename>
+   <gebcoFilename>/space/csprh/HAB/GEBCO/GEBCO.nc</gebcoFilename>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
    <outDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida4/</outDir>
    <resolution>2000</resolution>
