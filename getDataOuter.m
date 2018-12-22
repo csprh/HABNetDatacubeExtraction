@@ -207,7 +207,7 @@ for modIndex = 1:numberOfMods
         theseDates{iii} = thisDate;
         theseDeltaDates{iii} = thisDeltaDate;
         thesePointsNew = [thesePoints ones(size(thesePoints,1),1)*thisDeltaDate];
-        thesePointsProjNew = [thesePoints ones(size(thesePoints,1),1)*thisDeltaDate];
+        thesePointsProjNew = [thesePointsProj ones(size(thesePointsProj,1),1)*thisDeltaDate];
         thesePointsOutput = [thesePointsOutput; thesePointsNew];
         thesePointsProjOutput = [thesePointsProjOutput; thesePointsProjNew];
     end

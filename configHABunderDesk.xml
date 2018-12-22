@@ -3,10 +3,10 @@
    <inputFilename>./work/florida_2003-2018-50K</inputFilename>
    <gebcoFilename>~/HABCODE/scratch/HAB/GEBCO/GEBCO.nc</gebcoFilename>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
-   <outDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida2/</outDir>
+   <outDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida4/</outDir>
    <resolution>2000</resolution>
    <distance1>50000</distance1>
-   <numberOfDaysInPast>3</numberOfDaysInPast>
+   <numberOfDaysInPast>10</numberOfDaysInPast>
    <numberOfSamples>-1</numberOfSamples>
    <Modality>gebco</Modality>
    <Modality>oc-modisa-chlor_a</Modality>
@@ -18,10 +18,4 @@
    <Modality>oc-modisa-par</Modality>
    <Modality>sst-modisa-sstref</Modality>
    <Modality>oc-modist-chlor_a</Modality>
-   <Modality>oc-modist-Rrs_412</Modality>
-   <Modality>oc-modist-Rrs_443</Modality>
-   <Modality>oc-modist-Rrs_488</Modality>
-   <Modality>oc-modist-Rrs_531</Modality>
-   <Modality>oc-modist-Rrs_555</Modality>
-   <Modality>oc-modist-par</Modality>
 </confgData>

@@ -22,12 +22,39 @@ cd(outDir);
 mkdir(BimonthlyAverageDirectory);
 cd(BimonthlyAverageDirectory);
 
+%Get max/min (original excel file)
+%lattitude Min/Max = 24, 40.73333	
+%longitude Min/Max = -76.65694 -87.51778
+%Get max/min (original 50k mat file)
+%lattitude Min/Max = 24.4455, 30.7012 	
+%longitude Min/Max = -79.9940  -87.9453
+ 
+%Get max/min (original 5k mat file) USED!
+%lattitude Min/Max = 24.1864, 30.7012 	
+%longitude Min/Max = -79.9748  -87.9453
 
-ChlDate1 = datenum('2019-01-01');
-ChlDate2 = datenum('2003-01-01');
-ChlDate1S = datestr(ChlDate1,29);
-ChlDate2S = datestr(ChlDate2,29);
+%Loop through dates 2003 to 2019
+%Extract for bi-monthly range
+%For each range, extract
 
-thisString = ['sensor=modisa&sdate=' ChlDate2S '&edate=' ChlDate1S '&dtype=L3b&addurl=1&results_as_file=1&search=*8D_CHL*'];
-exeName  = [confgData.wgetStringBase ' -q --post-data="' thisString '" -O - https://oceandata.sci.gsfc.nasa.gov/api/file_search |' confgData.wgetStringBase ' -i -'];
-system(exeName);
+dayStartS = '2003-01-01';
+dayEndS = '2019-01-01';
+dayStart = datenum(dayStartS);
+dayEnd = datenum(dayEndS);
+
+thisDay = dayStart;
+while thisDay <  dayEnd
+    wdelString = 'rm *.nc';  unix(wdelString);
+    thisEndDay = thisDay+61;
+    thisDayS = datestr(thisDay,29);
+    thisEndDayS = datestr(thisEndDay,29);
+    
+    thisString = ['sensor=modisa&sdate=' thisDayS '&edate=' thisEndDayS '&dtype=L3b&addurl=1&results_as_file=1&search=A*8D_CHL.nc'];
+    exeName  = [confgData.wgetStringBase ' -q --post-data="' thisString '" -O - https://oceandata.sci.gsfc.nasa.gov/api/file_search |' confgData.wgetStringBase ' -i -'];
+    system(exeName);
+    % get list of downloaded .nc 
+    % loop through
+    %   open .nc
+    thisDay = thisDay+8;    
+end
+
