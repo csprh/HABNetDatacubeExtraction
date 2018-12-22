@@ -3,10 +3,10 @@
    <inputFilename>./work/florida_2003-2018-50K</inputFilename>
    <gebcoFilename>~/scratch/HAB/GEBCO/GEBCO.nc</gebcoFilename>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
-   <outDir>/mnt/storage/scratch/csprh/HAB/florida3/</outDir>
+   <outDir>/mnt/storage/scratch/csprh/HAB/florida4/</outDir>
    <resolution>2000</resolution>
    <distance1>50000</distance1>
-   <numberOfDaysInPast>5</numberOfDaysInPast>
+   <numberOfDaysInPast>10</numberOfDaysInPast>
    <numberOfSamples>-1</numberOfSamples>
    <Modality>gebco</Modality>
    <Modality>oc-modisa-chlor_a</Modality>
