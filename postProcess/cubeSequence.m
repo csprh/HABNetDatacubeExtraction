@@ -21,8 +21,8 @@ if ismac
     filenameBase1 = '/Users/csprh/tmp/florida2/';
     filenameBase2 = '/Users/csprh/tmp/CNNIms/florida2/';
 else
-    filenameBase1 = '/mnt/storage/home/csprh/scratch/HAB/florida3/';
-    filenameBase2 = '/mnt/storage/home/csprh/scratch/HAB/CNNIms/florida3/';
+    filenameBase1 = '/mnt/storage/home/csprh/scratch/HAB/florida4/';
+    filenameBase2 = '/mnt/storage/home/csprh/scratch/HAB/CNNIms/florida4/';
 end
 
 trainTestStr = {'Test','Train'};
@@ -58,7 +58,7 @@ for ii = 1: numberOfH5s
     dayEnd = h5readatt(h5name,'/GroundTruth/','dayEnd');
     dayStart = h5readatt(h5name,'/GroundTruth/','dayStart');
     numberOfDays = dayEnd - dayStart;
-    numberOfDays = 5;
+    numberOfDays = 10;
     
     % Loop through all groups (apart from GEBCO) and discount
     groupIndex = 3;  %Just choose one.  This should reflect typical sizes 
