@@ -4,7 +4,13 @@ clear; close all;
 if ismac
     filenameBase = '/Users/csprh/tmp/florida4/';
 else
-    filenameBase = '/mnt/storage/home/csprh/scratch/HAB/florida4/';
+    [dummy, thisCmd] = system('rpm --query centos-release');
+    isUnderDesk = strcmp(thisCmd(1:end-1),'centos-release-7-6.1810.2.el7.centos.x86_64');
+    if isUnderDesk == 0
+        filenameBase = '/mnt/storage/home/csprh/scratch/HAB/florida4/';
+    else
+        filenameBase = '/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida4/';
+    end
 end
 
 
