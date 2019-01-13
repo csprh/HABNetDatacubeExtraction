@@ -44,7 +44,6 @@ h5files=dir([filenameBase1 '*.h5.gz']);
 numberOfH5s=size(h5files,1);
 
 totalDiscount = 0;  %Number of discounted datapoints
-minmaxind = 1;
 
 trainTestR = randi([0 1],1,numberOfH5s);
 
@@ -52,6 +51,7 @@ load groupMaxAndMin %load the max and minima of the mods
 groupMinMax = getMinMax(thisMax, thisMin);
 groupMinMax(1,2)  = 0; %discount land
 
+minmaxind = ones(10,1);
 %%Loop through all the ground truth entries
 for ii = 1: numberOfH5s
     ii
@@ -140,7 +140,7 @@ for ii = 1: numberOfH5s
             for thisDay  = 1:numberOfDays
                 
 
-                if groupIndex == 2 %GEBCO
+                if thisGroupIndex == 1 %GEBCO
                     input.xp = PointsProj(:,1);
                     input.yp = PointsProj(:,2);
                     input.up = PointsProj(:,3);
@@ -152,7 +152,7 @@ for ii = 1: numberOfH5s
                     quantEdge1 = thisDay-1; quantEdge2 = thisDay;
                     theseIndices = (zp>=quantEdge1) & (zp<quantEdge2);
           
-                    if sum(theseIndices)==0
+                    if length(theseIndices)==0
                         outputImage = zeros(size(landInd));
                     else
                         input.xp = PointsProj(theseIndices,1);
@@ -164,9 +164,9 @@ for ii = 1: numberOfH5s
                     end
                 end
                 % Image Scaling and Infill
-                thisMax(thisGroupIndex,minmaxind) = max(input.up(:));
-                thisMin(thisGroupIndex,minmaxind) = min(input.up(:));
-                minmaxind = minmaxind + 1;
+                thisMax(thisGroupIndex,minmaxind(thisGroupIndex)) = max(input.up(:));
+                thisMin(thisGroupIndex,minmaxind(thisGroupIndex)) = min(input.up(:));
+                minmaxind(thisGroupIndex) = minmaxind(thisGroupIndex) + 1;
                 outputImage = outputImage-groupMinMax(thisGroupIndex,1);
                 outputImage = 255*(outputImage./(groupMinMax(thisGroupIndex,2)-groupMinMax(thisGroupIndex,1)));
  
