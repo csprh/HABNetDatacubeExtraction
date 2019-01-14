@@ -127,6 +127,10 @@ for ii = 1: numberOfH5s
         
         %%Loop through all modalities
         for groupIndex = 2: numberOfGroups
+     
+            if groupIndex == 11 && ii == 2
+                groupIndex
+            end 
             thisGroupIndex = groupIndex-1;
             thisBaseDirectory = [baseDirectory num2str(ii) '/' num2str(thisGroupIndex) '/'];
             mkdir(thisBaseDirectory);
@@ -135,7 +139,7 @@ for ii = 1: numberOfH5s
           
             PointsProj = h5read(h5name, [thisGroupName{groupIndex} '/PointsProj']);
             
-            
+          
             %%Loop through days, quantise them, sum, clip and output
             for thisDay  = 1:numberOfDays
                 
@@ -164,9 +168,11 @@ for ii = 1: numberOfH5s
                     end
                 end
                 % Image Scaling and Infill
-                thisMax(thisGroupIndex,minmaxind(thisGroupIndex)) = max(input.up(:));
-                thisMin(thisGroupIndex,minmaxind(thisGroupIndex)) = min(input.up(:));
-                minmaxind(thisGroupIndex) = minmaxind(thisGroupIndex) + 1;
+                if length(input.up(:)) ~= 0
+                    thisMax(thisGroupIndex,minmaxind(thisGroupIndex)) = max(input.up(:));
+                    thisMin(thisGroupIndex,minmaxind(thisGroupIndex)) = min(input.up(:));
+                    minmaxind(thisGroupIndex) = minmaxind(thisGroupIndex) + 1;
+                end
                 outputImage = outputImage-groupMinMax(thisGroupIndex,1);
                 outputImage = 255*(outputImage./(groupMinMax(thisGroupIndex,2)-groupMinMax(thisGroupIndex,1)));
  
@@ -196,14 +202,19 @@ groupMinMax = [ min(thisMin') ; max(thisMax')]';
 
 function outputImage = getImage(output, input, alphaSize)
 
-if length(input.xp) == 0
-    outputImage = ones(size(input.xq))*NaN;
+if length(input.xp) < 10
+    outputImage = ones(size(output.xq))*NaN;
     return;
 end
+try
 outputImage = griddata(input.xp, input.yp,  input.up, output.xq, output.yq);
 shp = alphaShape(input.xp, input.yp,  alphaSize);
 thisin = inShape(shp, output.xq, output.yq);
 
 outputImage(thisin==0) = NaN;
 outputImage(input.isLand==1) == NaN;
+
+catch
+     outputImage = ones(size(output.xq))*NaN;
+end
 
