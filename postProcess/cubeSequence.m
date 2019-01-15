@@ -32,14 +32,16 @@ else
     end
 end
 
+%The input range is 50 by 50 samples (in projected space)
+%The output resolution is 1000m (1km)
+%AlphaSize controls the interpolation projected points to output image
 inputRangeX = [0 50];
 inputRangeY = [0 50];
 outputRes = 1000;
 alphaSize = 2;
-
+threshCP = 0.5;  threshAll = 0.2; %discount thresholds
 
 trainTestStr = {'Test','Train'};
-
 h5files=dir([filenameBase1 '*.h5.gz']);
 numberOfH5s=size(h5files,1);
 
@@ -53,27 +55,36 @@ groupMinMax(1,2)  = 0; %discount land
 groupMinMax(1,1)  = -500;
 
 minmaxind = ones(10,1);
-%%Loop through all the ground truth entries
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Loop through all the ground truth entries%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for ii = 1: numberOfH5s
     ii
     try
+        %% Process input h5 file
         system(['rm ' filenameBase1 '*.h5']);
         gzh5name = [filenameBase1 h5files(ii).name];
         gunzip(gzh5name);
         h5name = gzh5name(1:end-3);
-        
         thisCount = h5readatt(h5name,'/GroundTruth/','thisCount');
         [ 'thisCount = ' num2str(thisCount) ];
-        
         isHAB  = thisCount > 0;
         thisH5Info = h5info(h5name);
         thisH5Groups = thisH5Info.Groups;
         numberOfGroups = size(thisH5Groups,1);
-        
         dayEnd = h5readatt(h5name,'/GroundTruth/','dayEnd');
         dayStart = h5readatt(h5name,'/GroundTruth/','dayStart');
         numberOfDays = dayEnd - dayStart;
         numberOfDays = 10;
+
+        % Generate Output Interpolation Variables
+        inputRes = thisH5Info.Groups(1).Attributes(10);
+        inputRes = inputRes.Value;
+        fract = outputRes / inputRes ;
+        xq = inputRangeX(1) + fract/2 : fract : inputRangeX(2) - fract/2;
+        yq = inputRangeY(1) + fract/2 : fract : inputRangeY(2) - fract/2;
+        [output.xq, output.yq] = meshgrid(xq, yq);
         
         % Loop through all groups (apart from GEBCO) and discount
         groupIndex = 3;  %Just choose one.  This should reflect typical sizes
@@ -81,13 +92,6 @@ for ii = 1: numberOfH5s
         theseIms = h5read(h5name, [thisGroupName{groupIndex} '/Ims']);
         
         numberOfIms = size(theseIms,3);
-        
-        inputRes = thisH5Info.Groups(1).Attributes(10);
-        inputRes = inputRes.Value;
-        fract = outputRes / inputRes ;
-        xq = inputRangeX(1) + fract/2 : fract : inputRangeX(2) - fract/2;
-        yq = inputRangeY(1) + fract/2 : fract : inputRangeY(2) - fract/2;
-        [output.xq, output.yq] = meshgrid(xq, yq);
         
         %% Loop through saved images.  There may be a variable number of images
         %  The amount of data as a quotiant is the calculated (for whole image
@@ -108,15 +112,16 @@ for ii = 1: numberOfH5s
             zNumber(iii) = sum(theseIms(:)==0);
             quot(iii) = zNumber(iii) / totNumber(iii);
         end
-        allThereCP = (quotCP>0.5);
-        allThere = (quot>0.2);
+
+        allThereCP = (quotCP>threshCP);
+        allThere = (quot>threshAll);
         allThereTotal = [ allThereCP allThere ];
         thisDiscount = (sum(allThereTotal) ~= length(allThereTotal));
         
         % Discount this line in the Ground Truth
         if thisDiscount == 1
             totalDiscount= totalDiscount+1;
-            %continue;
+            continue;
         end
         totalDiscount
         
@@ -124,18 +129,16 @@ for ii = 1: numberOfH5s
         %number, Group Index
         baseDirectory = [ filenameBase2 trainTestStr{trainTestR(ii)+1 } '/' num2str(isHAB) '/' ] ;
         
-        
-        
         %%Loop through all modalities
         for groupIndex = 2: numberOfGroups
-            
-
             thisGroupIndex = groupIndex-1;
             thisBaseDirectory = [baseDirectory num2str(ii) '/' num2str(thisGroupIndex) '/'];
             mkdir(thisBaseDirectory);
             
             thisGroupName{groupIndex} = thisH5Groups(groupIndex).Name;
             
+            %Get projected points (on 50x50 grid), if not exist then
+            %generate blank output
             try
                 PointsProj = h5read(h5name, [thisGroupName{groupIndex} '/PointsProj']);
             catch
