@@ -37,6 +37,9 @@ cd(BimonthlyAverageDirectory);
 %Extract for bi-monthly range
 %For each range, extract
 
+
+latMinMax = [24.1864 30.7012]; 	
+lonMinMax = [-87.9453 -79.9748];
 dayStartS = '2003-01-01';
 dayEndS = '2019-01-01';
 dayStart = datenum(dayStartS);
@@ -51,7 +54,28 @@ while thisDay <  dayEnd
     
     thisString = ['sensor=modisa&sdate=' thisDayS '&edate=' thisEndDayS '&dtype=L3b&addurl=1&results_as_file=1&search=A*8D_CHL.nc'];
     exeName  = [confgData.wgetStringBase ' -q --post-data="' thisString '" -O - https://oceandata.sci.gsfc.nasa.gov/api/file_search |' confgData.wgetStringBase ' -i -'];
-    system(exeName);
+    %system(exeName);
+ 
+    NCfiles=dir('*.nc');
+    numberOfNCs=size(NCfiles,1);
+    
+    for ii = 1: numberOfNCs
+    ii
+        %% Process input h5 file
+
+        ncName = [filenameBase1 NCfiles(ii).name];
+        A = h5read(ncName,'/level-3_binned_data/chlor_a');
+        B = h5read(ncName,'/level-3_binned_data/BinList');
+        z = double(A.sum_squared);
+        bins = B.bin_num;
+        [lat,lon] = binind2latlon(bins);
+        ind = lon>=lonMinMax(1) & lon<=lonMinMax(2) & lat>=latMinMax(1) &lat<=latMinMax(2);
+        
+        outLat = lat(ind);
+        outLon = lon(ind);
+        outVal = z(ind);
+    end
+
     % get list of downloaded .nc 
     % loop through
     %   open .nc

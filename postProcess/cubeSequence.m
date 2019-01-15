@@ -215,6 +215,8 @@ groupMinMax = [ min(thisMin') ; max(thisMax')]';
 
 function outputImage = getImage(output, input, alphaSize)
 
+
+
 if length(input.xp) < 10
     outputImage = ones(size(output.xq))*NaN;
     return;

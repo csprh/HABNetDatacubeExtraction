@@ -19,6 +19,7 @@ function [outputIm, tripleOut, tripleOutProj] = getDataNew(file,  outLat, outLon
 % THE UNIVERSITY OF BRISTOL: HAB PROJECT
 % Author Dr Paul Hill 26th June 2018
 
+narginchk(7,7); nargoutchk(3,3);
 
 lonDD = ncread(file, '/navigation_data/longitude'); lonDD = lonDD(:);
 latDD = ncread(file, '/navigation_data/latitude'); latDD = latDD(:);
