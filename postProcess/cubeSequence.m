@@ -50,6 +50,7 @@ trainTestR = randi([0 1],1,numberOfH5s);
 load groupMaxAndMin %load the max and minima of the mods
 groupMinMax = getMinMax(thisMax, thisMin);
 groupMinMax(1,2)  = 0; %discount land
+groupMinMax(1,1)  = -500;
 
 minmaxind = ones(10,1);
 %%Loop through all the ground truth entries
@@ -123,61 +124,66 @@ for ii = 1: numberOfH5s
         %number, Group Index
         baseDirectory = [ filenameBase2 trainTestStr{trainTestR(ii)+1 } '/' num2str(isHAB) '/' ] ;
         
-
+        
         
         %%Loop through all modalities
         for groupIndex = 2: numberOfGroups
-     
-            if groupIndex == 11 && ii == 2
+            
+            if groupIndex == 11 && ii == 1
                 groupIndex
-            end 
+            end
             thisGroupIndex = groupIndex-1;
             thisBaseDirectory = [baseDirectory num2str(ii) '/' num2str(thisGroupIndex) '/'];
             mkdir(thisBaseDirectory);
             
             thisGroupName{groupIndex} = thisH5Groups(groupIndex).Name;
-          
+            
             PointsProj = h5read(h5name, [thisGroupName{groupIndex} '/PointsProj']);
             
-          
+            
             %%Loop through days, quantise them, sum, clip and output
             for thisDay  = 1:numberOfDays
                 
-
-                if thisGroupIndex == 1 %GEBCO
-                    input.xp = PointsProj(:,1);
-                    input.yp = PointsProj(:,2);
-                    input.up = PointsProj(:,3);
-                    outputImage = griddata(input.xp, input.yp,  input.up, output.xq, output.yq);
-                    landInd = outputImage>0;
-                    outputImage(landInd) = 0;
-                else
-                    zp = PointsProj(:,4);
-                    quantEdge1 = thisDay-1; quantEdge2 = thisDay;
-                    theseIndices = (zp>=quantEdge1) & (zp<quantEdge2);
-          
-                    if length(theseIndices)==0
-                        outputImage = zeros(size(landInd));
+                try
+                    if thisGroupIndex == 1 %GEBCO
+                        input.xp = PointsProj(:,1);
+                        input.yp = PointsProj(:,2);
+                        input.up = PointsProj(:,3);
+                        outputImage = griddata(input.xp, input.yp,  input.up, output.xq, output.yq);
+                        landInd = outputImage>0;
+                        outputImage(landInd) = 0;
                     else
-                        input.xp = PointsProj(theseIndices,1);
-                        input.yp = PointsProj(theseIndices,2);
-                        input.up = PointsProj(theseIndices,3);
-                        input.isLand = landInd;
-            
-                        outputImage = getImage(output, input, alphaSize);
+                        zp = PointsProj(:,4);
+                        quantEdge1 = thisDay-1; quantEdge2 = thisDay;
+                        theseIndices = (zp>=quantEdge1) & (zp<quantEdge2);
+                        
+                        if length(theseIndices)==0
+                            outputImage = zeros(size(landInd));
+                        else
+                            input.xp = PointsProj(theseIndices,1);
+                            input.yp = PointsProj(theseIndices,2);
+                            input.up = PointsProj(theseIndices,3);
+                            input.isLand = landInd;
+                            
+                            outputImage = getImage(output, input, alphaSize);
+                        end
                     end
+                    % Image Scaling and Infill
+                    if length(input.up(:)) ~= 0
+                        thisMax(thisGroupIndex,minmaxind(thisGroupIndex)) = max(input.up(:));
+                        thisMin(thisGroupIndex,minmaxind(thisGroupIndex)) = min(input.up(:));
+                        minmaxind(thisGroupIndex) = minmaxind(thisGroupIndex) + 1;
+                    end
+                    outputImage = outputImage-groupMinMax(thisGroupIndex,1);
+                    outputImage = 255*(outputImage./(groupMinMax(thisGroupIndex,2)-groupMinMax(thisGroupIndex,1)));
+                    outputImage(outputImage < 0) = 0; outputImage(outputImage > 255) = 255;
+                    
+                    %imwrite(uint8(outputImage),[thisBaseDirectory  sprintf('%02d',thisDay),'.jpg'],'Quality',100);
+                    imwrite(uint8(outputImage),[thisBaseDirectory  sprintf('%02d',thisDay),'.png']);
+                catch
+                    outputImage = ones(size(output.xq))*NaN;
+                    imwrite(uint8(outputImage),[thisBaseDirectory  sprintf('%02d',thisDay),'.png']);
                 end
-                % Image Scaling and Infill
-                if length(input.up(:)) ~= 0
-                    thisMax(thisGroupIndex,minmaxind(thisGroupIndex)) = max(input.up(:));
-                    thisMin(thisGroupIndex,minmaxind(thisGroupIndex)) = min(input.up(:));
-                    minmaxind(thisGroupIndex) = minmaxind(thisGroupIndex) + 1;
-                end
-                outputImage = outputImage-groupMinMax(thisGroupIndex,1);
-                outputImage = 255*(outputImage./(groupMinMax(thisGroupIndex,2)-groupMinMax(thisGroupIndex,1)));
- 
-                %imwrite(uint8(outputImage),[thisBaseDirectory  sprintf('%02d',thisDay),'.jpg'],'Quality',100);
-                imwrite(uint8(outputImage),[thisBaseDirectory  sprintf('%02d',thisDay),'.png']);
             end
         end
         clear totNumberCP zNumberCP quotCP totNumber zNumber quot
@@ -207,14 +213,13 @@ if length(input.xp) < 10
     return;
 end
 try
-outputImage = griddata(input.xp, input.yp,  input.up, output.xq, output.yq);
-shp = alphaShape(input.xp, input.yp,  alphaSize);
-thisin = inShape(shp, output.xq, output.yq);
+    outputImage = griddata(input.xp, input.yp,  input.up, output.xq, output.yq);
+    shp = alphaShape(input.xp, input.yp,  alphaSize);
+    thisin = inShape(shp, output.xq, output.yq);
 
-outputImage(thisin==0) = NaN;
-outputImage(input.isLand==1) == NaN;
-
+    outputImage(thisin==0) = NaN;
+    outputImage(input.isLand==1) = NaN;
 catch
-     outputImage = ones(size(output.xq))*NaN;
+    outputImage = ones(size(output.xq))*NaN;
 end
 
