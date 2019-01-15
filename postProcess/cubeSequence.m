@@ -129,17 +129,21 @@ for ii = 1: numberOfH5s
         %%Loop through all modalities
         for groupIndex = 2: numberOfGroups
             
-            if groupIndex == 11 && ii == 1
-                groupIndex
-            end
+
             thisGroupIndex = groupIndex-1;
             thisBaseDirectory = [baseDirectory num2str(ii) '/' num2str(thisGroupIndex) '/'];
             mkdir(thisBaseDirectory);
             
             thisGroupName{groupIndex} = thisH5Groups(groupIndex).Name;
             
-            PointsProj = h5read(h5name, [thisGroupName{groupIndex} '/PointsProj']);
-            
+            try
+                PointsProj = h5read(h5name, [thisGroupName{groupIndex} '/PointsProj']);
+            catch
+                outputImage = ones(size(output.xq))*NaN;
+                for thisDay  = 1:numberOfDays
+                    imwrite(uint8(outputImage),[thisBaseDirectory  sprintf('%02d',thisDay),'.png']);
+                end
+            end    
             
             %%Loop through days, quantise them, sum, clip and output
             for thisDay  = 1:numberOfDays
