@@ -16,11 +16,11 @@ end
 
 %% load all config from XML file
 BimonthlyAverageDirectory = 'BimonthlyAverageDirectory';
-outDir = tmpStruct.confgData.outDir.Text;
+outDir = [tmpStruct.confgData.outDir.Text BimonthlyAverageDirectory];
 confgData.wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;
-cd(outDir);
-mkdir(BimonthlyAverageDirectory);
-cd(BimonthlyAverageDirectory);
+
+mkdir(outDir);
+
 
 %Get max/min (original excel file)
 %lattitude Min/Max = 24, 40.73333	
@@ -37,7 +37,7 @@ cd(BimonthlyAverageDirectory);
 %Extract for bi-monthly range
 %For each range, extract
 
-
+ind = 0;
 latMinMax = [24.1864 30.7012]; 	
 lonMinMax = [-87.9453 -79.9748];
 dayStartS = '2003-01-01';
@@ -47,6 +47,7 @@ dayEnd = datenum(dayEndS);
 
 thisDay = dayStart;
 while thisDay <  dayEnd
+    ind = ind +1;
     wdelString = 'rm *.nc';  unix(wdelString);
     thisEndDay = thisDay+61;
     thisDayS = datestr(thisDay,29);
@@ -56,14 +57,15 @@ while thisDay <  dayEnd
     exeName  = [confgData.wgetStringBase ' -q --post-data="' thisString '" -O - https://oceandata.sci.gsfc.nasa.gov/api/file_search |' confgData.wgetStringBase ' -i -'];
     %system(exeName);
  
-    NCfiles=dir('*.nc');
+    NCfiles=dir([outDir '/*.nc' ]);
     numberOfNCs=size(NCfiles,1);
-    
+    outputTriple = [];
     for ii = 1: numberOfNCs
+
     ii
         %% Process input h5 file
 
-        ncName = [filenameBase1 NCfiles(ii).name];
+        ncName = [outDir '/' NCfiles(ii).name];
         A = h5read(ncName,'/level-3_binned_data/chlor_a');
         B = h5read(ncName,'/level-3_binned_data/BinList');
         z = double(A.sum_squared);
@@ -74,8 +76,21 @@ while thisDay <  dayEnd
         outLat = lat(ind);
         outLon = lon(ind);
         outVal = z(ind);
+        thisTriple = [outLat outLon outVal];
+        outputTriple = [thisTriple; outputTriple]; 
     end
 
+    
+    
+    h5name = [outDir '/BimonthLy_Chlor_a_' num2str(thisDay) '_' num2str(thisEndDay) '.h5'];
+    
+    fid = H5F.create(h5name);
+    H5F.close(fid);
+    hdf5write(h5name,['/biMonthTriple'],outputTriple, 'WriteMode','append');
+    hdf5write(h5name,['/thisDayS'],thisDayS, 'WriteMode','append');
+    hdf5write(h5name,['/thisEndDayS'],thisEndDayS, 'WriteMode','append');
+    hdf5write(h5name,['/thisDay'],thisDay, 'WriteMode','append');
+    hdf5write(h5name,['/thisEndDay'],thisEndDay, 'WriteMode','append');
     % get list of downloaded .nc 
     % loop through
     %   open .nc
