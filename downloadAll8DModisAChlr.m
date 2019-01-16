@@ -55,7 +55,7 @@ while thisDay <  dayEnd
     
     thisString = ['sensor=modisa&sdate=' thisDayS '&edate=' thisEndDayS '&dtype=L3b&addurl=1&results_as_file=1&search=A*8D_CHL.nc'];
     exeName  = [confgData.wgetStringBase ' -q --post-data="' thisString '" -O - https://oceandata.sci.gsfc.nasa.gov/api/file_search |' confgData.wgetStringBase ' -i -'];
-    %system(exeName);
+    system(exeName);
  
     NCfiles=dir([outDir '/*.nc' ]);
     numberOfNCs=size(NCfiles,1);
