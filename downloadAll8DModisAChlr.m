@@ -65,7 +65,7 @@ while thisDay <  dayEnd
     ii
         %% Process input h5 file
 
-        ncName = [outDir '/' NCfiles(ii).name];
+        ncName = NCfiles(ii).name;
         A = h5read(ncName,'/level-3_binned_data/chlor_a');
         B = h5read(ncName,'/level-3_binned_data/BinList');
         z = double(A.sum_squared);
