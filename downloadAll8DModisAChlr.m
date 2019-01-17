@@ -38,8 +38,8 @@ mkdir(outDir);
 %For each range, extract
 
 ind = 0;
-latMinMax = [24.1864 30.7012]; 	
-lonMinMax = [-87.9453 -79.9748];
+latMinMax = [24.0864 30.8012]; 	
+lonMinMax = [-88.0453 -79.8748];
 dayStartS = '2003-01-01';
 dayEndS = '2019-01-01';
 dayStart = datenum(dayStartS);
