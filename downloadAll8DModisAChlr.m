@@ -40,7 +40,7 @@ mkdir(outDir);
 ind = 0;
 latMinMax = [24.0864 30.8012]; 	
 lonMinMax = [-88.0453 -79.8748];
-dayStartS = '2003-01-01';
+dayStartS = '2003-11-06';
 dayEndS = '2019-01-01';
 dayStart = datenum(dayStartS);
 dayEnd = datenum(dayEndS);
@@ -48,6 +48,7 @@ dayEnd = datenum(dayEndS);
 thisDay = dayStart;
 while thisDay <  dayEnd
     ind = ind +1;
+    try
     wdelString = 'rm *.nc';  unix(wdelString);
     thisEndDay = thisDay+61;
     thisDayS = datestr(thisDay,29);
@@ -94,6 +95,9 @@ while thisDay <  dayEnd
     % get list of downloaded .nc 
     % loop through
     %   open .nc
-    thisDay = thisDay+8;    
+    thisDay = thisDay+8; 
+    catch
+        ['Caught on thisDay ' num2str(thisDay) ]
+    end
 end
 
