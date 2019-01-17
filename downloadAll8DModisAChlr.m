@@ -57,7 +57,7 @@ while thisDay <  dayEnd
     exeName  = [confgData.wgetStringBase ' -q --post-data="' thisString '" -O - https://oceandata.sci.gsfc.nasa.gov/api/file_search |' confgData.wgetStringBase ' -i -'];
     system(exeName);
  
-    NCfiles=dir([outDir '/*.nc' ]);
+    NCfiles=dir('*.nc');
     numberOfNCs=size(NCfiles,1);
     outputTriple = [];
     for ii = 1: numberOfNCs
