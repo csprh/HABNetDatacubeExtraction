@@ -51,8 +51,8 @@ trainTestR = randi([0 1],1,numberOfH5s);
 
 load groupMaxAndMin %load the max and minima of the mods
 groupMinMax = getMinMax(thisMax, thisMin);
-groupMinMax(1,2)  = 0; %discount land
-groupMinMax(1,1)  = -500;
+groupMinMax(1,2)  = 0;    %Bathymetry max (discount land)
+groupMinMax(1,1)  = -500; %Bathymetry min (discount anything under 500m depth)
 
 minmaxind = ones(10,1);
 
@@ -93,11 +93,14 @@ for ii = 1: numberOfH5s
         
         numberOfIms = size(theseIms,3);
         
-        %% Loop through saved images.  There may be a variable number of images
-        %  The amount of data as a quotiant is the calculated (for whole image
-        %  and a central patch)
-        %  It the quotiants are less than a threshold then the datapoint is
-        %  discounted
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%% Loop through saved images.  There may be a variable number of images
+        %% The amount of data as a quotiant is the calculated (for whole image
+        %% and a central patch)
+        %% It the quotiants are less than a threshold then the datapoint is
+        %% discounted
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
         for iii = 1:numberOfIms
             thisIm = theseIms(:,:,iii);
             centrePatchP = size(thisIm)/2+2;
@@ -129,7 +132,9 @@ for ii = 1: numberOfH5s
         %number, Group Index
         baseDirectory = [ filenameBase2 trainTestStr{trainTestR(ii)+1 } '/' num2str(isHAB) '/' ] ;
         
-        %%Loop through all modalities
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%Loop through all modalities              %%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         for groupIndex = 2: numberOfGroups
             thisGroupIndex = groupIndex-1;
             thisBaseDirectory = [baseDirectory num2str(ii) '/' num2str(thisGroupIndex) '/'];

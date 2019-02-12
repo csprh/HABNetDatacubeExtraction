@@ -81,7 +81,7 @@ for ii = 1: numberOfH5s
         
         biMonthName = getBiMonthName(dayStart, dateStartArray, biMDirfiles);
         
-        biMonthTriple = h5read(h5name,'/biMonthTriple');
+        biMonthTriple = h5read([biMDir biMonthName],'/biMonthTriple');
         numberOfDays = dayEnd - dayStart;
         numberOfDays = 10;
 

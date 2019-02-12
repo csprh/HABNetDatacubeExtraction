@@ -131,11 +131,16 @@ The datacubes are converted to a series of images in a directory structure descr
 
 An example output directory structure is as follows
 
-* Train/1/101/3/1.jpg
-* Train/1/101/3/2.jpg
-* Train/1/101/3/3.jpg
-* Train/1/101/3/4.jpg
-* Train/1/101/3/5.jpg
+* Train/1/101/3/1.png
+* Train/1/101/3/2.png
+* Train/1/101/3/3.png
+* Train/1/101/3/4.png
+* Train/1/101/3/5.png
+* Train/1/101/3/6.png
+* Train/1/101/3/7.png
+* Train/1/101/3/8.png
+* Train/1/101/3/9.png
+* Train/1/101/3/10.png
 
 The numbered name of the jpg image is the quantised day of capture (from the day of capture in the ground truth file) i.e. they are the five days quantised. 
 

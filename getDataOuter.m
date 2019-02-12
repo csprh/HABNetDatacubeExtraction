@@ -46,10 +46,13 @@ system(['rm ' confgData.outDir '*.h5']);
 load(confgData.inputFilename); 
 if confgData.numberOfSamples == -1;   confgData.numberOfSamples = length(count2); end;
 
-%% Loop through all samples in .mat Ground Truth File
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Loop through all samples in .mat Ground Truth File %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 outputIndex = 1;
 for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
-%for ii = 1: 10 %Loop through all the ground truth entries
     try
         if rem(ii,10) == 1        % Delete the .nc files (every tenth one)
             wdelString = 'rm *.nc';  unix(wdelString);
