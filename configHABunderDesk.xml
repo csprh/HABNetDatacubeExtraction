@@ -5,7 +5,7 @@
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
    <outDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida4/</outDir>
    <resolution>2000</resolution>
-   <distance1>50000</distance1>
+   <distance1>100000</distance1>
    <numberOfDaysInPast>10</numberOfDaysInPast>
    <numberOfSamples>-1</numberOfSamples>
    <Modality>gebco</Modality>

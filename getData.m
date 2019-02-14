@@ -26,11 +26,11 @@ latDD = ncread(file, '/navigation_data/latitude'); latDD = latDD(:);
 inVar = ncread(file, thisVar); inVar = inVar(:);
 
 
-[centerXProj, centerYPro] = mfwdtran( utmstruct, outLat,outLon);
+[centerXProj, centerYProj] = mfwdtran( utmstruct, outLat,outLon);
 
 %Define the projected coordinate ROI
 eProj = centerXProj + round(distance1/2); wProj = centerXProj - round(distance1/2);
-nProj = centerYPro + round(distance1/2);  sProj = centerYPro - round(distance1/2);
+nProj = centerYProj + round(distance1/2); sProj = centerYProj - round(distance1/2);
 
 %Determine output shape, normalise the projected data so each output pixel
 %is of length 1 and starts at 0.
@@ -40,7 +40,7 @@ aff = affine2d([resolution 0.0 wProj; 0.0 resolution sProj; 0 0 1]');
 %Define the projected coordianate 1.2*ROI that's double the size (to retain
 %data)
 eProj2 = centerXProj + round(distance1/2)*1.2; wProj2 = centerXProj - round(distance1/2)*1.2;
-nProj2 = centerYPro + round(distance1/2)*1.2;  sProj2 = centerYPro - round(distance1/2)*1.2;
+nProj2 = centerYProj + round(distance1/2)*1.2;  sProj2 = centerYProj - round(distance1/2)*1.2;
 
 %Inverse trans ROI to get max and min lat and lon
 indROI = getMinMaxLatLon(eProj, wProj, nProj, sProj, lonDD, latDD, utmstruct);
