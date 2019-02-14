@@ -1,4 +1,4 @@
-function [outputIm, tripleOut, tripleOutProj] = getDataNew(file,  outLat, outLon, distance1, resolution, thisVar, utmstruct)
+function [outputIm, tripleOut, tripleOutProj] = getData(file,  outLat, outLon, distance1, resolution, thisVar, utmstruct)
 % Extract binned image and value triplet array from netCDF input file
 %
 % USAGE:
@@ -105,7 +105,7 @@ maxLon = max([tlLon blLon trLon brLon]);
 minLat = min([tlLat blLat trLat brLat]);
 maxLat = max([tlLat blLat trLat brLat]);
 
-indROI = (lonDD>=minLon)&(lonDD<=maxLon)&(lat_dd>=minLat)&(lat_dd<=maxLat);
+indROI = (lonDD>=minLon)&(lonDD<=maxLon)&(latDD>=minLat)&(latDD<=maxLat);
 
 
 
