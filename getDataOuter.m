@@ -207,6 +207,7 @@ for modIndex = 1:numberOfMods
         end
         
         [theseImages{iii}, thesePoints, thesePointsProj] = getData(fileName,  thisLat, thisLon, confgData.distance1, confgData.resolution, ['/geophysical_data/' subMods{3}], utmstruct);
+        [DummytheseImages{iii}, DummythesePoints, DummythesePointsProj] = getDataOLD(fileName,  thisLat, thisLon, confgData.distance1, confgData.resolution, ['/geophysical_data/' subMods{3}], utmstruct);
         theseDates{iii} = thisDate;
         theseDeltaDates{iii} = thisDeltaDate;
         thesePointsNew = [thesePoints ones(size(thesePoints,1),1)*thisDeltaDate];
