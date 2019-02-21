@@ -54,9 +54,9 @@ function getDataOuter
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% Loop through all samples in .mat Ground Truth File %%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    startIndex = 23;
+    startIndex = 1;
     outputIndex = startIndex;
-    for ii = 21: confgData.numberOfSamples %Loop through all the ground truth entries
+    for ii = startIndex: confgData.numberOfSamples %Loop through all the ground truth entries
          try
             if rem(ii,10) == 1 && ii>startIndex       % Delete the .nc files (every tenth one)
                 system([rmcommand confgData.downloadDir '*.nc']);
@@ -160,7 +160,7 @@ function getModData(inStruc, confgData)
     downloadDir = confgData.downloadDir;
     wgetStringBase = confgData.wgetStringBase;
     distance1 = confgData.distance1;
-    disp(['Getting data for ',inStruc.h5name]);
+    disp(['Fetching data for ',inStruc.h5name]);
     
     %% Loop through all the modulations
     for modIndex = 1:numberOfMods
