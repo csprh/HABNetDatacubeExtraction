@@ -65,7 +65,7 @@ function getDataOuter
             inStruc.thisLat = latitude(ii);
             inStruc.thisLon = longitude(ii);
 
-            if isLandGEBCO(inStruc, confgData);  continue;  end;
+            if isLandGEBCO(inStruc, confgData);  continue;  end
             inStruc.thisCount = count2(ii);
             inStruc.zoneHrDiff = timezone(inStruc.thisLon);
             % Adjust input time / date: Assume that the sample is taken at 11pm

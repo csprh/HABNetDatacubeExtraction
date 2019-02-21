@@ -1,0 +1,40 @@
+TERRA/MODIS granule match found: T2003017162500.L2_LAC_OC.nc
+Download link: https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/T2003017162500.L2_LAC_OC.nc
+ 
+TERRA/MODIS granule match found: T2003018153000.L2_LAC_OC.nc
+Download link: https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/T2003018153000.L2_LAC_OC.nc
+ 
+TERRA/MODIS granule match found: T2003021160000.L2_LAC_OC.nc
+Download link: https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/T2003021160000.L2_LAC_OC.nc
+ 
+TERRA/MODIS granule match found: T2003020165500.L2_LAC_OC.nc
+Download link: https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/T2003020165500.L2_LAC_OC.nc
+ 
+TERRA/MODIS granule match found: T2003019161000.L2_LAC_OC.nc
+Download link: https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/T2003019161000.L2_LAC_OC.nc
+ 
+TERRA/MODIS granule match found: T2003023154500.L2_LAC_OC.nc
+Download link: https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/T2003023154500.L2_LAC_OC.nc
+ 
+TERRA/MODIS granule match found: T2003023155000.L2_LAC_OC.nc
+Download link: https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/T2003023155000.L2_LAC_OC.nc
+ 
+TERRA/MODIS granule match found: T2003022164000.L2_LAC_OC.nc
+Download link: https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/T2003022164000.L2_LAC_OC.nc
+ 
+TERRA/MODIS granule match found: T2003022164500.L2_LAC_OC.nc
+Download link: https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/T2003022164500.L2_LAC_OC.nc
+ 
+TERRA/MODIS granule match found: T2003015163500.L2_LAC_OC.nc
+Download link: https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/T2003015163500.L2_LAC_OC.nc
+ 
+TERRA/MODIS granule match found: T2003014155500.L2_LAC_OC.nc
+Download link: https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/T2003014155500.L2_LAC_OC.nc
+ 
+TERRA/MODIS granule match found: T2003018170500.L2_LAC_OC.nc
+Download link: https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/T2003018170500.L2_LAC_OC.nc
+ 
+TERRA/MODIS granule match found: T2003016154000.L2_LAC_OC.nc
+Download link: https://oceandata.sci.gsfc.nasa.gov/cmr/getfile/T2003016154000.L2_LAC_OC.nc
+ 
+Number of granules found: 13

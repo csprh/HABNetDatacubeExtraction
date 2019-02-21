@@ -17,6 +17,6 @@ lat1D = ncread(config.gebcoFilename, '/lat');
 
 [dummy centre_col] = min(abs(lon1D-outLon));
 [dummy centre_row] = min(abs(lat1D-outLat));
-bathAt = ncread(config.gebcoFilename, '/elevation', [centre_col centre_row], [1 1])
+bathAt = ncread(config.gebcoFilename, '/elevation', [centre_col centre_row], [1 1]);
 land = bathAt > 10; % if the bathymetry is greater than 10m assume that it is land
 

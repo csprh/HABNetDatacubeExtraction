@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<confgData>
+   <inputFilename>.\work\florida_2003-2018-50K</inputFilename>
+   <gebcoFilename>..\GEBCO.nc</gebcoFilename>
+   <downloadFolder>..\downloads\</downloadFolder>
+   <wgetStringBase>..\wget.exe</wgetStringBase>
+   <outDir>..\data\florida\</outDir>
+   <resolution>2000</resolution>
+   <distance1>100000</distance1>
+   <numberOfDaysInPast>10</numberOfDaysInPast>
+   <numberOfSamples>-1</numberOfSamples>
+   <Modality>gebco</Modality>
+   <Modality>oc-modisa-chlor_a</Modality>
+   <Modality>oc-modisa-Rrs_412</Modality>
+   <Modality>oc-modisa-Rrs_443</Modality>
+   <Modality>oc-modisa-Rrs_488</Modality>
+   <Modality>oc-modisa-Rrs_531</Modality>
+   <Modality>oc-modisa-Rrs_555</Modality>
+   <Modality>oc-modisa-par</Modality>
+   <Modality>oc-modist-chlor_a</Modality>
+   <Modality>sst-modisa-sstref</Modality>
+</confgData>
