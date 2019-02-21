@@ -4,7 +4,8 @@ This project takes a MATLAB .mat file containing all of the lat, long, date
 and count information of a HAB.  This then generates an H5 file per sample 
 line in the ground truth file.  This H5 file contains all of the imaging 
 data from the satelites.  Thse H5 files can then be used for machine 
-learning (cross validation etc.).
+learning (cross validation etc.). This version is checked for compatibilty
+with windows machines.
 
 ## Files
 * **getDataOuter**: Input the xml config file, then load the .mat ground truth
