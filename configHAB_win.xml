@@ -10,7 +10,6 @@
    <numberOfDaysInPast>10</numberOfDaysInPast>
    <numberOfSamples>-1</numberOfSamples>
    <Modality>gebco</Modality>
-   <Modality>oc-modisa-chlor_a</Modality>
    <Modality>oc-modisa-Rrs_412</Modality>
    <Modality>oc-modisa-Rrs_443</Modality>
    <Modality>oc-modisa-Rrs_488</Modality>

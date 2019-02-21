@@ -54,11 +54,11 @@ function getDataOuter
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% Loop through all samples in .mat Ground Truth File %%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-    outputIndex = 1;
-    for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
-%         try
-            if rem(ii,10) == 1 && ii>1       % Delete the .nc files (every tenth one)
+    startIndex = 23;
+    outputIndex = startIndex;
+    for ii = 21: confgData.numberOfSamples %Loop through all the ground truth entries
+         try
+            if rem(ii,10) == 1 && ii>startIndex       % Delete the .nc files (every tenth one)
                 system([rmcommand confgData.downloadDir '*.nc']);
             end
 
@@ -81,27 +81,23 @@ function getDataOuter
             inStruc.dayEndS = datestr(inStruc.dayEnd,29);
             inStruc.UTCTime = sprintf('T%02d:00:00Z', inStruc.endTimeUTC);
 
-
             fileName = ['Cube_' sprintf('%05d',outputIndex) '_' sprintf('%05d',ii) '_' num2str(sample_date(ii)) '.h5'];
             outputIndex = outputIndex+1;
             inStruc.h5name = [confgData.outDir fileName ];
             if exist(inStruc.h5name, 'file')==2;  delete(inStruc.h5name);  end
+            
             %Put images, count, dates and deltadates into output .H5 file
-
             addDataH5(inStruc, confgData);
             getModData(inStruc, confgData);
             
             % Zip up the data and delete the original
             gzip(inStruc.h5name);
             system([rmcommand confgData.outDir '*.h5']);
-%         catch e   
-%             fileID = fopen('errors.txt','at');
-%             text = ['Error procesing sample ', num2str(ii), '- ',e.identifier, '::', e.message];
-%             fprintf(fileID,'%s\n\r ',text);
-%             fclose(fileID);
-%             throw(e)
-%             continue      
-%        end
+        catch e   
+            str_iden = num2str(ii);
+            logErr(e,str_iden) 
+            continue      
+        end
     end
 end
 
@@ -160,11 +156,14 @@ function getModData(inStruc, confgData)
     dayStartS = inStruc.dayStartS;
     UTCTime = inStruc.UTCTime;
     dayEndS = inStruc.dayEndS;
-
-    %Loop through all the modulations
-
+    index = inStruc.ii;
+    downloadDir = confgData.downloadDir;
+    wgetStringBase = confgData.wgetStringBase;
+    distance1 = confgData.distance1;
+    disp(['Getting data for ',inStruc.h5name]);
+    
+    %% Loop through all the modulations
     for modIndex = 1:numberOfMods
-
         thisMod = confgData.mods{modIndex}.Text;
         subMods = strsplit(thisMod,'-');
 
@@ -196,7 +195,7 @@ function getModData(inStruc, confgData)
         
         pyOpt = [' --data_type=' subMods{1} ' --sat=' subMods{2} ' --slat=' num2str(thisLat) ...
                  ' --slon=' num2str(thisLon) ' --stime=' dayStartS UTCTime ' --etime=' dayEndS UTCTime];
-        disp(['Searching granules for: ' pyOpt])
+        disp(['Searching granules for: --mod=',subMods{3}, pyOpt])
         exeName = [pythonStr ' fd_matchup.py', pyOpt,' > cmdOut.txt'];
         system(exeName);
 
@@ -229,6 +228,7 @@ function getModData(inStruc, confgData)
             sortIndex = sortIndex(1); 
             listLength = 1;
         end % Needed to prevent issues with SST4
+        
         %% Loop through previous times and extract images and points from .nc files
         % iyyyydddhhmmss.L2_rrr_ppp,
         % where i is the instrument identifier  yyyydddhhmmss
@@ -249,7 +249,7 @@ function getModData(inStruc, confgData)
             thisDate = thisInput(thisIndex).date;
             thisDeltaDate = thisInput(thisIndex).deltadate;
             [~,name,ext] = fileparts(thisLine);
-            fileName = [confgData.downloadDir name ext];
+            fileName = [downloadDir name ext];
             
             %wget file if it hasn't previously been downloaded
             if exist(fileName, 'file')~=2
@@ -257,18 +257,26 @@ function getModData(inStruc, confgData)
             %directory is local or if the network directory has been
             %mapped. Otherwise just copy wget.exe to the same path as the
             %.m files and modify the xml accordingly.
-                wgetString = [confgData.wgetStringBase,' -nv', ' -P ',confgData.downloadDir, ' ', thisLine];
-                disp(['Downloading granule ',num2str(iii),' from ',thisLine,' ...'])
+                wgetString = [wgetStringBase,' -nv', ' -P ',downloadDir, ' ', thisLine];
+                disp(['Downloading granule ',num2str(thisIndex),' from ',thisLine,' ...'])
                 system(wgetString);
             end           
-            theseDates{iii} = thisDate;
-            theseDeltaDates{iii} = thisDeltaDate;
             
-            [theseImages{iii}, thesePoints, thesePointsProj] = getData(fileName,  thisLat, thisLon, confgData.distance1, confgData.resolution, ['/geophysical_data/' subMods{3}], utmstruct);
-            thesePointsNew{iii} = [thesePoints ones(size(thesePoints,1),1)*theseDeltaDates{iii}];
-            thesePointsProjNew{iii} = [thesePointsProj ones(size(thesePointsProj,1),1)*theseDeltaDates{iii}];     
+            try %Some nc files cannot be read, so we catch those cases
+                theseDates{iii} = thisDate;
+                theseDeltaDates{iii} = thisDeltaDate;
+                [theseImages{iii}, thesePoints, thesePointsProj] = getData(fileName,  thisLat, thisLon, distance1, confgData.resolution, ['/geophysical_data/' subMods{3}], utmstruct);
+                thesePointsNew{iii} = [thesePoints ones(size(thesePoints,1),1)*theseDeltaDates{iii}];
+                thesePointsProjNew{iii} = [thesePointsProj ones(size(thesePointsProj,1),1)*theseDeltaDates{iii}];     
+            catch e2
+                logErr(e2,['index: ',num2str(index),' mod: ',num2str(modIndex), ' granule: ',num2str(iii)]); 
+            end 
         end
        
+        %Get rid of any empty cells
+            theseDates = theseDates(~cellfun('isempty', theseImages));
+            theseDeltaDates = theseDeltaDates(~cellfun('isempty', theseImages));
+            theseImages = theseImages(~cellfun('isempty', theseImages));
         %Build output arrays
         for iii = 1:listLength
             thesePointsOutput = [thesePointsOutput; thesePointsNew{iii}];
@@ -318,4 +326,13 @@ function addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thes
     hdf5write(h5name,['/' thisMod  '/theseDeltaDates'],theseDeltaDates, 'WriteMode','append');
     hdf5write(h5name,['/' thisMod  '/Points'],thesePointsOutput, 'WriteMode','append');
     hdf5write(h5name,['/' thisMod  '/PointsProj'],thesePointsOutputProj, 'WriteMode','append');
+end
+
+function logErr(e,str_iden)
+    fileID = fopen('errors.txt','at');
+    identifier = ['Error procesing sample ',str_iden, ' at ', datestr(now)];
+    text = [e.identifier, '::', e.message];
+    fprintf(fileID,'%s\n\r ',identifier);
+    fprintf(fileID,'%s\n\r ',text);
+    fclose(fileID);
 end
