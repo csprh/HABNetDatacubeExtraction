@@ -39,7 +39,8 @@ function getDataOuter
     confgData.gebcoFilename = tmpStruct.confgData.gebcoFilename.Text;
     confgData.wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;
     confgData.outDir = tmpStruct.confgData.outDir.Text;
-    confgData.downloadDir = tmpStruct.confgData.downloadFolder.Text;    %Path to folder to put downloads
+    if isfield(tmpStruct.confgData,'downloadFolder'), confgData.downloadDir = tmpStruct.confgData.downloadFolder.Text; 
+    else, confgData.downloadDir = ''; end
     confgData.distance1 = str2double(tmpStruct.confgData.distance1.Text);
     confgData.resolution = str2double(tmpStruct.confgData.resolution.Text);
     confgData.numberOfDaysInPast = str2double(tmpStruct.confgData.numberOfDaysInPast.Text);
@@ -65,7 +66,7 @@ function getDataOuter
             inStruc.thisLat = latitude(ii);
             inStruc.thisLon = longitude(ii);
 
-            if isLandGEBCO(inStruc, confgData);  continue;  end;
+            if isLandGEBCO(inStruc, confgData);  continue;  end
             inStruc.thisCount = count2(ii);
             inStruc.zoneHrDiff = timezone(inStruc.thisLon);
             % Adjust input time / date: Assume that the sample is taken at 11pm
@@ -222,22 +223,24 @@ function getModData(inStruc, confgData)
         thisList = zeros(length(thisInput),1);
         for iii = 1: length(thisInput); thisList(iii) = thisInput(iii).deltadate; end
         [~, sortIndex] = sort(thisList);
-
+        listLength = length(sortIndex);
+        
         if strcmp(subMods{1},'sst'); sortIndex = sortIndex(1);  end % Needed to prevent issues with SST4
         %% Loop through previous times and extract images and points from .nc files
         % iyyyydddhhmmss.L2_rrr_ppp,
         % where i is the instrument identifier  yyyydddhhmmss
         clear theseDates theseDeltaDates theseImages;
         thesePointsOutput = []; thesePointsProjOutput = [];
-        theseImages = cell(length(sortIndex),1);theseDates = cell(length(sortIndex),1);theseDeltaDates = cell(length(sortIndex),1);
-        fileNames = cell(length(sortIndex),1);
+        theseImages = cell(listLength,1);theseDates = cell(listLength,1);theseDeltaDates = cell(length(sortIndex),1);
+        thesePointsNew = cell(listLength,1);
+        thesePointsProjNew = cell(listLength,1);
         
         %Download all granules found
         %Uses the parallel computing toolbox, if not available change to a
         %normal for loop.
-        %tic
+        tic
         cluster = parcluster('local'); nworkers = cluster.NumWorkers;
-        parfor (iii = 1:length(sortIndex),nworkers)
+        parfor (iii = 1:listLength,nworkers)
             thisIndex = sortIndex(iii);
             thisLine = thisInput(thisIndex).line;
             thisDate = thisInput(thisIndex).date;
@@ -257,19 +260,18 @@ function getModData(inStruc, confgData)
             end           
             theseDates{iii} = thisDate;
             theseDeltaDates{iii} = thisDeltaDate;
-            fileNames{iii} = fileName;
+            
+            [theseImages{iii}, thesePoints, thesePointsProj] = getData(fileName,  thisLat, thisLon, confgData.distance1, confgData.resolution, ['/geophysical_data/' subMods{3}], utmstruct);
+            thesePointsNew{iii} = [thesePoints ones(size(thesePoints,1),1)*theseDeltaDates{iii}];
+            thesePointsProjNew{iii} = [thesePointsProj ones(size(thesePointsProj,1),1)*theseDeltaDates{iii}];     
         end
-        %disp(['Time taken to get granules: ', num2str(toc)]); tic;
-        
-        %Process all granules found
-        for iii = 1:length(sortIndex) 
-            [theseImages{iii}, thesePoints, thesePointsProj] = getData(fileNames{iii},  thisLat, thisLon, confgData.distance1, confgData.resolution, ['/geophysical_data/' subMods{3}], utmstruct);
-            thesePointsNew = [thesePoints ones(size(thesePoints,1),1)*theseDeltaDates{iii}];
-            thesePointsProjNew = [thesePointsProj ones(size(thesePointsProj,1),1)*theseDeltaDates{iii}];
-            thesePointsOutput = [thesePointsOutput; thesePointsNew];
-            thesePointsProjOutput = [thesePointsProjOutput; thesePointsProjNew];
+       
+        %Build output arrays
+        for iii = 1:listLength
+            thesePointsOutput = [thesePointsOutput; thesePointsNew{iii}];
+            thesePointsProjOutput = [thesePointsProjOutput; thesePointsProjNew{iii}];
         end
-        %disp(['Time taken to process granules: ', num2str(toc)]);
+        disp(['Time taken to process granules: ', num2str(toc)]);
         
         addToH5(inStruc.h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsProjOutput);
         %h5disp(inStruc.h5name);

@@ -1,17 +1,0 @@
-Error at sample 1:MATLAB:UndefinedFunction::Undefined function 'ppaddDataH5' for input arguments of type 'struct'.
- Error at sample 1:MATLAB:UndefinedFunction::Undefined function 'ppaddDataH5' for input arguments of type 'struct'.
- Error at sample 1:MATLAB:UndefinedFunction::Undefined function 'ppaddDataH5' for input arguments of type 'struct'.
- Error at sample 1:MATLAB:invalidType::The value of 'Data' is invalid. Expected DATA to be one of these types:
-
-double, single, uint8, uint16, uint32, uint64, int8, int16, int32, int64
- Error at sample 1:MATLAB:invalidType::The value of 'Data' is invalid. Expected DATA to be one of these types:
-
-double, single, uint8, uint16, uint32, uint64, int8, int16, int32, int64
- Error at sample 1:MATLAB:invalidType::The value of 'Data' is invalid. Expected DATA to be one of these types:
-
-double, single, uint8, uint16, uint32, uint64, int8, int16, int32, int64
- Error at sample 1:MATLAB:invalidType::The value of 'Data' is invalid. Expected DATA to be one of these types:
-
-double, single, uint8, uint16, uint32, uint64, int8, int16, int32, int64
- Error procesing sample 1- MATLAB:FileIO:InvalidFid::Invalid file identifier. Use fopen to generate a valid file identifier.
- 
