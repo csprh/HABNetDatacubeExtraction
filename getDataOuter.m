@@ -40,7 +40,7 @@ function getDataOuter
     confgData.wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;
     confgData.outDir = tmpStruct.confgData.outDir.Text;
     if isfield(tmpStruct.confgData,'downloadFolder'), confgData.downloadDir = tmpStruct.confgData.downloadFolder.Text; 
-    else, confgData.downloadDir = ''; end
+    else, confgData.downloadDir = '.\'; end
     confgData.distance1 = str2double(tmpStruct.confgData.distance1.Text);
     confgData.resolution = str2double(tmpStruct.confgData.resolution.Text);
     confgData.numberOfDaysInPast = str2double(tmpStruct.confgData.numberOfDaysInPast.Text);
@@ -225,7 +225,10 @@ function getModData(inStruc, confgData)
         [~, sortIndex] = sort(thisList);
         listLength = length(sortIndex);
         
-        if strcmp(subMods{1},'sst'); sortIndex = sortIndex(1);  end % Needed to prevent issues with SST4
+        if strcmp(subMods{1},'sst') 
+            sortIndex = sortIndex(1); 
+            listLength = 1;
+        end % Needed to prevent issues with SST4
         %% Loop through previous times and extract images and points from .nc files
         % iyyyydddhhmmss.L2_rrr_ppp,
         % where i is the instrument identifier  yyyydddhhmmss
