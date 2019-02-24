@@ -329,10 +329,10 @@ function addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thes
 end
 
 function logErr(e,str_iden)
-    fileID = fopen('errors.txt','at');
-    identifier = ['Error procesing sample ',str_iden, ' at ', datestr(now)];
-    text = [e.identifier, '::', e.message];
-    fprintf(fileID,'%s\n\r ',identifier);
-    fprintf(fileID,'%s\n\r ',text);
-    fclose(fileID);
+    %fileID = fopen('errors.txt','at');
+    %identifier = ['Error procesing sample ',str_iden, ' at ', datestr(now)];
+    %text = [e.identifier, '::', e.message];
+    %fprintf(fileID,'%s\n\r ',identifier);
+    %fprintf(fileID,'%s\n\r ',text);
+    %fclose(fileID);
 end
