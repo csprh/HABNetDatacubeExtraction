@@ -2,6 +2,7 @@
 <confgData>
    <inputFilename>./work/florida_2003-2018-50K</inputFilename>
    <gebcoFilename>/space/csprh/HAB/GEBCO/GEBCO.nc</gebcoFilename>
+   <downloadFolder>./downloads/</downloadFolder>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
    <outDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida4/</outDir>
    <resolution>2000</resolution>

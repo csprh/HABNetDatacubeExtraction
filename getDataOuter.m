@@ -1,96 +1,118 @@
 function getDataOuter
-%% Top level code that loads config, loads .mat ground truth file,
-%  searches for all relevant .nc granules (using fd_matchup.py and NASA's
-%  CMR interface).  Datacubes are formed from all the local .nc granules
-%
-% USAGE:
-%   getDataOuter
-% INPUT:
-%   -
-% OUTPUT:
-%   -
-% THE UNIVERSITY OF BRISTOL: HAB PROJECT
-% Author Dr Paul Hill 26th June 2018
+    %% Top level code that loads config, loads .mat ground truth file,
+    %  searches for all relevant .nc granules (using fd_matchup.py and NASA's
+    %  CMR interface).  Datacubes are formed from all the local .nc granules
+    %
+    % USAGE:
+    %   getDataOuter
+    % INPUT:
+    %   -
+    % OUTPUT:
+    %   -
+    % THE UNIVERSITY OF BRISTOL: HAB PROJECT
+    % Author Dr Paul Hill 26th June 2018
+    % Updates for WIN compatibility: JVillegas 21 Feb 2019, Khalifa University
+    clear; close all;
 
-clear; close all;
-
-
-if ismac
-    tmpStruct = xml2struct('configHABmac.xml');
-elseif isunix
-    [dummy, thisCmd] = system('rpm --query centos-release');
-    isUnderDesk = strcmp(thisCmd(1:end-1),'centos-release-7-6.1810.2.el7.centos.x86_64');
-    if isUnderDesk == 1
-        tmpStruct = xml2struct('configHABunderDesk.xml');
-    else
-        tmpStruct = xml2struct('configHAB.xml');
-    end
-elseif ispc
-    % Code to run on Windows platform
-else
-    disp('Platform not supported')
-end
-
-%% load all config from XML file
-confgData.inputFilename = tmpStruct.confgData.inputFilename.Text;
-confgData.gebcoFilename = tmpStruct.confgData.gebcoFilename.Text;
-confgData.wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;
-confgData.outDir = tmpStruct.confgData.outDir.Text;
-confgData.distance1 = str2double(tmpStruct.confgData.distance1.Text);
-confgData.resolution = str2double(tmpStruct.confgData.resolution.Text);
-confgData.numberOfDaysInPast = str2double(tmpStruct.confgData.numberOfDaysInPast.Text);
-confgData.numberOfSamples = str2double(tmpStruct.confgData.numberOfSamples.Text);
-confgData.mods = tmpStruct.confgData.Modality;
-
-system(['rm ' confgData.outDir '*.h5']);
-load(confgData.inputFilename); 
-if confgData.numberOfSamples == -1;   confgData.numberOfSamples = length(count2); end;
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Loop through all samples in .mat Ground Truth File %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-outputIndex = 1;
-for ii = 1: confgData.numberOfSamples %Loop through all the ground truth entries
-    try
-        if rem(ii,10) == 1        % Delete the .nc files (every tenth one)
-            wdelString = 'rm *.nc';  unix(wdelString);
+    if ismac
+        rmcommand = 'rm ';
+        tmpStruct = xml2struct('configHABmac.xml');
+    elseif isunix
+        rmcommand = 'rm ';
+        [~, thisCmd] = system('rpm --query centos-release');
+        isUnderDesk = strcmp(thisCmd(1:end-1),'centos-release-7-6.1810.2.el7.centos.x86_64');
+        if isUnderDesk == 1
+            tmpStruct = xml2struct('configHABunderDesk.xml');
+        else
+            tmpStruct = xml2struct('configHAB.xml');
         end
-        
-        inStruc.ii = ii;
-        inStruc.thisLat = latitude(ii);
-        inStruc.thisLon = longitude(ii);
-        
-        if isLandGEBCO(inStruc, confgData);  continue;  end;
-        inStruc.thisCount = count2(ii);
-        inStruc.zoneHrDiff = timezone(inStruc.thisLon);
-        % Adjust input time / date: Assume that the sample is taken at 11pm
-        % FWC say their data is collected in daylight hours (mostly)
-        inStruc.endTimeUTC = 23+inStruc.zoneHrDiff;
-        inStruc.dayEnd = sample_date(ii);
-        if inStruc.endTimeUTC > 24; inStruc.endTimeUTC = inStruc.endTimeUTC-24; inStruc.dayEnd=inStruc.dayEnd+1; end;
-        inStruc.dayEndFraction = inStruc.dayEnd+inStruc.endTimeUTC/24;
-        inStruc.dayStart = inStruc.dayEnd - confgData.numberOfDaysInPast;
-        inStruc.dayStartFraction = inStruc.dayEndFraction - confgData.numberOfDaysInPast;
-        inStruc.dayStartS = datestr(inStruc.dayStart,29);
-        inStruc.dayEndS = datestr(inStruc.dayEnd,29);
-        inStruc.UTCTime = sprintf('T%02d:00:00Z', inStruc.endTimeUTC);
-        
-        
-        thisName = ['Cube_' sprintf('%05d',outputIndex) '_' sprintf('%05d',ii) '_' num2str(sample_date(ii)) '.h5'];
-        outputIndex = outputIndex+1;
-        inStruc.h5name = [confgData.outDir thisName ];
-        if exist(inStruc.h5name, 'file')==2;  delete(inStruc.h5name);  end
-        %Put images, count, dates and deltadates into output .H5 file
-        
-        addDataH5(inStruc, confgData);
-        getModData(inStruc, confgData);
-    catch        
+    elseif ispc
+        % Code to run on Windows platform
+        tmpStruct = xml2struct('configHAB_win.xml');
+        rmcommand = ['del ' pwd '\' ];
+    else
+        disp('Platform not supported')
+    end
+
+    %% load all config from XML file
+    confgData.inputFilename = tmpStruct.confgData.inputFilename.Text;
+    confgData.gebcoFilename = tmpStruct.confgData.gebcoFilename.Text;
+    confgData.wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;
+    confgData.outDir = tmpStruct.confgData.outDir.Text;
+    if isfield(tmpStruct.confgData,'downloadFolder'), confgData.downloadDir = tmpStruct.confgData.downloadFolder.Text; 
+    else, confgData.downloadDir = '.\'; end
+    confgData.distance1 = str2double(tmpStruct.confgData.distance1.Text);
+    confgData.resolution = str2double(tmpStruct.confgData.resolution.Text);
+    confgData.numberOfDaysInPast = str2double(tmpStruct.confgData.numberOfDaysInPast.Text);
+    confgData.numberOfSamples = str2double(tmpStruct.confgData.numberOfSamples.Text);
+    confgData.mods = tmpStruct.confgData.Modality;
+
+    system([rmcommand confgData.outDir '*.h5']);
+    load(confgData.inputFilename); 
+    if confgData.numberOfSamples == -1;   confgData.numberOfSamples = length(count2); end
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% Loop through all samples in .mat Ground Truth File %%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    startIndex = 1;
+    outputIndex = startIndex;
+    for ii = startIndex: confgData.numberOfSamples %Loop through all the ground truth entries
+         try
+            if rem(ii,10) == 1 && ii>startIndex       % Delete the .nc files (every tenth one)
+                system([rmcommand confgData.downloadDir '*.nc']);
+            end
+
+            inStruc.ii = ii;
+            inStruc.thisLat = latitude(ii);
+            inStruc.thisLon = longitude(ii);
+
+            if isLandGEBCO(inStruc, confgData);  continue;  end
+            inStruc.thisCount = count2(ii);
+            inStruc.zoneHrDiff = timezone(inStruc.thisLon);
+            % Adjust input time / date: Assume that the sample is taken at 11pm
+            % FWC say their data is collected in daylight hours (mostly)
+            inStruc.endTimeUTC = 23+inStruc.zoneHrDiff;
+            inStruc.dayEnd = sample_date(ii);
+            if inStruc.endTimeUTC > 24; inStruc.endTimeUTC = inStruc.endTimeUTC-24; inStruc.dayEnd=inStruc.dayEnd+1; end
+            inStruc.dayEndFraction = inStruc.dayEnd+inStruc.endTimeUTC/24;
+            inStruc.dayStart = inStruc.dayEnd - confgData.numberOfDaysInPast;
+            inStruc.dayStartFraction = inStruc.dayEndFraction - confgData.numberOfDaysInPast;
+            inStruc.dayStartS = datestr(inStruc.dayStart,29);
+            inStruc.dayEndS = datestr(inStruc.dayEnd,29);
+            inStruc.UTCTime = sprintf('T%02d:00:00Z', inStruc.endTimeUTC);
+
+            fileName = ['Cube_' sprintf('%05d',outputIndex) '_' sprintf('%05d',ii) '_' num2str(sample_date(ii)) '.h5'];
+            outputIndex = outputIndex+1;
+            inStruc.h5name = [confgData.outDir fileName ];
+            if exist(inStruc.h5name, 'file')==2;  delete(inStruc.h5name);  end
+            
+            %Put images, count, dates and deltadates into output .H5 file
+            addDataH5(inStruc, confgData);
+            getModData(inStruc, confgData);
+            
+            % Zip up the data and delete the original
+            gzip(inStruc.h5name);
+            system([rmcommand confgData.outDir '*.h5']);
+        catch e   
+            str_iden = num2str(ii);
+            logErr(e,str_iden) 
+            continue      
+        end
     end
 end
 
 function addDataH5(inStruc, confgData)
+%% addDataH5 creates a H5 file and stores ground truth data to it 
+    %  Adds extracted information to one H5 file per datapoint in ground truth
+    %
+    % USAGE:
+    %   addDataH5(inStruc, confgData)
+    % INPUT:
+    %   inStruc - Contains all the input parameters for the function
+    %   confgData - Configuration information extracted from XML
+    % OUTPUT:
+    %   - 
+    
     fid = H5F.create(inStruc.h5name);
     plist = 'H5P_DEFAULT';
     gid = H5G.create(fid,'GroundTruth',plist,plist,plist);
@@ -110,152 +132,207 @@ function addDataH5(inStruc, confgData)
     numberOfMods = length(confgData.mods);
 
     %% Loop through all the modulations
+    theseMods = cell(numberOfMods,1);
     for modIndex = 1:numberOfMods
         theseMods{modIndex} = confgData.mods{modIndex}.Text;
     end
     hdf5write(inStruc.h5name,'/Modnames',theseMods, 'WriteMode','append');
+end
 
 function getModData(inStruc, confgData)
-%% getModData in Data Retrieval Over the ground Truth Datapoints
-%  Adds extracted information to one H5 file per datapoint in ground truth
-%
-% USAGE:
-%   getModData(inStruc, confgData)
-% INPUT:
-%   inStruc - Contains all the input parameters for the function
-%   confgData - Configuration information extracted from XML
-% OUTPUT:
-%   - 
-numberOfMods = length(confgData.mods);
-thisLat = inStruc.thisLat;
-thisLon = inStruc.thisLon;
-dayStartS = inStruc.dayStartS;
-UTCTime = inStruc.UTCTime;
-dayEndS = inStruc.dayEndS;
+    %% getModData in Data Retrieval Over the ground Truth Datapoints
+    %  Adds extracted information to one H5 file per datapoint in ground truth
+    %
+    % USAGE:
+    %   getModData(inStruc, confgData)
+    % INPUT:
+    %   inStruc - Contains all the input parameters for the function
+    %   confgData - Configuration information extracted from XML
+    % OUTPUT:
+    %   - 
+    numberOfMods = length(confgData.mods);
+    thisLat = inStruc.thisLat;
+    thisLon = inStruc.thisLon;
+    dayStartS = inStruc.dayStartS;
+    UTCTime = inStruc.UTCTime;
+    dayEndS = inStruc.dayEndS;
+    index = inStruc.ii;
+    downloadDir = confgData.downloadDir;
+    wgetStringBase = confgData.wgetStringBase;
+    distance1 = confgData.distance1;
+    disp(['Fetching data for ',inStruc.h5name]);
+    
+    %% Loop through all the modulations
+    for modIndex = 1:numberOfMods
+        thisMod = confgData.mods{modIndex}.Text;
+        subMods = strsplit(thisMod,'-');
 
-%% Loop through all the modulations
-for modIndex = 1:numberOfMods
-    
-    thisMod = confgData.mods{modIndex}.Text;
-    subMods = strsplit(thisMod,'-');
-    
-    zone = utmzone(thisLat, thisLon);
-    utmstruct = defaultm('utm');
-    utmstruct.zone = zone;
-    utmstruct.geoid = wgs84Ellipsoid; %almanac('earth','grs80','meters');
-    utmstruct = defaultm(utmstruct);
-    
-    h5writeatt(inStruc.h5name,'/GroundTruth', 'Projection', ['utm wgs84Ellipsoid ' zone] );
-    
-    if strcmp(subMods{1},'gebco')
-        [elevationIm, elevationPoints, elevationPointsProj] = getGEBCOData(confgData, thisLat, thisLon, utmstruct);
-        addToH5(inStruc.h5name, thisMod, elevationIm, 0, 0, elevationPoints, elevationPointsProj);
-        continue;
-    end
-    % product suites are either oc, iop or sst
-    % sensors are either modisa,modist,viirsn,goci,meris,czcs,octs or 'seawifs'
-    % sst: sstref, sst4, sst 1Km resolution for all sst
-    % Search for "granules" at a particular lat, long and date range (output goes in Output.txt)
-    
-    if ismac
-        pythonStr = '/usr/local/bin/python3';
-    else
-        pythonStr = 'python';
-    end
-    
-    exeName = [pythonStr ' fd_matchup.py --data_type=' subMods{1} ' --sat=' subMods{2} ' --slat=' num2str(thisLat) ' --slon=' num2str(thisLon) ' --stime=' dayStartS UTCTime ' --etime=' dayEndS UTCTime];
-    system(exeName);
-    
-    %% Loop through .nc files, veryify and download / extract
-    fid = fopen('Output.txt');   tline = fgetl(fid);
-    indInput = 1;  clear thisInput; clear thisList;
-    while ischar(tline)
-        [filepath,thisName,ext] = fileparts(tline);
-        if thisName(end) ~= '4'   %ignore SST4
-            thisDate=julian2time(thisName(2:14));
-            thisInput{indInput}.line = tline;
-            thisInput{indInput}.date = thisDate;
-            thisInput{indInput}.deltadate = inStruc.dayEndFraction-thisDate;
-            indInput = indInput + 1;
+        zone = utmzone(thisLat, thisLon);
+        utmstruct = defaultm('utm');
+        utmstruct.zone = zone;
+        utmstruct.geoid = wgs84Ellipsoid; %almanac('earth','grs80','meters');
+        utmstruct = defaultm(utmstruct);
+
+        h5writeatt(inStruc.h5name,'/GroundTruth', 'Projection', ['utm wgs84Ellipsoid ' zone] );
+
+        if strcmp(subMods{1},'gebco')
+            [elevationIm, elevationPoints, elevationPointsProj] = getGEBCOData(confgData, thisLat, thisLon, utmstruct);
+            addToH5(inStruc.h5name, thisMod, elevationIm, 0, 0, elevationPoints, elevationPointsProj);
+            continue;
         end
+        % product suites are either oc, iop or sst
+        % sensors are either modisa,modist,viirsn,goci,meris,czcs,octs or 'seawifs'
+        % sst: sstref, sst4, sst 1Km resolution for all sst
+        % Search for "granules" at a particular lat, long and date range (output goes in Output.txt)
+
+        if ismac
+            pythonStr = '/usr/local/bin/python3';
+        elseif isunix
+            pythonStr = 'python';
+        elseif ispc
+            pythonStr = 'py';
+        end
+        
+        pyOpt = [' --data_type=' subMods{1} ' --sat=' subMods{2} ' --slat=' num2str(thisLat) ...
+                 ' --slon=' num2str(thisLon) ' --stime=' dayStartS UTCTime ' --etime=' dayEndS UTCTime];
+        disp(['Searching granules for: --mod=',subMods{3}, pyOpt])
+        exeName = [pythonStr ' fd_matchup.py', pyOpt,' > cmdOut.txt'];
+        system(exeName);
+
+        %% Loop through .nc files, veryify and download / extract
+        
+        fid = fopen('Output.txt');   
         tline = fgetl(fid);
-    end
-    
-    fclose(fid);
-    %% Re-order the list of found data
-    for iii = 1: length(thisInput); thisList(iii) = thisInput{iii}.deltadate; end;
-    [sorted sortIndex] = sort(thisList);
-    
-    if strcmp(subMods{1},'sst'); sortIndex = sortIndex(1);  end % Needed to prevent issues with SST4
-    %% Loop through previous times and extract images and points from .nc files
-    % iyyyydddhhmmss.L2_rrr_ppp,
-    % where i is the instrument identifier  yyyydddhhmmss
-    clear theseDates theseDeltaDates theseImages;
-    thesePointsOutput = []; thesePointsProjOutput = [];
-    for iii = 1:length(sortIndex)
-        thisIndex = sortIndex(iii);
-        thisLine = thisInput{thisIndex}.line;
-        thisDate = thisInput{thisIndex}.date;
-        thisDeltaDate = thisInput{thisIndex}.deltadate;
-        [filepath,name,ext] = fileparts(thisLine);
-        fileName = [name ext];
-        
-        %wget file if it hasn't previously been downloaded
-        if exist(fileName, 'file')~=2;
-            wgetString = [confgData.wgetStringBase ' ' thisLine];
-            unix(wgetString);
+        indInput = 1;  clear thisInput; clear thisList;
+        while ischar(tline)
+            [~,nc_name,~] = fileparts(tline);
+            if nc_name(end) ~= '4'   %ignore SST4
+                thisDate=julian2time(nc_name(2:14));
+                thisInput(indInput).line = tline;
+                thisInput(indInput).date = thisDate;
+                thisInput(indInput).deltadate = inStruc.dayEndFraction-thisDate;
+                indInput = indInput + 1;
+            end
+            tline = fgetl(fid);
         end
+        fclose(fid);
+        disp(['Found ', num2str(length(thisInput)), ' granules.' ])
         
-        [theseImages{iii}, thesePoints, thesePointsProj] = getData(fileName,  thisLat, thisLon, confgData.distance1, confgData.resolution, ['/geophysical_data/' subMods{3}], utmstruct);
-        theseDates{iii} = thisDate;
-        theseDeltaDates{iii} = thisDeltaDate;
-        thesePointsNew = [thesePoints ones(size(thesePoints,1),1)*thisDeltaDate];
-        thesePointsProjNew = [thesePointsProj ones(size(thesePointsProj,1),1)*thisDeltaDate];
-        thesePointsOutput = [thesePointsOutput; thesePointsNew];
-        thesePointsProjOutput = [thesePointsProjOutput; thesePointsProjNew];
+        %% Re-order the list of found data
+        thisList = zeros(length(thisInput),1);
+        for iii = 1: length(thisInput); thisList(iii) = thisInput(iii).deltadate; end
+        [~, sortIndex] = sort(thisList);
+        listLength = length(sortIndex);
+        
+        if strcmp(subMods{1},'sst') 
+            sortIndex = sortIndex(1); 
+            listLength = 1;
+        end % Needed to prevent issues with SST4
+        
+        %% Loop through previous times and extract images and points from .nc files
+        % iyyyydddhhmmss.L2_rrr_ppp,
+        % where i is the instrument identifier  yyyydddhhmmss
+        clear theseDates theseDeltaDates theseImages;
+        thesePointsOutput = []; thesePointsProjOutput = [];
+        theseImages = cell(listLength,1);theseDates = cell(listLength,1);theseDeltaDates = cell(length(sortIndex),1);
+        thesePointsNew = cell(listLength,1);
+        thesePointsProjNew = cell(listLength,1);
+        
+        %Download all granules found
+        %Uses the parallel computing toolbox, if not available change to a
+        %normal for loop.
+        tic
+        cluster = parcluster('local'); nworkers = cluster.NumWorkers;
+        parfor (iii = 1:listLength,nworkers)
+            thisIndex = sortIndex(iii);
+            thisLine = thisInput(thisIndex).line;
+            thisDate = thisInput(thisIndex).date;
+            thisDeltaDate = thisInput(thisIndex).deltadate;
+            [~,name,ext] = fileparts(thisLine);
+            fileName = [downloadDir name ext];
+            
+            %wget file if it hasn't previously been downloaded
+            if exist(fileName, 'file')~=2
+            %In windows relative paths to wget will only run if the file
+            %directory is local or if the network directory has been
+            %mapped. Otherwise just copy wget.exe to the same path as the
+            %.m files and modify the xml accordingly.
+                wgetString = [wgetStringBase,' -nv', ' -P ',downloadDir, ' ', thisLine];
+                disp(['Downloading granule ',num2str(thisIndex),' from ',thisLine,' ...'])
+                system(wgetString);
+            end           
+            
+            try %Some nc files cannot be read, so we catch those cases
+                theseDates{iii} = thisDate;
+                theseDeltaDates{iii} = thisDeltaDate;
+                [theseImages{iii}, thesePoints, thesePointsProj] = getData(fileName,  thisLat, thisLon, distance1, confgData.resolution, ['/geophysical_data/' subMods{3}], utmstruct);
+                thesePointsNew{iii} = [thesePoints ones(size(thesePoints,1),1)*theseDeltaDates{iii}];
+                thesePointsProjNew{iii} = [thesePointsProj ones(size(thesePointsProj,1),1)*theseDeltaDates{iii}];     
+            catch e2
+                logErr(e2,['index: ',num2str(index),' mod: ',num2str(modIndex), ' granule: ',num2str(iii)]); 
+            end 
+        end
+       
+        %Get rid of any empty cells
+            theseDates = theseDates(~cellfun('isempty', theseImages));
+            theseDeltaDates = theseDeltaDates(~cellfun('isempty', theseImages));
+            theseImages = theseImages(~cellfun('isempty', theseImages));
+        %Build output arrays
+        for iii = 1:listLength
+            thesePointsOutput = [thesePointsOutput; thesePointsNew{iii}];
+            thesePointsProjOutput = [thesePointsProjOutput; thesePointsProjNew{iii}];
+        end
+        disp(['Time taken to process granules: ', num2str(toc)]);
+        
+        addToH5(inStruc.h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsProjOutput);
+        %h5disp(inStruc.h5name);
     end
-    
-    addToH5(inStruc.h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsProjOutput);
-    h5disp(inStruc.h5name);
 end
-% Zip up the data and delete the original
-gzip(inStruc.h5name);
-system(['rm ' confgData.outDir '*.h5']);
 
 function t=julian2time(str)
-%% julian2time takes the julian day of the year contained in the .nc granule
-%  and converts it to integer datenum (as output by datestr).
-%  convert NASA yyyydddHHMMSS to datenum
-%  ddd starts with 1 (therefore we have to take 1 away
-%
-% USAGE:
-%   t=julian2time(str)
-% INPUT:
-%   str - input string containing time in julian format
-% OUTPUT:
-%   t - output time
-ddd=str2double(str(5:7));
-jan1=[str(1:4),'0101',str(8:13)];  % day 1
-t=datenum(jan1,'yyyymmddHHMMSS')+ddd-1;
+    %% julian2time takes the julian day of the year contained in the .nc granule
+    %  and converts it to integer datenum (as output by datestr).
+    %  convert NASA yyyydddHHMMSS to datenum
+    %  ddd starts with 1 (therefore we have to take 1 away
+    %
+    % USAGE:
+    %   t=julian2time(str)
+    % INPUT:
+    %   str - input string containing time in julian format
+    % OUTPUT:
+    %   t - output time
+    ddd=str2double(str(5:7));
+    jan1=[str(1:4),'0101',str(8:13)];  % day 1
+    t=datenum(jan1,'yyyymmddHHMMSS')+ddd-1;
+end
 
 function addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsOutputProj)
-%% add Ims, theseDates, theseDeltaDates and Points to output H5 file
-%
-% USAGE:
-%   addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput)
-% INPUT:
-%   h5name - name of H5 name to be output
-%   thisMod = Name of the output modality
-%   theseImages - Cell array of output binned images (for this modality)
-%   theseDates - The actual capture dates of the points and images output
-%   theseDeltaDates - The delta dates (difference from capture date) of the points and images output
-%   thesePointsOutput - 4D Array of points output
-%   thesePointsOutputProj - 4D Array of projected points output
-% OUTPUT:
-%   - 
-hdf5write(h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/theseDates'],theseDates, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/theseDeltaDates'],theseDeltaDates, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/Points'],thesePointsOutput, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/PointsProj'],thesePointsOutputProj, 'WriteMode','append');
+    %% add Ims, theseDates, theseDeltaDates and Points to output H5 file
+    %
+    % USAGE:
+    %   addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput)
+    % INPUT:
+    %   h5name - name of H5 name to be output
+    %   thisMod = Name of the output modality
+    %   theseImages - Cell array of output binned images (for this modality)
+    %   theseDates - The actual capture dates of the points and images output
+    %   theseDeltaDates - The delta dates (difference from capture date) of the points and images output
+    %   thesePointsOutput - 4D Array of points output
+    %   thesePointsOutputProj - 4D Array of projected points output
+    % OUTPUT:
+    %   - 
+    hdf5write(h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
+    hdf5write(h5name,['/' thisMod  '/theseDates'],theseDates, 'WriteMode','append');
+    hdf5write(h5name,['/' thisMod  '/theseDeltaDates'],theseDeltaDates, 'WriteMode','append');
+    hdf5write(h5name,['/' thisMod  '/Points'],thesePointsOutput, 'WriteMode','append');
+    hdf5write(h5name,['/' thisMod  '/PointsProj'],thesePointsOutputProj, 'WriteMode','append');
+end
 
+function logErr(e,str_iden)
+    fileID = fopen('errors.txt','at');
+    identifier = ['Error procesing sample ',str_iden, ' at ', datestr(now)];
+    text = [e.identifier, '::', e.message];
+    fprintf(fileID,'%s\n\r ',identifier);
+    fprintf(fileID,'%s\n\r ',text);
+    fclose(fileID);
+end
