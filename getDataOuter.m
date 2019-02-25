@@ -82,12 +82,12 @@ function getDataOuter
             inStruc.UTCTime = sprintf('T%02d:00:00Z', inStruc.endTimeUTC);
 
             fileName = ['Cube_' sprintf('%05d',outputIndex) '_' sprintf('%05d',ii) '_' num2str(sample_date(ii)) '.h5'];
-            outputIndex = outputIndex+1;
             inStruc.h5name = [confgData.outDir fileName ];
             if exist(inStruc.h5name, 'file')==2;  delete(inStruc.h5name);  end
             
-            %Put images, count, dates and deltadates into output .H5 file
+            %Saves images, count, dates and deltadates into output .H5 file
             addDataH5(inStruc, confgData);
+            outputIndex = outputIndex+1;
             getModData(inStruc, confgData);
             
             % Zip up the data and delete the original
@@ -331,7 +331,7 @@ end
 function logErr(e,str_iden)
     fileID = fopen('errors.txt','at');
     identifier = ['Error procesing sample ',str_iden, ' time: ', datestr(now)];
-    text = [e.identifier, '::', e.message];
+    text = [e.identifier, '::', getReport(e)];
     fprintf(fileID,'%s\n\r ',identifier);
     fprintf(fileID,'%s\n\r ',text);
     fclose(fileID);
