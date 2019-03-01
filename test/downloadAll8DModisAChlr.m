@@ -142,4 +142,3 @@ function logErr(e,strIden)
     fprintf(fileID,'%s\n',identifier);
     fprintf(fileID,'%s\n',text);
     fclose(fileID);
-end
