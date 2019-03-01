@@ -39,8 +39,7 @@ function getDataOuter
     confgData.gebcoFilename = tmpStruct.confgData.gebcoFilename.Text;
     confgData.wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;
     confgData.outDir = tmpStruct.confgData.outDir.Text;
-    if isfield(tmpStruct.confgData,'downloadFolder'), confgData.downloadDir = tmpStruct.confgData.downloadFolder.Text; 
-    else, confgData.downloadDir = '.\'; end
+    confgData.downloadDir = tmpStruct.confgData.downloadFolder.Text; 
     confgData.distance1 = str2double(tmpStruct.confgData.distance1.Text);
     confgData.resolution = str2double(tmpStruct.confgData.resolution.Text);
     confgData.numberOfDaysInPast = str2double(tmpStruct.confgData.numberOfDaysInPast.Text);

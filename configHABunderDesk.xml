@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <confgData>
-   <inputFilename>./work/florida_2003-2018-50K</inputFilename>
+   <inputFilename>/home/cosc/csprh/linux/HABCODE/code/HAB/extractData/work/florida_2003-2018-50K</inputFilename>
    <gebcoFilename>/space/csprh/HAB/GEBCO/GEBCO.nc</gebcoFilename>
-   <downloadFolder>./downloads/</downloadFolder>
+   <downloadFolder>/home/cosc/csprh/linux/HABCODE/code/HAB/extractData/downloads/</downloadFolder>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
    <outDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida4/</outDir>
    <resolution>2000</resolution>

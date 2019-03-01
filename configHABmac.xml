@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- oc: 412, 443, 488, 531, and 551, chlro_a (not chr_ocx) par? -->
-<!-- sst: sst4 (for sst4) and sst (for sst files), sstref for both -->
 <confgData>
-   <inputFilename>./work/florida_2003-2018-50K</inputFilename>
+   <inputFilename>/Users/csprh/Dlaptop/MATLAB/MYCODE/HAB/CODE/extractData/work/florida_2003-2018-50K</inputFilename>
    <gebcoFilename>/Users/csprh/seadas-7.4/DATA/GEBCO.nc</gebcoFilename>
+   <downloadFolder>/Users/csprh/Dlaptop/MATLAB/MYCODE/HAB/CODE/extractData/downloads/</downloadFolder>
    <wgetStringBase>/usr/local/bin/wget</wgetStringBase>
-   <outDir>../../WORK/HAB/florida2/</outDir>
+   <outDir>/Users/csprh/Dlaptop/MATLAB/MYCODE/HAB/WORK/HAB/florida2/</outDir>
    <resolution>2000</resolution>
    <distance1>100000</distance1>
    <numberOfDaysInPast>10</numberOfDaysInPast>
@@ -22,3 +21,5 @@
    <Modality>oc-modist-chlor_a</Modality>
 
 </confgData>
+<!-- oc: 412, 443, 488, 531, and 551, chlro_a (not chr_ocx) par? -->
+<!-- sst: sst4 (for sst4) and sst (for sst files), sstref for both -->

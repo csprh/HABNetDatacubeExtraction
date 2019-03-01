@@ -67,7 +67,7 @@ GroundTruth/dayStart:  Date - numberOfDaysInPast
 GroundTruth/dayEndFraction: Take into account the time of capture and time zone
 GroundTruth/dayStartFraction: 
 GroundTruth/resolution:  Resolution of the output images (in metres)
-GroundTruth/distance1:  Distance from centre (lon,lat) of the edge of each image
+GroundTruth/distance1:   Spatial width of datacube (in metres)
 GroundTruth/projection:  Type of projection of the output images
 ```
 
@@ -91,6 +91,7 @@ The configuration of the datacube extraction is contained within an xml file (â€
 <confgData>
    <inputFilename>./work/florida_2003-2018-50K</inputFilename>
    <gebcoFilename>~/scratch/HAB/GEBCO/GEBCO.nc</gebcoFilename>
+   <downloadFolder>./downloads/</downloadFolder>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
    <outDir>/mnt/storage/scratch/csprh/HAB/florida1/</outDir>
    <resolution>2000</resolution>
