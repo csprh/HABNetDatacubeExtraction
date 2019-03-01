@@ -116,22 +116,30 @@ while thisDay <  dayEnd
             outLon = lon(ind);
             outVal = z(ind);
             thisTriple = [outLat outLon outVal];
-            outputTriple = [thisTriple outputTriple];
+            outputTriple = [thisTriple; outputTriple];
         end
         
         h5name = [outDir '/BimonthLy_Chlor_a_' num2str(thisDay) '_' num2str(thisEndDay) '.h5'];
         
         fid = H5F.create(h5name);
         H5F.close(fid);
-        hdf5write(h5name,['/biMonthTriple'], outputTriple, 'WriteMode','append');
-        hdf5write(h5name,['/thisDayS'],thisDayS, 'WriteMode','append');
-        hdf5write(h5name,['/thisEndDayS'],thisEndDayS, 'WriteMode','append');
-        hdf5write(h5name,['/thisDay'],thisDay, 'WriteMode','append');
-        hdf5write(h5name,['/thisEndDay'],thisEndDay, 'WriteMode','append');
+        hdf5write(h5name,'/biMonthTriple', outputTriple, 'WriteMode','append');
+        h5writeatt(h5name, 'thisDayS', thisDayS);
+        h5writeatt(h5name, 'thisEndDayS', thisEndDayS);
+        h5writeatt(h5namep, 'thisDay', thisDay);
+        h5writeatt(h5name, 'thisEndDay', thisEndDay);
 
         thisDay = thisDay+8;
-    catch
-        ['Caught on thisDay ' num2str(thisDay) ]
+    catch err
+        logErr(err,num2str(thisDay));
     end
 end
 
+function logErr(e,strIden)
+    fileID = fopen('errors.txt','at');
+    identifier = ['Error procesing sample ',strIden, ' at ', datestr(now)];
+    text = [e.identifier, '::', e.message];
+    fprintf(fileID,'%s\n',identifier);
+    fprintf(fileID,'%s\n',text);
+    fclose(fileID);
+end
