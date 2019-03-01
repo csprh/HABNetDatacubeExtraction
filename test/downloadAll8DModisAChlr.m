@@ -120,7 +120,7 @@ while thisDay <  dayEnd
         end
         
         h5name = [outDir '/BimonthLy_Chlor_a_' num2str(thisDay) '_' num2str(thisEndDay) '.h5'];
-        
+        if exist(h5name, 'file')==2;  delete(h5name);  end
         fid = H5F.create(h5name);
         H5F.close(fid);
         hdf5write(h5name,'/biMonthTriple', outputTriple, 'WriteMode','append');
@@ -132,6 +132,7 @@ while thisDay <  dayEnd
         thisDay = thisDay+8;
     catch err
         logErr(err,num2str(thisDay));
+        thisDay = thisDay+8;
     end
 end
 
