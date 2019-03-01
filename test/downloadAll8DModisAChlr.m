@@ -126,7 +126,7 @@ while thisDay <  dayEnd
         hdf5write(h5name'/biMonthTriple', outputTriple, 'WriteMode','append');
         h5writeatt(h5name, '/','thisDayS', thisDayS);
         h5writeatt(h5name, '/','thisEndDayS', thisEndDayS);
-        h5writeatt(h5namep,'/', 'thisDay', thisDay);
+        h5writeatt(h5name,'/', 'thisDay', thisDay);
         h5writeatt(h5name, '/','thisEndDay', thisEndDay);
 
         thisDay = thisDay+8;
