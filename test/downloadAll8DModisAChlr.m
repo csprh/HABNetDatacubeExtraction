@@ -123,11 +123,11 @@ while thisDay <  dayEnd
         if exist(h5name, 'file')==2;  delete(h5name);  end
         fid = H5F.create(h5name);
         H5F.close(fid);
-        hdf5write(h5name,'/biMonthTriple', outputTriple, 'WriteMode','append');
-        h5writeatt(h5name, 'thisDayS', thisDayS);
-        h5writeatt(h5name, 'thisEndDayS', thisEndDayS);
-        h5writeatt(h5namep, 'thisDay', thisDay);
-        h5writeatt(h5name, 'thisEndDay', thisEndDay);
+        hdf5write(h5name'/biMonthTriple', outputTriple, 'WriteMode','append');
+        h5writeatt(h5name, '/','thisDayS', thisDayS);
+        h5writeatt(h5name, '/','thisEndDayS', thisEndDayS);
+        h5writeatt(h5namep,'/', 'thisDay', thisDay);
+        h5writeatt(h5name, '/','thisEndDay', thisEndDay);
 
         thisDay = thisDay+8;
     catch err
