@@ -12,7 +12,7 @@ module load apps/matlab/2017a
 
 cd $SLURM_SUBMIT_DIR
 echo $SLURM_SUBMIT_DIR
-cd /mnt/storage/home/csprh/code/HAB/extractData/postProcess
+cd /mnt/storage/home/csprh/code/HAB/extractData
 #matlab -nodisplay -nosplash -r getDataOuter > outfile.txt < /dev/null 
-matlab -nodisplay -nosplash -r cubeAnalysis_1
+matlab -nodisplay -nosplash -r getDataOuter
 

@@ -12,7 +12,6 @@ module load apps/matlab/2017a
 
 cd $SLURM_SUBMIT_DIR
 echo $SLURM_SUBMIT_DIR
-cd /mnt/storage/home/csprh/code/HAB/extractData/postProcess
-#matlab -nodisplay -nosplash -r getDataOuter > outfile.txt < /dev/null 
-matlab -nodisplay -nosplash -r pngGenFromH5v4 
+cd /mnt/storage/home/csprh/code/HAB/genHDFData
+matlab -nodisplay -nosplash -r pngGenFromH5v2   
 
