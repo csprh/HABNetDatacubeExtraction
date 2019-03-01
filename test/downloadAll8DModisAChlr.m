@@ -1,6 +1,6 @@
 function downloadAll8DModisAChlr
 %% Function that integrates all the Chloraphyl data on a bi-monthly basis
-% from level-3 7 day products
+% from level-3 8 day products
 %
 % USAGE:
 %   downloadAll8DModisAChlr
@@ -9,13 +9,17 @@ function downloadAll8DModisAChlr
 % OUTPUT:
 %   -
 % THE UNIVERSITY OF BRISTOL: HAB PROJECT
+%
+% TODO!
+% This code is very inefficient as it downloads all the global data for two
+% months multiple times.  Also, it should be quantised / rasterised to
+% reduce the amount of data in the outpuot .h5 files
+% 
+% NOTES:
+% Only modis aqua is used as modis terra is degrading in quality after
+% about 2011.  
+
 % Author Dr Paul Hill 26th Feb 2019
-
-
-% Clean code
-% Integrate lat and lon data
-% Error code
-% Parrallelise code
 
 
 if ismac
@@ -94,33 +98,32 @@ while thisDay <  dayEnd
         numberOfNCs=size(NCfiles,1);
         outputTriple = [];
         
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %%Loop through the NCs          %%%
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         for ii = 1: numberOfNCs
             
-            ii
             %% Process input h5 file
-            
             ncName = NCfiles(ii).name;
-            A = h5read(ncName,'/level-3_binned_data/chlor_a');
-            B = h5read(ncName,'/level-3_binned_data/BinList');
+            A = h5read([downloadDir ncName],'/level-3_binned_data/chlor_a');
+            B = h5read([downloadDir ncName],'/level-3_binned_data/BinList');
             z = double(A.sum_squared);
             bins = B.bin_num;
             [lat,lon] = binind2latlon(bins);
-            ind = lon>=lonMinMax(1) & lon<=lonMinMax(2) & lat>=latMinMax(1) &lat<=latMinMax(2);
+            ind = (lon>=lonMinMax(1) & lon<=lonMinMax(2) & lat>=latMinMax(1) &lat<=latMinMax(2));
             
             outLat = lat(ind);
             outLon = lon(ind);
             outVal = z(ind);
             thisTriple = [outLat outLon outVal];
-            outputTriple = [thisTriple; outputTriple];
+            outputTriple = [thisTriple outputTriple];
         end
-        
-        
         
         h5name = [outDir '/BimonthLy_Chlor_a_' num2str(thisDay) '_' num2str(thisEndDay) '.h5'];
         
         fid = H5F.create(h5name);
         H5F.close(fid);
-        hdf5write(h5name,['/biMonthTriple'],outputTriple, 'WriteMode','append');
+        hdf5write(h5name,['/biMonthTriple'], outputTriple, 'WriteMode','append');
         hdf5write(h5name,['/thisDayS'],thisDayS, 'WriteMode','append');
         hdf5write(h5name,['/thisEndDayS'],thisEndDayS, 'WriteMode','append');
         hdf5write(h5name,['/thisDay'],thisDay, 'WriteMode','append');
