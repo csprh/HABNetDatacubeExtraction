@@ -151,3 +151,9 @@ This is achieved using the MATLAB script (with no input parameters)
 
 * postprocess/cubeSequence.m
 
+## Generation of Bi-monthly Chlor_a Values
+
+All of the florida bi-monthly average values are downloaded using the following
+code
+* test/downloadAll8DModisAChlr.m
+
