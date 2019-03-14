@@ -10,16 +10,16 @@ function HABDetectScript(h5name, outputDirectory)
 %% probability
 %
 % USAGE:
-%   HABDetetScript
+%   HABDetectScript('/home/cosc/csprh/linux/HABCODE/scratch/HAB/tmpTest/testCubes/Cube_09073_09081_737173.h5', '/home/cosc/csprh/linux/HABCODE/scratch/HAB/tmpTest/CNNIms');
 % INPUT:
 %   h5name: Name of the input
 %   outputDirectory
 % OUTPUT:
 %   -
 % THE UNIVERSITY OF BRISTOL: HAB PROJECT
-% Author Dr Paul Hill 2nd October 2018
-clear; close all;
-addpath('..');
+% Author Dr Paul Hill March 2019
+
+addpath('postProcess');
 [~, tmpStruct] = getHABConfig;
 if ismac
     modelPYString = '/Users/csprh/Dlaptop/MATLAB/MYCODE/HAB/CODE/modelHAB/';
@@ -39,7 +39,6 @@ alphaSize = str2num(tmpStruct.confgData.alphaSize.Text);
 
 inputRangeX = [0 distance1/resolution];
 inputRangeY = [0 distance1/resolution];
-
 
 load groupMaxAndMin
 

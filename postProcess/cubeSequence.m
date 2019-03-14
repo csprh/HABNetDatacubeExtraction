@@ -48,7 +48,7 @@ if preLoadMinMax ~= 1
     [thisMax, thisMin] = getMinMaxFromH5s(cubesDir);
     groupMinMax = getMinMax(thisMax, thisMin);
     groupMinMax(1,2)  = 0;    %Gebco Bathymetry max (discount land)
-    groupMinMax(1,1)  = -500; %Gebco Bathymetry min (discount anything under 500m depth)
+    groupMinMax(1,1)  = -380; %Gebco Bathymetry min (discount anything under 500m depth)
     save groupMaxAndMin groupMinMax
 else
     load groupMaxAndMin %load the max and minima of the mods
