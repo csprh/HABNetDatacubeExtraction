@@ -22,17 +22,18 @@ function HABDetectScript(h5name, outputDirectory)
 addpath('postProcess');
 [~, tmpStruct] = getHABConfig;
 if ismac
-    modelPYString = '/Users/csprh/Dlaptop/MATLAB/MYCODE/HAB/CODE/modelHAB/';
+    modelPYString = '../modelHAB/';
     pythonStr = '/usr/local/bin/python3';
 elseif isunix
-    modelPYString = '?????/modelHAB/';
+    modelPYString = '../modelHAB/';
     pythonStr = 'python';
 elseif ispc
-    modelPYString = '?????/modelHAB/';
+    modelPYString = '../modelHAB/';
     pythonStr = 'py';
 end
 
 resolution = str2num(tmpStruct.confgData.resolution.Text);
+distance1 = str2num(tmpStruct.confgData.distance1.Text);
 numberOfDays = str2num(tmpStruct.confgData.numberOfDaysInPast.Text);
 outputRes = str2num(tmpStruct.confgData.outputRes.Text);
 alphaSize = str2num(tmpStruct.confgData.alphaSize.Text);
