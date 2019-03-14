@@ -42,11 +42,12 @@ load groupMaxAndMin
 
 outputImagesFromDataCube(outputDirectory, numberOfDays, groupMinMax, inputRangeX, inputRangeY, alphaSize, outputRes, h5name);
 origDir = pwd;
-cd ..; cd modelHAB;
+%cd ..; cd modelHAB;
+system('cd ..'); system('cd modelHAB');
 thisDir = pwd;
-exeName = [pythonStr ' extract_features.py ' thisDir '/cnfgXMLs/NASNet11_lstm0.xml ' outputDirectory];
+exeName = [pythonStr ' extract_features.py cnfgXMLs/NASNet11_lstm0.xml ' outputDirectory];
 system(exeName);
-exeName = [pythonStr ' testHAB.py ' thisDir '/cnfgXMLs/NASNet11_lstm0.xml ' outputDirectory];
+exeName = [pythonStr ' testHAB.py cnfgXMLs/NASNet11_lstm0.xml ' outputDirectory];
 prob = system(exeName);
 cd (origDir);
 
