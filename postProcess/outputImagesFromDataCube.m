@@ -1,4 +1,5 @@
 function outputImagesFromDataCube(baseDirectory,  numberOfDays, groupMinMax, inputRangeX, inputRangeY, alphaSize, outputRes, h5name)
+
 %% This Code loops through all modalities within the h5 file and generates
 %% A directory of images in a folder for ingress into Machine Learning
 

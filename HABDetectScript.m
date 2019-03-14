@@ -22,13 +22,10 @@ function HABDetectScript(h5name, outputDirectory)
 addpath('postProcess');
 [~, tmpStruct] = getHABConfig;
 if ismac
-    modelPYString = '../modelHAB/';
     pythonStr = '/usr/local/bin/python3';
 elseif isunix
-    modelPYString = '../modelHAB/';
-    pythonStr = 'python';
+    pythonStr = 'python3';
 elseif ispc
-    modelPYString = '../modelHAB/';
     pythonStr = 'py';
 end
 
@@ -44,10 +41,13 @@ inputRangeY = [0 distance1/resolution];
 load groupMaxAndMin
 
 outputImagesFromDataCube(outputDirectory, numberOfDays, groupMinMax, inputRangeX, inputRangeY, alphaSize, outputRes, h5name);
-exeName = [pythonStr modelPYString 'feature_extract.py cnfgXMLs/NASNet11_lstm0.xml ' outputDirectory];
+origDir = pwd
+cd ..; cd modelHAB;
+exeName = [modelPYString 'extract_features.py cnfgXMLs/NASNet11_lstm0.xml ' outputDirectory];
 system(exeName);
-exeName = [pythonStr modelPYString 'testHAB.py cnfgXMLs/NASNet11_lstm0.xml ' outputDirectory];
+exeName = [modelPYString 'testHAB.py cnfgXMLs/NASNet11_lstm0.xml ' outputDirectory];
 prob = system(exeName);
+cd (origDir);
 
 
 
