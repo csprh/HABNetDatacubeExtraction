@@ -44,9 +44,9 @@ outputImagesFromDataCube(outputDirectory, numberOfDays, groupMinMax, inputRangeX
 origDir = pwd;
 cd ..; cd modelHAB;
 thisDir = pwd;
-exeName = [pythonStr ' extract_features.py ' thisDir ' cnfgXMLs/NASNet11_lstm0.xml ' outputDirectory];
+exeName = [pythonStr ' extract_features.py ' thisDir '/cnfgXMLs/NASNet11_lstm0.xml ' outputDirectory];
 system(exeName);
-exeName = [pythonStr ' testHAB.py ' thisDir ' cnfgXMLs/NASNet11_lstm0.xml ' outputDirectory];
+exeName = [pythonStr ' testHAB.py ' thisDir '/cnfgXMLs/NASNet11_lstm0.xml ' outputDirectory];
 prob = system(exeName);
 cd (origDir);
 
