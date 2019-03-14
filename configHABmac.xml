@@ -5,6 +5,7 @@
    <downloadFolder>/Users/csprh/Dlaptop/MATLAB/MYCODE/HAB/CODE/extractData/downloads/</downloadFolder>
    <wgetStringBase>/usr/local/bin/wget</wgetStringBase>
    <outDir>/Users/csprh/Dlaptop/MATLAB/MYCODE/HAB/WORK/HAB/florida2/</outDir>
+   <imsDir>/Users/csprh/Dlaptop/MATLAB/MYCODE/HAB/WORK/HAB/CNNIms/florida2/</imsDir>
    <resolution>2000</resolution>
    <distance1>100000</distance1>
    <numberOfDaysInPast>10</numberOfDaysInPast>
@@ -19,7 +20,11 @@
    <Modality>oc-modisa-par</Modality>
    <Modality>sst-modisa-sstref</Modality>
    <Modality>oc-modist-chlor_a</Modality>
-
+   <outputRes>1000</outputRes>
+   <alphaSize>2</alphaSize>
+   <threshCentrePoint>0.5</threshCentrePoint>
+   <threshAll>0.2</threshAll>
+   <preLoadMinMax>1</preLoadMinMax>
 </confgData>
 <!-- oc: 412, 443, 488, 531, and 551, chlro_a (not chr_ocx) par? -->
 <!-- sst: sst4 (for sst4) and sst (for sst files), sstref for both -->
