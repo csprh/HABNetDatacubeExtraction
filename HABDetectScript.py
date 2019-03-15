@@ -26,7 +26,7 @@ outputDirectory = '/home/cosc/csprh/linux/HABCODE/scratch/HAB/tmpTest/CNNIms'
 os.chdir(r'../modelHAB')
 #eng.HABDetect(h5name, outputDirectory)
 mstring = 'matlab /nosplash /nodesktop /r HABDetect('
-os.system(mstring + h5name + ',' + outputDirectory + ')')
+os.system( mstring + '\'' + h5name + '\',\'' + outputDirectory + '\')')
 extract_features('cnfgXMLs/NASNet11_lstm0.xml', outputDirectory)
 testHAB('cnfgXMLs/NASNet11_lstm0.xml', outputDirectory)
 
