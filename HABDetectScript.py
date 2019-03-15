@@ -25,7 +25,7 @@ h5name = '/home/cosc/csprh/linux/HABCODE/scratch/HAB/tmpTest/testCubes/Cube_0907
 outputDirectory = '/home/cosc/csprh/linux/HABCODE/scratch/HAB/tmpTest/CNNIms'
 os.chdir(r'../modelHAB')
 #eng.HABDetect(h5name, outputDirectory)
-p = os.system('HABDetect ' + ' '+ h5name + ' ' + outputDirectory)
+p = os.system('matlabl HABDetect ' + ' '+ h5name + ' ' + outputDirectory)
 extract_features('cnfgXMLs/NASNet11_lstm0.xml', outputDirectory)
 testHAB('cnfgXMLs/NASNet11_lstm0.xml', outputDirectory)
 
