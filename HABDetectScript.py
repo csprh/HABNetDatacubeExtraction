@@ -23,9 +23,9 @@ import pudb; pu.db
 
 h5name = '/home/cosc/csprh/linux/HABCODE/scratch/HAB/tmpTest/testCubes/Cube_09073_09081_737173.h5'
 outputDirectory = '/home/cosc/csprh/linux/HABCODE/scratch/HAB/tmpTest/CNNIms'
-os.chdir(r'../modelHAB')
+#os.chdir(r'../modelHAB')
 #eng.HABDetect(h5name, outputDirectory)
-mstring = 'matlab -r \"HABDetect ' +  h5name + ' ' + outputDirectory + '\"'
+mstring = 'matlab -nosplash -r \"HABDetect ' +  h5name + ' ' + outputDirectory + '\"'
 os.system(mstring)
 extract_features('cnfgXMLs/NASNet11_lstm0.xml', outputDirectory)
 testHAB('cnfgXMLs/NASNet11_lstm0.xml', outputDirectory)
