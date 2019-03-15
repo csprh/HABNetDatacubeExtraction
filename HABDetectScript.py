@@ -25,9 +25,9 @@ h5name = '/home/cosc/csprh/linux/HABCODE/scratch/HAB/tmpTest/testCubes/Cube_0907
 outputDirectory = '/home/cosc/csprh/linux/HABCODE/scratch/HAB/tmpTest/CNNIms'
 os.chdir(r'../modelHAB')
 eng.HABDetect(h5name, outputDirectory)
-outputImagesFromDataCube(outputDirectory, numberOfDays, groupMinMax, inputRangeX, inputRangeY, alphaSize, outputRes, h5name);
-extract_features('cnfgXMLs/NASNet11_lstm0.xml', outputDirectory);
-testHAB('cnfgXMLs/NASNet11_lstm0.xml' outputDirectory);
+outputImagesFromDataCube(outputDirectory, numberOfDays, groupMinMax, inputRangeX, inputRangeY, alphaSize, outputRes, h5name)
+extract_features('cnfgXMLs/NASNet11_lstm0.xml', outputDirectory)
+testHAB('cnfgXMLs/NASNet11_lstm0.xml', outputDirectory)
 
 
 
