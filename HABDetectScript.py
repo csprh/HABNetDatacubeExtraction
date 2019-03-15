@@ -14,7 +14,7 @@
 
 import sys
 import os
-import matlab.engine
+#import matlab.engine
 import pudb; pu.db
 
 eng = matlab.engine.start_matlab()
@@ -24,7 +24,8 @@ eng = matlab.engine.start_matlab()
 h5name = '/home/cosc/csprh/linux/HABCODE/scratch/HAB/tmpTest/testCubes/Cube_09073_09081_737173.h5'
 outputDirectory = '/home/cosc/csprh/linux/HABCODE/scratch/HAB/tmpTest/CNNIms'
 os.chdir(r'../modelHAB')
-eng.HABDetect(h5name, outputDirectory)
+#eng.HABDetect(h5name, outputDirectory)
+os.system('HABDetect ' + ' '+ h5name + ' ' + outputDirectory)
 outputImagesFromDataCube(outputDirectory, numberOfDays, groupMinMax, inputRangeX, inputRangeY, alphaSize, outputRes, h5name)
 extract_features('cnfgXMLs/NASNet11_lstm0.xml', outputDirectory)
 testHAB('cnfgXMLs/NASNet11_lstm0.xml', outputDirectory)
