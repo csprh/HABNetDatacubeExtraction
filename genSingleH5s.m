@@ -19,6 +19,10 @@ inStruc.zoneHrDiff = timezone(inStruc.thisLon);
 % FWC say their data is collected in daylight hours (mostly)
 inStruc.endTimeUTC = 23+inStruc.zoneHrDiff;
 
+inStruc.thisLon
+inStruc.thisLat
+inStruc.dayEnd
+
 if inStruc.endTimeUTC > 24; inStruc.endTimeUTC = inStruc.endTimeUTC-24; inStruc.dayEnd=inStruc.dayEnd+1; end
 inStruc.dayEndFraction = inStruc.dayEnd+inStruc.endTimeUTC/24;
 inStruc.dayStart = inStruc.dayEnd - confgData.numberOfDaysInPast;
