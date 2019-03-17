@@ -6,7 +6,7 @@ for satellite granule names and download links.
 written by J.Scott on 2016/12/12 (joel.scott@nasa.gov)
 
 Updated by P.Hill 2019 in order extract list of file locations in file format
-Called by getDataOuter.m MATLAB file
+Called by getDataOuter.m MATLAB file output to output.txt
 """
 
 def main():

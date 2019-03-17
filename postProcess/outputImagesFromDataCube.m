@@ -1,10 +1,10 @@
 function outputImagesFromDataCube(baseDirectory,  numberOfDays, groupMinMax, inputRangeX, inputRangeY, alphaSize, outputRes, h5name)
 
-%% This Code loops through all modalities within the h5 file and generates
+%% This Code loops through all modalities within the given h5 file (h5name) and generates
 %% A directory of images in a folder for ingress into Machine Learning
 
 % USAGE:
-%   outputImagesFromDataCube(baseDirectory, numberOfGroups, h5name)
+%   outputImagesFromDataCube(baseDirectory,  numberOfDays, groupMinMax, inputRangeX, inputRangeY, alphaSize, outputRes, h5name)
 % INPUT:
 %   baseDirectory: Directory to put the output images (0,1,2....directories
 %   created to put modalities into...each image 0.png, 1.png etc are the
@@ -14,7 +14,7 @@ function outputImagesFromDataCube(baseDirectory,  numberOfDays, groupMinMax, inp
 %   inputRangeY: Range of output for images ([0:50])
 %   outputRes: Resolution (in metres) of quantise bins output
 %   groupMinMax: Array of Minima and Maxima of the modalities
-%   h5name: Name of the input HDF5 file
+%   h5name: Name of the input H5 file
 % OUTPUT:
 %   -
 % THE UNIVERSITY OF BRISTOL: HAB PROJECT
@@ -88,20 +88,32 @@ for groupIndex = 2: numberOfGroups
 end
 
 
-function outputImage = getImage(output, input, alphaSize)
+function outputImage = getImage(thisOutput, thisInput, alphaSize)
+%% This Code grids the data in thisInput to the grid of thisOutput using 
+%% Gridding and alphashape
 
-if length(input.xp) < 10
-    outputImage = ones(size(output.xq))*NaN;
+% USAGE:
+%   outputImage = getImage(output, input, alphaSize)
+% INPUT:
+%   thisOuput: definition of output shape
+%   thisInput: definition of input shape
+%   alphaSize: definition of parameters for alphaShape
+% OUTPUT:
+%   outputImage: Raster output image
+
+% If there is very small amounts of input data just resturn a NaN image
+if length(thisInput.xp) < 10
+    outputImage = ones(size(thisOutput.xq))*NaN;
     return;
 end
 try
-    outputImage = griddata(input.xp, input.yp,  input.up, output.xq, output.yq);
-    shp = alphaShape(input.xp, input.yp,  alphaSize);
-    thisin = inShape(shp, output.xq, output.yq);
+    outputImage = griddata(thisInput.xp, thisInput.yp,  thisInput.up, thisOutput.xq, thisOutput.yq);
+    shp = alphaShape(thisInput.xp, thisInput.yp,  alphaSize);
+    thisin = inShape(shp, thisOutput.xq, thisOutput.yq);
     
     outputImage(thisin==0) = NaN;
-    outputImage(input.isLand==1) = NaN;
+    outputImage(thisInput.isLand==1) = NaN;
 catch
-    outputImage = ones(size(output.xq))*NaN;
+    outputImage = ones(size(thisOutput.xq))*NaN;
 end
 

@@ -1,12 +1,16 @@
 function [thisMax, thisMin] = getMinMaxFromH5s(filenameBase)
 %% This Code loops through al the h5 output files and generates
-%% The maximum and minimum values of the modalities
+%% The maximum and minimum values for each modality.
+%% These are then output into the Maximum vector thisMax and
+%% the minimum vector thisMin
 % USAGE:
-%   groupMinMax = getMinMaxFromH5s(filenameBase)
+%   [thisMax, thisMin] = getMinMaxFromH5s(filenameBase)
 % INPUT:
-%   filenameBase
+%   filenameBase: Directory that holds all compressed h5 datacubes
 % OUTPUT:
-%   groupMinMax
+%   thisMax: Vector of maximum values for each modality
+%   thisMin: Vector of minimum values for each modality
+
 % THE UNIVERSITY OF BRISTOL: HAB PROJECT
 % Author Dr Paul Hill March 2019
 close all;
@@ -42,8 +46,6 @@ for ii = 1: numberOfH5s
             theseVals = Points(:,3);
             thisMax(thisGroupIndex, ii) = max(theseVals);
             thisMin(thisGroupIndex, ii) = min(theseVals);
-            
-            
         end
     catch
     end

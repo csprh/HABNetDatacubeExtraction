@@ -1,10 +1,16 @@
 function cubeSequence
-%% This Code loops through al the h5 output files and generates
-%% A directory of images in a folder for ingress into Machine Learning model
+%% This Code loops through all the h5 output files and generates
+% A directory of images in a folder for ingress into Machine Learning model.
 % Datapoints (lines in the ground truth file) are discounted if they do not
-% Contain enough data.
-% This file will need to be run twice.  Once to get the range (max and min)
-% and once to output the final data images
+% Contain enough data. Using the thresholds in the XML file
+% 
+% Optionally loops through all h5 datacubes to generate min and max values for
+% all modalities
+
+% Tests datacubes to see if there is enough data to discount the training using
+% that datacube
+% If tests are passed then outputImagesFromDataCube.m is used to generate the
+% list of quantised images
 %
 % USAGE:
 %   cubeSequence
@@ -13,7 +19,7 @@ function cubeSequence
 % OUTPUT:
 %   -
 % THE UNIVERSITY OF BRISTOL: HAB PROJECT
-% Author Dr Paul Hill 2nd October 2018
+% Author Dr Paul Hill March 2019
 clear; close all;
 addpath('..');
 [~, tmpStruct] = getHABConfig;
@@ -31,8 +37,8 @@ preLoadMinMax = str2num(tmpStruct.confgData.preLoadMinMax.Text);
 numberOfDaysInPast  = str2num(tmpStruct.confgData.numberOfDaysInPast.Text);
 
 
-%The input range is 50 by 50 samples (in projected space)
-%The output resolution is 1000m (1km)
+%The input range is usually 50 by 50 samples (in projected space)
+%The output resolution is 1000m (1km).  This results in 100x100 pixels images
 %AlphaSize controls the interpolation projected points to output image
 
 inputRangeX = [0 distance1/resolution];
@@ -54,13 +60,10 @@ else
     load groupMaxAndMin %load the max and minima of the mods
 end
 
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Loop through all the ground truth entries%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for ii = 1: numberOfH5s
-    ii
     try
         %% Process input h5 file
         system(['rm ' cubesDir '*.h5']);
