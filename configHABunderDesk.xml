@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <confgData>
-   <inputFilename>./work/florida_2003-2018-50K</inputFilename>
+   <inputFilename>/home/cosc/csprh/linux/HABCODE/code/HAB/extractData/work/florida_2003-2018-50K</inputFilename>
    <gebcoFilename>/space/csprh/HAB/GEBCO/GEBCO.nc</gebcoFilename>
+   <downloadFolder>/home/cosc/csprh/linux/HABCODE/scratch/downloads/</downloadFolder>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
    <outDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida4/</outDir>
+   <imsDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/CNNIms/florida4/</imsDir>
    <resolution>2000</resolution>
    <distance1>100000</distance1>
    <numberOfDaysInPast>10</numberOfDaysInPast>
@@ -18,4 +20,9 @@
    <Modality>oc-modisa-par</Modality>
    <Modality>sst-modisa-sstref</Modality>
    <Modality>oc-modist-chlor_a</Modality>
+   <outputRes>1000</outputRes>
+   <alphaSize>2</alphaSize>
+   <threshCentrePoint>0.5</threshCentrePoint>
+   <threshAll>0.2</threshAll>
+   <preLoadMinMax>1</preLoadMinMax>
 </confgData>

@@ -1,5 +1,5 @@
 function getDataOuter
-    %% Top level code that loads config, loads .mat ground truth file,
+    %% Top level code that loads xml config, loads .mat ground truth file,
     %  searches for all relevant .nc granules (using fd_matchup.py and NASA's
     %  CMR interface).  Datacubes are formed from all the local .nc granules
     %
@@ -11,36 +11,18 @@ function getDataOuter
     %   -
     % THE UNIVERSITY OF BRISTOL: HAB PROJECT
     % Author Dr Paul Hill 26th June 2018
+    % Updated March 2019 PRH
     % Updates for WIN compatibility: JVillegas 21 Feb 2019, Khalifa University
     clear; close all;
 
-    if ismac
-        rmcommand = 'rm ';
-        tmpStruct = xml2struct('configHABmac.xml');
-    elseif isunix
-        rmcommand = 'rm ';
-        [~, thisCmd] = system('rpm --query centos-release');
-        isUnderDesk = strcmp(thisCmd(1:end-1),'centos-release-7-6.1810.2.el7.centos.x86_64');
-        if isUnderDesk == 1
-            tmpStruct = xml2struct('configHABunderDesk.xml');
-        else
-            tmpStruct = xml2struct('configHAB.xml');
-        end
-    elseif ispc
-        % Code to run on Windows platform
-        tmpStruct = xml2struct('configHAB_win.xml');
-        rmcommand = ['del ' pwd '\' ];
-    else
-        disp('Platform not supported')
-    end
+    [rmcommand, tmpStruct] = getHABConfig;
 
     %% load all config from XML file
     confgData.inputFilename = tmpStruct.confgData.inputFilename.Text;
     confgData.gebcoFilename = tmpStruct.confgData.gebcoFilename.Text;
     confgData.wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;
     confgData.outDir = tmpStruct.confgData.outDir.Text;
-    if isfield(tmpStruct.confgData,'downloadFolder'), confgData.downloadDir = tmpStruct.confgData.downloadFolder.Text; 
-    else, confgData.downloadDir = '.\'; end
+    confgData.downloadDir = tmpStruct.confgData.downloadFolder.Text; 
     confgData.distance1 = str2double(tmpStruct.confgData.distance1.Text);
     confgData.resolution = str2double(tmpStruct.confgData.resolution.Text);
     confgData.numberOfDaysInPast = str2double(tmpStruct.confgData.numberOfDaysInPast.Text);
@@ -54,7 +36,7 @@ function getDataOuter
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% Loop through all samples in .mat Ground Truth File %%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    startIndex = 1903;
+    startIndex = 1;
     outputIndex = startIndex;
     for ii = startIndex: confgData.numberOfSamples %Loop through all the ground truth entries
          try
@@ -65,14 +47,22 @@ function getDataOuter
             inStruc.ii = ii;
             inStruc.thisLat = latitude(ii);
             inStruc.thisLon = longitude(ii);
-
-            if isLandGEBCO(inStruc, confgData);  continue;  end
+            inStruc.dayEnd = sample_date(ii);
             inStruc.thisCount = count2(ii);
+            
+            fileName = ['Cube_' sprintf('%05d',outputIndex) '_' sprintf('%05d',ii) '_' num2str(sample_date(ii)) '.h5'];
+            
+            if isLandGEBCO(inStruc, confgData);  continue;  end
+            
+            inStruc.h5name = [confgData.outDir fileName];
+            
+            generateh5Cube(inStruc, confgData);
+            
             inStruc.zoneHrDiff = timezone(inStruc.thisLon);
             % Adjust input time / date: Assume that the sample is taken at 11pm
             % FWC say their data is collected in daylight hours (mostly)
             inStruc.endTimeUTC = 23+inStruc.zoneHrDiff;
-            inStruc.dayEnd = sample_date(ii);
+            
             if inStruc.endTimeUTC > 24; inStruc.endTimeUTC = inStruc.endTimeUTC-24; inStruc.dayEnd=inStruc.dayEnd+1; end
             inStruc.dayEndFraction = inStruc.dayEnd+inStruc.endTimeUTC/24;
             inStruc.dayStart = inStruc.dayEnd - confgData.numberOfDaysInPast;
@@ -81,18 +71,17 @@ function getDataOuter
             inStruc.dayEndS = datestr(inStruc.dayEnd,29);
             inStruc.UTCTime = sprintf('T%02d:00:00Z', inStruc.endTimeUTC);
 
-            fileName = ['Cube_' sprintf('%05d',outputIndex) '_' sprintf('%05d',ii) '_' num2str(sample_date(ii)) '.h5'];
-            inStruc.h5name = [confgData.outDir fileName ];
+            
             if exist(inStruc.h5name, 'file')==2;  delete(inStruc.h5name);  end
             
-            %Saves images, count, dates and deltadates into output .H5 file
+            %Put images, count, dates and deltadates into output .H5 file
             addDataH5(inStruc, confgData);
-            outputIndex = outputIndex+1;
             getModData(inStruc, confgData);
             
             % Zip up the data and delete the original
             gzip(inStruc.h5name);
             system([rmcommand confgData.outDir '*.h5']);
+            outputIndex = outputIndex+1;
         catch e   
             str_iden = num2str(ii);
             logErr(e,str_iden) 

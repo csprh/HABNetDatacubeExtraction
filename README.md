@@ -8,17 +8,16 @@ learning (cross validation etc.). This version is checked for compatibilty
 with windows machines.
 
 ## Files
-* **getDataOuter**: Input the xml config file, then load the .mat ground truth
-file.  Loop through each line in the file, search for .nc files via CMR
-NASA interface (using fd_matchup.py).  Loop through all of the .nc files, 
-download using wget and and call getData on each.  Delete downloaded .nc file.
-* **getData**: Get the actual datacubes from a .nc file (called from getDataOuter)
+* **genAllH5s.m**: Input the xml config file, then load the .mat ground truth
+file.  Then calls genSingleH5s to form all H5 datacubes.
+* **genSingleH5s.m**: Function that inputs inStruc and confgData to generate
+single H5 datacube.  Searches for all relevant .nc granules (using 
+fd_matchup.py and NASA's  CMR interface).  Datacubes are formed from all 
+the local .nc granules
+* **getData.m**: Get the actual datacubes from a .nc file (called from getDataOuter)
 * **fd_matchup.py**: Modified Seadas code to access CMR NASA interface
-* **configHAB.xml**: Configuration file input by getDataOuter
-* **configHABmac.xml**: Configuration file input by getDataOuter (on a mac)
-* **testData1.sh**: shell script to run getDataOuter (on blue crystal)
-* **testData2.sh**: shell script to run getDataOuter (on blue crystal)
-
+* **configHAB.xml**: Configuration file input by genAllH5s
+* **configHABmac.xml**: Configuration file input by genAllH5s (on a mac)
 
 The datacubes are generated for each of the lines in the groundtruth file.  Each datacube is named as follows:
 
@@ -68,7 +67,7 @@ GroundTruth/dayStart:  Date - numberOfDaysInPast
 GroundTruth/dayEndFraction: Take into account the time of capture and time zone
 GroundTruth/dayStartFraction: 
 GroundTruth/resolution:  Resolution of the output images (in metres)
-GroundTruth/distance1:  Distance from centre (lon,lat) of the edge of each image
+GroundTruth/distance1:   Spatial width of datacube (in metres)
 GroundTruth/projection:  Type of projection of the output images
 ```
 
@@ -90,17 +89,31 @@ The configuration of the datacube extraction is contained within an xml file (â€
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <confgData>
-   <inputFilename>./work/florida_2003-2018-50K</inputFilename>
-   <gebcoFilename>~/scratch/HAB/GEBCO/GEBCO.nc</gebcoFilename>
+   <inputFilename>/home/cosc/csprh/linux/HABCODE/code/HAB/extractData/work/florida_2003-2018-50K</inputFilename>
+   <gebcoFilename>/space/csprh/HAB/GEBCO/GEBCO.nc</gebcoFilename>
+   <downloadFolder>/home/cosc/csprh/linux/HABCODE/scratch/downloads/</downloadFolder>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
-   <outDir>/mnt/storage/scratch/csprh/HAB/florida1/</outDir>
+   <outDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida4/</outDir>
+   <imsDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/CNNIms/florida4/</imsDir>
    <resolution>2000</resolution>
-   <distance1>50000</distance1>
-   <numberOfDaysInPast>3</numberOfDaysInPast>
+   <distance1>100000</distance1>
+   <numberOfDaysInPast>10</numberOfDaysInPast>
    <numberOfSamples>-1</numberOfSamples>
    <Modality>gebco</Modality>
    <Modality>oc-modisa-chlor_a</Modality>
    <Modality>oc-modisa-Rrs_412</Modality>
+   <Modality>oc-modisa-Rrs_443</Modality>
+   <Modality>oc-modisa-Rrs_488</Modality>
+   <Modality>oc-modisa-Rrs_531</Modality>
+   <Modality>oc-modisa-Rrs_555</Modality>
+   <Modality>oc-modisa-par</Modality>
+   <Modality>sst-modisa-sstref</Modality>
+   <Modality>oc-modist-chlor_a</Modality>
+   <outputRes>1000</outputRes>
+   <alphaSize>2</alphaSize>
+   <threshCentrePoint>0.5</threshCentrePoint>
+   <threshAll>0.2</threshAll>
+   <preLoadMinMax>1</preLoadMinMax>
 </confgData>
 ```
 
@@ -110,11 +123,21 @@ The XML elements are:
 ```
 inputFilename: name of MATLAB ground truth file
 gebcoFilename: name of the netCDF bathymetry GEBCO information.  GEBCO is from https://www.gebco.net/
+downloadFolder: intdroduced so the granules are downloaded to a temporay folder
 wgetStringBase: the wget string (differs for Linux/OSX etc.)
 outDir: place to store the output HDF5 files
+imsDir: directory to store quantised images
 Resolution: The resolution of the bins (for reprojection) for the generation of images (in meters).  Currently, 2Km (2000m).  Most of the MODIS data is 1Km, but on reprojection binning at 1Km would result in images that are too sparse.
 Distance1: The distance between the central location of the sample to the upper, lower, east and west edges (in metres).
 Modalities: A list of the modalities to extract (GEBCO is a special case as it extracts the Bathymetry information surrounding the sample location).
+outputRes: resolution output
+alphaSize: size of alphashape (used to quanisation of output)
+threshCentrePoint: Threshold of centre area near detection to decided whether to
+discount datacube
+threshAll: Threshold of amount of data in whole image of data cube to deside on
+whether to discount datacube
+preLoadMinMax: set to 1 to reload precomputed max and min values for output
+datacube images. Set to anything else for recalculation
 ```
 
 ##	Granule Search
@@ -132,22 +155,28 @@ The datacubes are converted to a series of images in a directory structure descr
 
 An example output directory structure is as follows
 
-* Train/1/101/3/1.png
-* Train/1/101/3/2.png
-* Train/1/101/3/3.png
-* Train/1/101/3/4.png
-* Train/1/101/3/5.png
-* Train/1/101/3/6.png
-* Train/1/101/3/7.png
-* Train/1/101/3/8.png
-* Train/1/101/3/9.png
-* Train/1/101/3/10.png
+* /1/101/3/1.png
+* /1/101/3/2.png
+* /1/101/3/3.png
+* /1/101/3/4.png
+* /1/101/3/5.png
+* /1/101/3/6.png
+* /1/101/3/7.png
+* /1/101/3/8.png
+* /1/101/3/9.png
+* /1/101/3/10.png
 
 The numbered name of the jpg image is the quantised day of capture (from the day of capture in the ground truth file) i.e. they are the five days quantised. 
 
-Split output into Train/Test, HAB Class (0/1), Ground truth line number, Modality (1-10)
+Split output into HAB Class (0/1), Ground truth line number, Modality (1-10)
 
 This is achieved using the MATLAB script (with no input parameters)
 
 * postprocess/cubeSequence.m
+
+## Generation of Bi-monthly Chlor_a Values
+
+All of the florida bi-monthly average values are downloaded using the following
+code
+* test/downloadAll8DModisAChlr.m
 
