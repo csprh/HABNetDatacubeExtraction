@@ -15,7 +15,7 @@ function getDataOuter
     % Updates for WIN compatibility: JVillegas 21 Feb 2019, Khalifa University
     clear; close all;
 
-    [rmcommand, tmpStruct] = getHABConfig;
+    [rmcommand, pythonStr, tmpStruct] = getHABConfig;
 
     %% load all config from XML file
     confgData.inputFilename = tmpStruct.confgData.inputFilename.Text;
@@ -151,17 +151,16 @@ function getModData(inStruc, confgData)
     distance1 = confgData.distance1;
     disp(['Fetching data for ',inStruc.h5name]);
     
+    zone = utmzone(thisLat, thisLon);
+    utmstruct = defaultm('utm');
+    utmstruct.zone = zone;
+    utmstruct.geoid = wgs84Ellipsoid; %almanac('earth','grs80','meters');
+    utmstruct = defaultm(utmstruct);
+
     %% Loop through all the modulations
     for modIndex = 1:numberOfMods
         thisMod = confgData.mods{modIndex}.Text;
         subMods = strsplit(thisMod,'-');
-
-        zone = utmzone(thisLat, thisLon);
-        utmstruct = defaultm('utm');
-        utmstruct.zone = zone;
-        utmstruct.geoid = wgs84Ellipsoid; %almanac('earth','grs80','meters');
-        utmstruct = defaultm(utmstruct);
-
         h5writeatt(inStruc.h5name,'/GroundTruth', 'Projection', ['utm wgs84Ellipsoid ' zone] );
 
         if strcmp(subMods{1},'gebco')
@@ -173,14 +172,6 @@ function getModData(inStruc, confgData)
         % sensors are either modisa,modist,viirsn,goci,meris,czcs,octs or 'seawifs'
         % sst: sstref, sst4, sst 1Km resolution for all sst
         % Search for "granules" at a particular lat, long and date range (output goes in Output.txt)
-
-        if ismac
-            pythonStr = '/usr/local/bin/python3';
-        elseif isunix
-            pythonStr = 'python';
-        elseif ispc
-            pythonStr = 'py';
-        end
         
         pyOpt = [' --data_type=' subMods{1} ' --sat=' subMods{2} ' --slat=' num2str(thisLat) ...
                  ' --slon=' num2str(thisLon) ' --stime=' dayStartS UTCTime ' --etime=' dayEndS UTCTime];
