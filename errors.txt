@@ -1,0 +1,417 @@
+Error procesing sample index: 21 mod: 8 granule: 12 at 22-Feb-2019 01:37:26
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 21 mod: 8 granule: 12 at 22-Feb-2019 01:43:03
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 524 mod: 2 granule: 1 time: 23-Feb-2019 07:26:55
+ MATLAB:imagesci:netcdf:unableToOpenFileforRead::Could not open ..\downloads\A2005165185000.L2_LAC_OC.nc for reading.
+ Error procesing sample index: 554 mod: 8 granule: 12 time: 23-Feb-2019 08:57:08
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 856 mod: 2 granule: 2 time: 24-Feb-2019 02:13:45
+ MATLAB:imagesci:netcdf:unableToOpenFileforRead::Could not open ..\downloads\A2005346173000.L2_LAC_OC.nc for reading.
+ Error procesing sample index: 859 mod: 2 granule: 9 time: 24-Feb-2019 02:21:40
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 859 mod: 3 granule: 9 time: 24-Feb-2019 02:21:56
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 859 mod: 4 granule: 9 time: 24-Feb-2019 02:22:13
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 859 mod: 5 granule: 9 time: 24-Feb-2019 02:22:29
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 859 mod: 6 granule: 9 time: 24-Feb-2019 02:22:46
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 875 mod: 2 granule: 5 time: 24-Feb-2019 03:33:25
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 875 mod: 3 granule: 5 time: 24-Feb-2019 03:33:40
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 875 mod: 4 granule: 5 time: 24-Feb-2019 03:33:58
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 875 mod: 5 granule: 5 time: 24-Feb-2019 03:34:14
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 875 mod: 6 granule: 5 time: 24-Feb-2019 03:34:31
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 875 mod: 7 granule: 5 time: 24-Feb-2019 03:34:46
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 892 mod: 8 granule: 7 time: 24-Feb-2019 04:51:53
+ MATLAB:imagesci:netcdf:unableToOpenFileforRead::Could not open ..\downloads\T2006033153500.L2_LAC_OC.nc for reading.
+ Error procesing sample index: 1008 mod: 8 granule: 6 time: 24-Feb-2019 11:27:52
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1102 mod: 2 granule: 5 time: 24-Feb-2019 16:36:07
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1102 mod: 3 granule: 5 time: 24-Feb-2019 16:36:19
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1102 mod: 4 granule: 5 time: 24-Feb-2019 16:36:34
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1102 mod: 5 granule: 5 time: 24-Feb-2019 16:36:48
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1102 mod: 6 granule: 5 time: 24-Feb-2019 16:37:02
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1301 mod: 2 granule: 5 time: 25-Feb-2019 03:34:00
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1301 mod: 3 granule: 5 time: 25-Feb-2019 03:35:11
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1301 mod: 4 granule: 5 time: 25-Feb-2019 03:35:26
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1301 mod: 5 granule: 5 time: 25-Feb-2019 03:35:41
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1301 mod: 6 granule: 5 time: 25-Feb-2019 03:35:55
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1301 mod: 7 granule: 5 time: 25-Feb-2019 03:36:10
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1323 mod: 2 granule: 15 time: 25-Feb-2019 04:45:01
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1323 mod: 3 granule: 15 time: 25-Feb-2019 04:46:14
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1323 mod: 4 granule: 15 time: 25-Feb-2019 04:46:30
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1323 mod: 5 granule: 15 time: 25-Feb-2019 04:46:46
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1323 mod: 6 granule: 15 time: 25-Feb-2019 04:47:01
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1323 mod: 7 granule: 15 time: 25-Feb-2019 04:47:18
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1392 mod: 2 granule: 1 time: 25-Feb-2019 09:23:17
+ MATLAB:imagesci:netcdf:unableToOpenFileforRead::Could not open ..\downloads\A2007085193000.L2_LAC_OC.nc for reading.
+ Error procesing sample index: 1402 mod: 8 granule: 9 time: 25-Feb-2019 10:01:05
+ stats:hist3:WrongNumCols::X must be a matrix with two columns.
+ Error procesing sample index: 1402 mod: 8 granule: 9 time: 25-Feb-2019 10:11:55
+ stats:hist3:WrongNumCols::Error using hist3 (line 149)
+X must be a matrix with two columns.
+
+Error in getData (line 66)
+cnt = hist3([destIds2, destIds1], {YbnCntrs XbnCntrs});
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample index: 1404 mod: 8 granule: 9 time: 25-Feb-2019 10:16:19
+ MATLAB:imagesci:netcdf:libraryFailure::Error using netcdflib
+The NetCDF library encountered an error during execution of 'open' function - 'HDF error (NC_EHDFERR)'.
+
+Error in netcdf.open (line 67)
+        [varargout{:}] = netcdflib ( 'open', filename, varargin{1} );
+
+Error in internal.matlab.imagesci.nc/openToRead (line 1278)
+            this.ncRootid = netcdf.open(this.Filename,'NOWRITE');
+
+Error in internal.matlab.imagesci.nc (line 121)
+                    this.openToRead();
+
+Error in ncread (line 61)
+ncObj   = internal.matlab.imagesci.nc(ncFile);
+
+Error in getData (line 24)
+lonDD = ncread(file, '/navigation_data/longitude'); lonDD = lonDD(:);
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample index: 1405 mod: 8 granule: 9 time: 25-Feb-2019 10:18:48
+ MATLAB:imagesci:netcdf:libraryFailure::Error using netcdflib
+The NetCDF library encountered an error during execution of 'open' function - 'HDF error (NC_EHDFERR)'.
+
+Error in netcdf.open (line 67)
+        [varargout{:}] = netcdflib ( 'open', filename, varargin{1} );
+
+Error in internal.matlab.imagesci.nc/openToRead (line 1278)
+            this.ncRootid = netcdf.open(this.Filename,'NOWRITE');
+
+Error in internal.matlab.imagesci.nc (line 121)
+                    this.openToRead();
+
+Error in ncread (line 61)
+ncObj   = internal.matlab.imagesci.nc(ncFile);
+
+Error in getData (line 24)
+lonDD = ncread(file, '/navigation_data/longitude'); lonDD = lonDD(:);
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample index: 1406 mod: 8 granule: 9 time: 25-Feb-2019 10:22:09
+ MATLAB:imagesci:netcdf:libraryFailure::Error using netcdflib
+The NetCDF library encountered an error during execution of 'open' function - 'HDF error (NC_EHDFERR)'.
+
+Error in netcdf.open (line 67)
+        [varargout{:}] = netcdflib ( 'open', filename, varargin{1} );
+
+Error in internal.matlab.imagesci.nc/openToRead (line 1278)
+            this.ncRootid = netcdf.open(this.Filename,'NOWRITE');
+
+Error in internal.matlab.imagesci.nc (line 121)
+                    this.openToRead();
+
+Error in ncread (line 61)
+ncObj   = internal.matlab.imagesci.nc(ncFile);
+
+Error in getData (line 24)
+lonDD = ncread(file, '/navigation_data/longitude'); lonDD = lonDD(:);
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample index: 1481 mod: 2 granule: 9 time: 25-Feb-2019 15:33:27
+ MATLAB:imagesci:netcdf:unableToOpenFileforRead::Error using internal.matlab.imagesci.nc/openToRead (line 1272)
+Could not open ..\downloads\A2007184182000.L2_LAC_OC.nc for reading.
+
+Error in internal.matlab.imagesci.nc (line 121)
+                    this.openToRead();
+
+Error in ncread (line 61)
+ncObj   = internal.matlab.imagesci.nc(ncFile);
+
+Error in getData (line 24)
+lonDD = ncread(file, '/navigation_data/longitude'); lonDD = lonDD(:);
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample index: 1481 mod: 8 granule: 8 time: 25-Feb-2019 15:41:13
+ MATLAB:imagesci:netcdf:unableToOpenFileforRead::Error using internal.matlab.imagesci.nc/openToRead (line 1272)
+Could not open ..\downloads\T2007185155500.L2_LAC_OC.nc for reading.
+
+Error in internal.matlab.imagesci.nc (line 121)
+                    this.openToRead();
+
+Error in ncread (line 61)
+ncObj   = internal.matlab.imagesci.nc(ncFile);
+
+Error in getData (line 24)
+lonDD = ncread(file, '/navigation_data/longitude'); lonDD = lonDD(:);
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample index: 1481 mod: 8 granule: 4 time: 25-Feb-2019 15:41:48
+ MATLAB:imagesci:netcdf:libraryFailure::Error using netcdflib
+The NetCDF library encountered an error during execution of 'open' function - 'HDF error (NC_EHDFERR)'.
+
+Error in netcdf.open (line 67)
+        [varargout{:}] = netcdflib ( 'open', filename, varargin{1} );
+
+Error in internal.matlab.imagesci.nc/openToRead (line 1278)
+            this.ncRootid = netcdf.open(this.Filename,'NOWRITE');
+
+Error in internal.matlab.imagesci.nc (line 121)
+                    this.openToRead();
+
+Error in ncread (line 61)
+ncObj   = internal.matlab.imagesci.nc(ncFile);
+
+Error in getData (line 24)
+lonDD = ncread(file, '/navigation_data/longitude'); lonDD = lonDD(:);
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample index: 1481 mod: 8 granule: 15 time: 25-Feb-2019 15:42:33
+ MATLAB:imagesci:netcdf:unableToOpenFileforRead::Error using internal.matlab.imagesci.nc/openToRead (line 1272)
+Could not open ..\downloads\T2007181161500.L2_LAC_OC.nc for reading.
+
+Error in internal.matlab.imagesci.nc (line 121)
+                    this.openToRead();
+
+Error in ncread (line 61)
+ncObj   = internal.matlab.imagesci.nc(ncFile);
+
+Error in getData (line 24)
+lonDD = ncread(file, '/navigation_data/longitude'); lonDD = lonDD(:);
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample index: 1484 mod: 8 granule: 6 time: 25-Feb-2019 16:07:10
+ MATLAB:imagesci:netcdf:libraryFailure::Error using netcdflib
+The NetCDF library encountered an error during execution of 'open' function - 'HDF error (NC_EHDFERR)'.
+
+Error in netcdf.open (line 67)
+        [varargout{:}] = netcdflib ( 'open', filename, varargin{1} );
+
+Error in internal.matlab.imagesci.nc/openToRead (line 1278)
+            this.ncRootid = netcdf.open(this.Filename,'NOWRITE');
+
+Error in internal.matlab.imagesci.nc (line 121)
+                    this.openToRead();
+
+Error in ncread (line 61)
+ncObj   = internal.matlab.imagesci.nc(ncFile);
+
+Error in getData (line 24)
+lonDD = ncread(file, '/navigation_data/longitude'); lonDD = lonDD(:);
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample index: 1485 mod: 8 granule: 13 time: 25-Feb-2019 16:12:21
+ MATLAB:imagesci:netcdf:libraryFailure::Error using netcdflib
+The NetCDF library encountered an error during execution of 'open' function - 'HDF error (NC_EHDFERR)'.
+
+Error in netcdf.open (line 67)
+        [varargout{:}] = netcdflib ( 'open', filename, varargin{1} );
+
+Error in internal.matlab.imagesci.nc/openToRead (line 1278)
+            this.ncRootid = netcdf.open(this.Filename,'NOWRITE');
+
+Error in internal.matlab.imagesci.nc (line 121)
+                    this.openToRead();
+
+Error in ncread (line 61)
+ncObj   = internal.matlab.imagesci.nc(ncFile);
+
+Error in getData (line 24)
+lonDD = ncread(file, '/navigation_data/longitude'); lonDD = lonDD(:);
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample index: 1486 mod: 8 granule: 13 time: 25-Feb-2019 16:15:14
+ MATLAB:imagesci:netcdf:libraryFailure::Error using netcdflib
+The NetCDF library encountered an error during execution of 'open' function - 'HDF error (NC_EHDFERR)'.
+
+Error in netcdf.open (line 67)
+        [varargout{:}] = netcdflib ( 'open', filename, varargin{1} );
+
+Error in internal.matlab.imagesci.nc/openToRead (line 1278)
+            this.ncRootid = netcdf.open(this.Filename,'NOWRITE');
+
+Error in internal.matlab.imagesci.nc (line 121)
+                    this.openToRead();
+
+Error in ncread (line 61)
+ncObj   = internal.matlab.imagesci.nc(ncFile);
+
+Error in getData (line 24)
+lonDD = ncread(file, '/navigation_data/longitude'); lonDD = lonDD(:);
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample index: 1488 mod: 8 granule: 14 time: 25-Feb-2019 16:20:58
+ MATLAB:imagesci:netcdf:libraryFailure::Error using netcdflib
+The NetCDF library encountered an error during execution of 'open' function - 'HDF error (NC_EHDFERR)'.
+
+Error in netcdf.open (line 67)
+        [varargout{:}] = netcdflib ( 'open', filename, varargin{1} );
+
+Error in internal.matlab.imagesci.nc/openToRead (line 1278)
+            this.ncRootid = netcdf.open(this.Filename,'NOWRITE');
+
+Error in internal.matlab.imagesci.nc (line 121)
+                    this.openToRead();
+
+Error in ncread (line 61)
+ncObj   = internal.matlab.imagesci.nc(ncFile);
+
+Error in getData (line 24)
+lonDD = ncread(file, '/navigation_data/longitude'); lonDD = lonDD(:);
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample index: 1489 mod: 8 granule: 12 time: 25-Feb-2019 16:24:11
+ stats:hist3:WrongNumCols::Error using hist3 (line 149)
+X must be a matrix with two columns.
+
+Error in getData (line 66)
+cnt = hist3([destIds2, destIds1], {YbnCntrs XbnCntrs});
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample index: 1876 mod: 8 granule: 1 time: 26-Feb-2019 14:04:40
+ stats:hist3:WrongNumCols::Error using hist3 (line 149)
+X must be a matrix with two columns.
+
+Error in getData (line 66)
+cnt = hist3([destIds2, destIds1], {YbnCntrs XbnCntrs});
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample index: 1879 mod: 8 granule: 9 time: 26-Feb-2019 14:15:34
+ stats:hist3:WrongNumCols::Error using hist3 (line 149)
+X must be a matrix with two columns.
+
+Error in getData (line 66)
+cnt = hist3([destIds2, destIds1], {YbnCntrs XbnCntrs});
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample 1897 time: 26-Feb-2019 15:33:58
+ MATLAB:imagesci:deprecatedHDF5:libraryError::Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('hdf5writec')" style="font-weight:bold">hdf5writec</a>
+Call to HDF5 library failed (fileOpen): "openHDF5File: Couldn't open file.".
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('hdf5write', 'C:\Program Files\MATLAB\R2018b\toolbox\matlab\imagesci\hdf5write.m', 151)" style="font-weight:bold">hdf5write</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2018b\toolbox\matlab\imagesci\hdf5write.m',151,0)">line 151</a>)
+hdf5writec(file, details, varargin{dset_idx});
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('getDataOuter>addToH5', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m', 324)" style="font-weight:bold">getDataOuter>addToH5</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m',324,0)">line 324</a>)
+    hdf5write(h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('getDataOuter>getModData', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m', 287)" style="font-weight:bold">getDataOuter>getModData</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m',287,0)">line 287</a>)
+        addToH5(inStruc.h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsProjOutput);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('getDataOuter', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m', 91)" style="font-weight:bold">getDataOuter</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m',91,0)">line 91</a>)
+            getModData(inStruc, confgData);
+ Error procesing sample index: 1898 mod: 2 granule: 2 time: 26-Feb-2019 15:34:13
+ MATLAB:imagesci:netcdf:unableToOpenFileforRead::Error using internal.matlab.imagesci.nc/openToRead (line 1272)
+Could not open ..\downloads\A2008021185500.L2_LAC_OC.nc for reading.
+
+Error in internal.matlab.imagesci.nc (line 121)
+                    this.openToRead();
+
+Error in ncread (line 61)
+ncObj   = internal.matlab.imagesci.nc(ncFile);
+
+Error in getData (line 26)
+inVar = ncread(file, thisVar); inVar = inVar(:);
+
+Error in parallel_function>make_general_channel/channel_general (line 923)
+                    O = F(C{:});
+
+Error in remoteParallelFunction (line 46)
+        out = parallel.internal.pool.serialize(feval(channel, channelArgs{:}));
+ Error procesing sample 1898 time: 26-Feb-2019 15:36:01
+ MATLAB:imagesci:deprecatedHDF5:libraryError::Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('hdf5writec')" style="font-weight:bold">hdf5writec</a>
+Call to HDF5 library failed (fileOpen): "openHDF5File: Couldn't open file.".
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('hdf5write', 'C:\Program Files\MATLAB\R2018b\toolbox\matlab\imagesci\hdf5write.m', 151)" style="font-weight:bold">hdf5write</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2018b\toolbox\matlab\imagesci\hdf5write.m',151,0)">line 151</a>)
+hdf5writec(file, details, varargin{dset_idx});
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('getDataOuter>addToH5', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m', 324)" style="font-weight:bold">getDataOuter>addToH5</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m',324,0)">line 324</a>)
+    hdf5write(h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('getDataOuter>getModData', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m', 287)" style="font-weight:bold">getDataOuter>getModData</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m',287,0)">line 287</a>)
+        addToH5(inStruc.h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsProjOutput);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('getDataOuter', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m', 91)" style="font-weight:bold">getDataOuter</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m',91,0)">line 91</a>)
+            getModData(inStruc, confgData);
+ 

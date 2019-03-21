@@ -54,7 +54,7 @@ function getDataOuter
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% Loop through all samples in .mat Ground Truth File %%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    startIndex = 1;
+    startIndex = 1903;
     outputIndex = startIndex;
     for ii = startIndex: confgData.numberOfSamples %Loop through all the ground truth entries
          try
