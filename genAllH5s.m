@@ -14,23 +14,18 @@ function genAllH5s
     % Updates for WIN compatibility: JVillegas 21 Feb 2019, Khalifa University
     clear; close all;
 
-    [rmcommand, pythonStr, tmpStruct] = getHABConfig;
+    if ismac,    xmlConfig= 'configHABmac.xml';
+    elseif isunix
+        [~, thisCmd] = system('rpm --query centos-release');
+        isUnderDesk = strcmp(thisCmd(1:end-1),'centos-release-7-6.1810.2.el7.centos.x86_64');
+        if isUnderDesk == 1, xmlConfig = 'configHABunderDesk.xml';
+        else, xmlConfig = 'configHAB.xml';
+        end
+    elseif ispc, xmlConfig = 'configHAB_win.xml';
+    end
+    [confgData] = getHABConfig(xmlConfig);
 
-
-    %% load all config from XML file
-    confgData.inputFilename = tmpStruct.confgData.inputFilename.Text;
-    confgData.gebcoFilename = tmpStruct.confgData.gebcoFilename.Text;
-    confgData.wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;
-    confgData.outDir = tmpStruct.confgData.outDir.Text;
-    confgData.downloadDir = tmpStruct.confgData.downloadFolder.Text; 
-    confgData.distance1 = str2double(tmpStruct.confgData.distance1.Text);
-    confgData.resolution = str2double(tmpStruct.confgData.resolution.Text);
-    confgData.numberOfDaysInPast = str2double(tmpStruct.confgData.numberOfDaysInPast.Text);
-    confgData.numberOfSamples = str2double(tmpStruct.confgData.numberOfSamples.Text);
-    confgData.mods = tmpStruct.confgData.Modality;
-    confgData.pythonStr = pythonStr;
-
-    system([rmcommand confgData.outDir '*.h5']);
+    system([confgData.command.rm confgData.outDir '*.h5']);
     load(confgData.inputFilename); 
     if confgData.numberOfSamples == -1;   confgData.numberOfSamples = length(count2); end
 

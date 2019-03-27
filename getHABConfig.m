@@ -1,8 +1,8 @@
-function [rmcommand, pythonStr, tmpStruct] = getHABConfig
+function [confgData] = getHABConfig(xmlConfig)
 %% This Code generates the remove command and configuration information
 %
 % USAGE:
-%   [rmcommand, pythonStr, tmpStruct] = getHABConfig
+%   [rmcommand, confgData] = getHABConfig
 % INPUT:
 %   -
 % OUTPUT:
@@ -13,27 +13,31 @@ function [rmcommand, pythonStr, tmpStruct] = getHABConfig
 % THE UNIVERSITY OF BRISTOL: HAB PROJECT
 % Author Dr Paul Hill March 2019
 
-    
-    
-if ismac
-    rmcommand = 'rm ';
-    pythonStr = '/usr/local/bin/python3';
-    tmpStruct = xml2struct('configHABmac.xml');
-elseif isunix
-    pythonStr = 'python';
-    rmcommand = 'rm ';
-    [~, thisCmd] = system('rpm --query centos-release');
-    isUnderDesk = strcmp(thisCmd(1:end-1),'centos-release-7-6.1810.2.el7.centos.x86_64');
-    if isUnderDesk == 1
-        tmpStruct = xml2struct('configHABunderDesk.xml');
-    else
-        tmpStruct = xml2struct('configHAB.xml');
+    if ismac
+        rmcommand = 'rm ';
+        pythonStr = '/usr/local/bin/python3';
+        tmpStruct = xml2struct(xmlConfig);
+    elseif isunix
+        pythonStr = 'python';
+        rmcommand = 'rm ';
+        tmpStruct = xml2struct(xmlConfig);
+    elseif ispc
+        % Code to run on Windows platform
+        pythonStr = 'py';
+        rmcommand = ['del ' pwd '\' ];        
+        tmpStruct = xml2struct(xmlConfig);
     end
-elseif ispc
-    % Code to run on Windows platform
-    pythonStr = 'py';
-    tmpStruct = xml2struct('configHAB_win.xml');
-    rmcommand = ['del ' pwd '\' ];
-else
-    disp('Platform not supported')
-end
+
+    %% load all config from XML file
+    confgData.inputFilename = tmpStruct.confgData.inputFilename.Text;
+    confgData.gebcoFilename = tmpStruct.confgData.gebcoFilename.Text;
+    confgData.wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;
+    confgData.outDir = tmpStruct.confgData.outDir.Text;
+    confgData.downloadDir = tmpStruct.confgData.downloadFolder.Text; 
+    confgData.distance1 = str2double(tmpStruct.confgData.distance1.Text);
+    confgData.resolution = str2double(tmpStruct.confgData.resolution.Text);
+    confgData.numberOfDaysInPast = str2double(tmpStruct.confgData.numberOfDaysInPast.Text);
+    confgData.numberOfSamples = str2double(tmpStruct.confgData.numberOfSamples.Text);
+    confgData.mods = tmpStruct.confgData.Modality;
+    confgData.command.pythonStr = pythonStr;
+    confgData.command.rm = rmcommand;
