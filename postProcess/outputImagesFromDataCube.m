@@ -1,19 +1,20 @@
 function outputImagesFromDataCube(baseDirectory,  numberOfDays, groupMinMax, inputRangeX, inputRangeY, alphaSize, outputRes, h5name)
-
-%% This Code loops through all modalities within the given h5 file (h5name) and generates
+%% This code generates quantised images for an input H5 datacube
+%% It loops through all modalities within the given H5 file (h5name) and generates
 %% A directory of images in a folder for ingress into Machine Learning
 
 % USAGE:
 %   outputImagesFromDataCube(baseDirectory,  numberOfDays, groupMinMax, inputRangeX, inputRangeY, alphaSize, outputRes, h5name)
 % INPUT:
 %   baseDirectory: Directory to put the output images (0,1,2....directories
-%   created to put modalities into...each image 0.png, 1.png etc are the
+%   created to put modalities into...each image 1.png, 2.png etc are the
 %   days output)
-%   numberOfDays: Number of days
+%   numberOfDays: Number of days in temporal range of datacube
+%   groupMinMax: Array of Minima and Maxima of the modalities
 %   inputRangeX: Range of output for images ([0:50])
 %   inputRangeY: Range of output for images ([0:50])
+%   alphaSize: Control of resampling
 %   outputRes: Resolution (in metres) of quantise bins output
-%   groupMinMax: Array of Minima and Maxima of the modalities
 %   h5name: Name of the input H5 file
 % OUTPUT:
 %   -

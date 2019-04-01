@@ -4,8 +4,10 @@
    <gebcoFilename>/space/csprh/HAB/GEBCO/GEBCO.nc</gebcoFilename>
    <downloadFolder>/home/cosc/csprh/linux/HABCODE/scratch/downloads/</downloadFolder>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
-   <outDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida4/</outDir>
-   <imsDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/CNNIms/florida4/</imsDir>
+   <trainDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida/train/</trainDir>
+   <testDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida/test/</testDir>
+   <trainImsDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/CNNIms/florida/train</trainImsDir>
+   <testImsDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/CNNIms/florida/test</testImsDir>
    <resolution>2000</resolution>
    <distance1>100000</distance1>
    <numberOfDaysInPast>10</numberOfDaysInPast>

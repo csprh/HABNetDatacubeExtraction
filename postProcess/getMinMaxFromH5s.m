@@ -1,7 +1,7 @@
 function [thisMax, thisMin] = getMinMaxFromH5s(filenameBase)
-%% This Code loops through al the h5 output files and generates
+%% This Code loops through al the H5 output files and generates
 %% The maximum and minimum values for each modality.
-%% These are then output into the Maximum vector thisMax and
+%% These are then output into the maximum vector thisMax and
 %% the minimum vector thisMin
 % USAGE:
 %   [thisMax, thisMin] = getMinMaxFromH5s(filenameBase)

@@ -1,11 +1,11 @@
-function genSingleH5s(inStruc, confgData);
-%% Top level code that inputs inStruc and confgData to generate single 
-%% H5 datacube
-%  searches for all relevant .nc granules (using fd_matchup.py and NASA's
+function genSingleH5s(inStruc, confgData)
+%% Code that inputs inStruc and confgData to generate single 
+%% H5 datacube.
+%  Searches for all relevant .nc granules (using fd_matchup.py and NASA's
 %  CMR interface).  Datacubes are formed from all the local .nc granules
 %
 % USAGE:
-%   genSingleH5s
+%   genSingleH5s(inStruc, confgData)
 % INPUT:
 %   -
 % OUTPUT:
@@ -29,11 +29,14 @@ inStruc.UTCTime = sprintf('T%02d:00:00Z', inStruc.endTimeUTC);
 
 if exist(inStruc.h5name, 'file')==2;  delete(inStruc.h5name);  end
 
-%Put images, count, dates and deltadates into output .H5 file
+%Put images, count, dates and deltadates into output H5 file
 addDataH5(inStruc, confgData);
+
+%Get all modality data from NASA and put into datacube
 getModData(inStruc, confgData);
 
 end
+
 function addDataH5(inStruc, confgData)
 %% addDataH5 creates a H5 file and stores ground truth data to it
 %  Adds extracted information to one H5 file per datapoint in ground truth
@@ -236,7 +239,7 @@ function addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thes
 %% add Ims, theseDates, theseDeltaDates and Points to output H5 file
 %
 % USAGE:
-%   addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput)
+%   addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsOutputProj)
 % INPUT:
 %   h5name - name of H5 name to be output
 %   thisMod = Name of the output modality

@@ -2,7 +2,7 @@ function [outputIm, tripleOut, tripleOutProj] = getData(file,  outLat, outLon, d
 % Extract binned image and value triplet array from netCDF input file
 %
 % USAGE:
-%   [outputIm tripleOut] = getData(file,  outLat, outLon, distance1, resolution, thisVar)
+%   [outputIm, tripleOut, tripleOutProj] = getData(file,  outLat, outLon, distance1, resolution, thisVar, utmstruct)
 % INPUT:
 %   file - H5 file containing granule
 %   outLat - latitude centre of the HAB
@@ -85,7 +85,7 @@ function indROI = getMinMaxLatLon(eProj, wProj, nProj, sProj, lonDD, latDD, utms
 % Generate Region of Interest (ROI) index from input parameters
 %
 % USAGE:
-%   indROI = getMinMaxLatLon(e2, w2, n2, s2, lon_dd, lat_dd, utmstruct)
+%   indROI = getMinMaxLatLon(eProj, wProj, nProj, sProj, lonDD, latDD, utmstruct)
 % INPUT:
 %   eProj - minimum east in projected 
 %   wProj - maximum west ..
