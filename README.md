@@ -1,22 +1,29 @@
 # HAB GroundTruth Extraction
 
-This project takes a MATLAB .mat file containing all of the lat, long, date
+This project is separated into training and testing tasks
+
+The training task takes a MATLAB .mat file containing all of the lat, long, date
 and count information of a HAB.  This then generates an H5 file per sample 
 line in the ground truth file.  This H5 file contains all of the imaging 
 data from the satelites.  Thse H5 files can then be used for machine 
 learning (cross validation etc.).
 
+The testing task separates a geographical region into a test grid.  
+Datacubes are then generated for each position within the test grid.
+
 ## Files
-* **genAllH5s.m**: Input the xml config file, then load the .mat ground truth
+* **train_genAllH5s.m**: Input the xml config file, then load the .mat ground truth
 file.  Then calls genSingleH5s to form all H5 datacubes.
+* **test_genAllH5s.m**: Defines a grid of locations to test.  Then calls
+genSingleH5s to form all H5 datacubes.
 * **genSingleH5s.m**: Function that inputs inStruc and confgData to generate
 single H5 datacube.  Searches for all relevant .nc granules (using 
 fd_matchup.py and NASA's  CMR interface).  Datacubes are formed from all 
 the local .nc granules
 * **getData.m**: Get the actual datacubes from a .nc file (called from getDataOuter)
 * **fd_matchup.py**: Modified Seadas code to access CMR NASA interface
-* **configHAB.xml**: Configuration file input by genAllH5s
-* **configHABmac.xml**: Configuration file input by genAllH5s (on a mac)
+* **configHAB.xml**: Configuration file input by test/train_genAllH5s
+* **configHABmac.xml**: Configuration file input by test/train_genAllH5s (on a mac)
 
 The datacubes are generated for each of the lines in the groundtruth file.  Each datacube is named as follows:
 
@@ -36,9 +43,13 @@ The second one labels any count above 5,000 (as indicated in an email from the F
 
 Data cube extraction is achieved using the MATLAB file:
 
-* getDataOuter.m
+* train_genAllH5s.m
 
 This file loops through all of the data points (in the chosen ground truth data).  For each loop, the modalities are also looped through.  For each modality, NASA’s CMR search is used (see below) to search for the relevant netCDF granule files.  This CMR search uses a python script fd_matchup.py.  This python script takes a latitude, longitude, date (and time) and temporal window.  The output is a text file called Output.txt with a list of netCDF web addresses.  Each of these granules are downloaded using wget.  
+
+* test_genAllH5s.m
+
+Defines a grid of locations to test.  Then calls genSingleH5s to form all H5 datacubes.
 
 For each of the netCDF files a sub-datacube is extracted using the MATLAB function file:
 
@@ -83,7 +94,7 @@ Thesedeltadates: the delta dates of Thesedates (relative to the capture date)
 ```
 
 ### Configuration
-The configuration of the datacube extraction is contained within an xml file (‘configHAB.xml’). A typical version of this file is 
+The configuration of the datacube extraction is contained within an xml file (configHAB.xml). A typical version of this file is 
  
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -92,8 +103,10 @@ The configuration of the datacube extraction is contained within an xml file (�
    <gebcoFilename>/space/csprh/HAB/GEBCO/GEBCO.nc</gebcoFilename>
    <downloadFolder>/home/cosc/csprh/linux/HABCODE/scratch/downloads/</downloadFolder>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
-   <outDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida4/</outDir>
-   <imsDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/CNNIms/florida4/</imsDir>
+   <trainDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida/train/</trainDir>
+   <testDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida/test/</testDir>
+   <trainImsDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/CNNIms/florida/train</trainImsDir>
+   <testImsDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/CNNIms/florida/test</testImsDir>
    <resolution>2000</resolution>
    <distance1>100000</distance1>
    <numberOfDaysInPast>10</numberOfDaysInPast>
@@ -124,10 +137,14 @@ inputFilename: name of MATLAB ground truth file
 gebcoFilename: name of the netCDF bathymetry GEBCO information.  GEBCO is from https://www.gebco.net/
 downloadFolder: intdroduced so the granules are downloaded to a temporay folder
 wgetStringBase: the wget string (differs for Linux/OSX etc.)
-outDir: place to store the output HDF5 files
-imsDir: directory to store quantised images
+trainDir: place to store the output training HDF5 files
+testDir: place to store the output testing HDF5 files
+testImsDir: directory to store quantised test images
+trainImsDir: directory to store quantised training images
 Resolution: The resolution of the bins (for reprojection) for the generation of images (in meters).  Currently, 2Km (2000m).  Most of the MODIS data is 1Km, but on reprojection binning at 1Km would result in images that are too sparse.
 Distance1: The distance between the central location of the sample to the upper, lower, east and west edges (in metres).
+numberOfDaysInPast: Temporal window
+numberOfSamples: Number of samples to use (in training).  if -1 then use all
 Modalities: A list of the modalities to extract (GEBCO is a special case as it extracts the Bathymetry information surrounding the sample location).
 outputRes: resolution output
 alphaSize: size of alphashape (used to quanisation of output)
@@ -141,7 +158,7 @@ datacube images. Set to anything else for recalculation
 
 ##	Granule Search
 
-The “CMR” search mechanism has been adopted to obtain the correct “granule” according to the latitude, longitude and date triplet.
+The CMR search mechanism has been adopted to obtain the correct granule according to the latitude, longitude and date triplet.
 
 * https://cmr.earthdata.nasa.gov/search/
 
@@ -150,7 +167,9 @@ It has been assumed that the capture time of the measurements was during dayligh
 
 ## Data-Cube Conversion to Machine Learning Image Ingress Format
 
-The datacubes are converted to a series of images in a directory structure described below using the MATLAB function cubeSequence.m
+The datacubes are converted to a series of images in a directory structure described below using the MATLAB functions train_cubeSequence.m and test_cubeSequence.m
+train_cubeSequence.m and test_cubeSequence.m differ in as much as test_cubeSequence.m does no checking.  They both call outputImagesFromDataCube.m
+
 
 An example output directory structure is as follows
 
@@ -171,7 +190,8 @@ Split output into HAB Class (0/1), Ground truth line number, Modality (1-10)
 
 This is achieved using the MATLAB script (with no input parameters)
 
-* postprocess/cubeSequence.m
+* postprocess/test_cubeSequence.m
+* postprocess/train_cubeSequence.m
 
 ## Generation of Bi-monthly Chlor_a Values
 
