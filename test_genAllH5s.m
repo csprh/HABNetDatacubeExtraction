@@ -57,7 +57,7 @@ for ii = startIndex: numberOfSamples %Loop through all the ground truth entries
         inStruc.dayEnd = sample_date;
         inStruc.thisCount = 0;
         
-        fileName = ['Cube_' sprintf('%05d',outputIndex) '_' sprintf('%05d',ii) '_' num2str(sample_date(ii)) '.h5'];
+        fileName = ['Cube_' sprintf('%05d',outputIndex) '_' sprintf('%05d',ii) '_' num2str(sample_date) '.h5'];
            
         inStruc.h5name = [confgData.outDir fileName];
         
