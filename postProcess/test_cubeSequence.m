@@ -33,7 +33,7 @@ numberOfDaysInPast  = str2num(tmpStruct.confgData.numberOfDaysInPast.Text);
 inputRangeX = [0 distance1/resolution];
 inputRangeY = [0 distance1/resolution];
 
-cubesDir = [imsDir filesep num2str(sample_date) filesep];
+imsDir = [imsDir filesep num2str(sample_date) filesep];
 
 h5files=dir([cubesDir '*.h5.gz']);
 numberOfH5s=size(h5files,1);
