@@ -15,10 +15,11 @@ function test_genAllH5s
 clear; close all;
 
 
-gulf = 1;    deltaran = 0.5;  removeFreq= 500;  sample_date = 737173;
+gulf = 1;    deltaran = 0.5;  removeFreq= 500;  
 [rmcommand, pythonStr, tmpStruct] = getHABConfig;
 
 %% load all config from XML file
+sample_date = str2num(tmpStruct.confgData.testDate.Text);
 confgData.inputFilename = tmpStruct.confgData.inputFilename.Text;
 confgData.gebcoFilename = tmpStruct.confgData.gebcoFilename.Text;
 confgData.wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;

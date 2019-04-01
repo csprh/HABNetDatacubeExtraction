@@ -16,8 +16,9 @@ clear; close all;
 addpath('..');
 [rmcommand, ~, tmpStruct] = getHABConfig;
 
-sample_date = 737173;
 
+
+sample_date = str2num(tmpStruct.confgData.testDate.Text);
 cubesDir = tmpStruct.confgData.testDir.Text;
 imsDir = tmpStruct.confgData.testImsDir.Text;
 resolution = str2num(tmpStruct.confgData.resolution.Text);

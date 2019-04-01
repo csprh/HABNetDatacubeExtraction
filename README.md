@@ -104,9 +104,10 @@ The configuration of the datacube extraction is contained within an xml file (co
    <downloadFolder>/home/cosc/csprh/linux/HABCODE/scratch/downloads/</downloadFolder>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
    <trainDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida/train/</trainDir>
-   <testDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida/test/</testDir>
    <trainImsDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/CNNIms/florida/train</trainImsDir>
+   <testDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida/test/</testDir>
    <testImsDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/CNNIms/florida/test</testImsDir>
+   <testDate>737173</testDate>
    <resolution>2000</resolution>
    <distance1>100000</distance1>
    <numberOfDaysInPast>10</numberOfDaysInPast>
@@ -138,9 +139,10 @@ gebcoFilename: name of the netCDF bathymetry GEBCO information.  GEBCO is from h
 downloadFolder: intdroduced so the granules are downloaded to a temporay folder
 wgetStringBase: the wget string (differs for Linux/OSX etc.)
 trainDir: place to store the output training HDF5 files
+trainImsDir: directory to store quantised training images
 testDir: place to store the output testing HDF5 files
 testImsDir: directory to store quantised test images
-trainImsDir: directory to store quantised training images
+testDate: The date to output the test data
 Resolution: The resolution of the bins (for reprojection) for the generation of images (in meters).  Currently, 2Km (2000m).  Most of the MODIS data is 1Km, but on reprojection binning at 1Km would result in images that are too sparse.
 Distance1: The distance between the central location of the sample to the upper, lower, east and west edges (in metres).
 numberOfDaysInPast: Temporal window
