@@ -70,7 +70,6 @@ for ii = 1: numberOfH5s
         gunzip(gzh5name);
         h5name = gzh5name(1:end-3);
         thisCount = h5readatt(h5name,'/GroundTruth/','thisCount');
-        lineInGrouthTruthMatlab = h5readatt(h5name,'/GroundTruth/','lineInGrouthTruthMatlab');
         
         [ 'thisCount = ' num2str(thisCount) ];
         isHAB  = thisCount > 0;

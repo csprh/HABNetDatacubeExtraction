@@ -35,6 +35,8 @@ inputRangeX = [0 distance1/resolution];
 inputRangeY = [0 distance1/resolution];
 
 imsDir = [imsDir filesep num2str(sample_date) filesep];
+latLonList = 'latLonList.txt';
+
 
 h5files=dir([cubesDir '*.h5.gz']);
 numberOfH5s=size(h5files,1);
@@ -42,6 +44,10 @@ numberOfH5s=size(h5files,1);
 
 
 load groupMaxAndMin %load the max and minima of the mods
+
+fileID = fopen([imsDir latLonList],'w');
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Loop through all the ground truth entries%%
@@ -53,11 +59,15 @@ for ii = 1: numberOfH5s
         gzh5name = [cubesDir h5files(ii).name];
         gunzip(gzh5name);
         h5name = gzh5name(1:end-3);
-        lineInGrouthTruthMatlab = h5readatt(h5name,'/GroundTruth/','lineInGrouthTruthMatlab');
+
+        lon = str2num(h5readatt(h5name,'/GroundTruth/','thisLon'));
+        lat = str2num(h5readatt(h5name,'/GroundTruth/','thisLat'));
         
+        fprintf(fileID,'%d %d %d\n',ii, lat, lon);
+
         %Split output into train/test, HAB Class directory, Ground truth line
         %number, Group Index
-        baseDirectory = [imsDir filesep num2str(lineInGrouthTruthMatlab)] ;
+        baseDirectory = [imsDir filesep num2str(ii)] ;
         
         outputImagesFromDataCube(baseDirectory,  numberOfDaysInPast, groupMinMax, inputRangeX, inputRangeY, alphaSize, outputRes, h5name);
         
@@ -65,5 +75,6 @@ for ii = 1: numberOfH5s
         [ 'caught at = ' num2str(ii) ]
     end
 end
+fclose(fileID);
 
 
