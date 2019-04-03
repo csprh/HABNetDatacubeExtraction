@@ -37,7 +37,8 @@ inputRangeY = [0 distance1/resolution];
 imsDir = [imsDir filesep num2str(sample_date) filesep];
 latLonList = 'latLonList.txt';
 
-system([rmcommand '-rf' imsDir]);
+system([rmcommand '-rf ' imsDir]);
+mkdir(imsDir);
 
 h5files=dir([cubesDir '*.h5.gz']);
 numberOfH5s=size(h5files,1);
