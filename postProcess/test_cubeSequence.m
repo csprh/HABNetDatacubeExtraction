@@ -37,17 +37,14 @@ inputRangeY = [0 distance1/resolution];
 imsDir = [imsDir filesep num2str(sample_date) filesep];
 latLonList = 'latLonList.txt';
 
+system([rmcommand '-rf' imsDir]);
 
 h5files=dir([cubesDir '*.h5.gz']);
 numberOfH5s=size(h5files,1);
 
-
-
 load groupMaxAndMin %load the max and minima of the mods
 
-fileID = fopen([imsDir latLonList],'w');
-
-
+fileID = fopen([imsDir latLonList],'w+');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Loop through all the ground truth entries%%

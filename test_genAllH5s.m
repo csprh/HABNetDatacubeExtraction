@@ -39,6 +39,7 @@ if ~exist(confgData.outDir, 'dir')
 end
 
 system([rmcommand confgData.outDir '*.h5']);
+system([rmcommand confgData.outDir '*.h5.gz']);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Loop through all samples in .mat Ground Truth File %%

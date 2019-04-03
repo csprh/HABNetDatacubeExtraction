@@ -8,6 +8,7 @@
    <testDir>/Users/csprh/Dlaptop/MATLAB/MYCODE/HAB/WORK/HAB/florida/test/</testDir>
    <trainImsDir>/Users/csprh/Dlaptop/MATLAB/MYCODE/HAB/WORK/HAB/CNNIms/florida/train</trainImsDir>
    <testImsDir>/Users/csprh/Dlaptop/MATLAB/MYCODE/HAB/WORK/HAB/CNNIms/florida/test</testImsDir>
+   <testDate>737174</testDate>
    <resolution>2000</resolution>
    <distance1>100000</distance1>
    <numberOfDaysInPast>10</numberOfDaysInPast>
