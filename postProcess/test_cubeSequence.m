@@ -58,14 +58,14 @@ for ii = 1: numberOfH5s
         gunzip(gzh5name);
         h5name = gzh5name(1:end-3);
 
-        lon = str2num(h5readatt(h5name,'/GroundTruth/','thisLon'));
-        lat = str2num(h5readatt(h5name,'/GroundTruth/','thisLat'));
+        lon = h5readatt(h5name,'/GroundTruth/','thisLon');
+        lat = h5readatt(h5name,'/GroundTruth/','thisLat');
         
         fprintf(fileID,'%d %d %d\n',ii, lat, lon);
 
         %Split output into train/test, HAB Class directory, Ground truth line
         %number, Group Index
-        baseDirectory = [imsDir filesep num2str(ii)] ;
+        baseDirectory = [imsDir num2str(ii)] ;
         
         outputImagesFromDataCube(baseDirectory,  numberOfDaysInPast, groupMinMax, inputRangeX, inputRangeY, alphaSize, outputRes, h5name);
         
