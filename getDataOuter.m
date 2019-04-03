@@ -23,7 +23,7 @@ function getDataOuter
         if isUnderDesk == 1, xmlConfig = 'configHABunderDesk.xml';
         else, xmlConfig = 'configHAB.xml';
         end
-    elseif ispc, xmlConfig = 'configHAB_win.xml';
+    elseif ispc, xmlConfig = 'configHAB_AUHwin.xml';
     end
     [confgData] = getHABConfig(xmlConfig);
     system([confgData.command.rm confgData.outDir '*.h5']);
