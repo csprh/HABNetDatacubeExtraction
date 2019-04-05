@@ -1,6 +1,6 @@
 function train_cubeSequence
 %% This Code loops through all the h5 output files and generates
-% A directory of images in a folder for ingress into Machine Learning model.
+%% A directory of images in a folder for ingress into Machine Learning model.
 % Datapoints (lines in the ground truth file) are discounted if they do not
 % Contain enough data. Using the thresholds in the XML file
 % 
@@ -13,7 +13,7 @@ function train_cubeSequence
 % of quantised images
 %
 % USAGE:
-%   cubeSequence;
+%   train_cubeSequence;
 % INPUT:
 %   -
 % OUTPUT:

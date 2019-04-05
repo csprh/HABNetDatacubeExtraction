@@ -1,8 +1,12 @@
 function test_cubeSequence
 %% This Code loops through all the h5 test files and generates
-%% A directory of images in a folder for ingress into Machine Learning model
+%% a directory of images in a folder for ingress into Machine Learning model
 %% for testing
 % 
+% ...Also creates a record of the tested data points in file latLonList.txt
+% Inside latLonList.txt a line is entered for each of the datapoints
+% Each line is [Index latitude longitude] where index is the name of the 
+% output directory
 %
 % USAGE:
 %   test_cubeSequence;
@@ -15,8 +19,6 @@ function test_cubeSequence
 clear; close all;
 addpath('..');
 [rmcommand, ~, tmpStruct] = getHABConfig;
-
-
 
 sample_date = str2num(tmpStruct.confgData.testDate.Text);
 cubesDir = tmpStruct.confgData.testDir.Text;
@@ -37,13 +39,15 @@ inputRangeY = [0 distance1/resolution];
 imsDir = [imsDir filesep num2str(sample_date) filesep];
 latLonList = 'latLonList.txt';
 
+% REMOVE Previous output directory
+% NOTE: May need to be changed for PC
 system([rmcommand '-rf ' imsDir]);
 mkdir(imsDir);
 
 h5files=dir([cubesDir '*.h5.gz']);
 numberOfH5s=size(h5files,1);
 
-load groupMaxAndMin %load the max and minima of the mods
+load groupMaxAndMin %load the max and minima of the mods created by training
 
 fileID = fopen([imsDir latLonList],'w+');
 

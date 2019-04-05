@@ -88,7 +88,6 @@ for groupIndex = 2: numberOfGroups
     end
 end
 
-
 function outputImage = getImage(thisOutput, thisInput, alphaSize)
 %% This Code grids the data in thisInput to the grid of thisOutput using 
 %% Gridding and alphashape

@@ -1,12 +1,12 @@
-# HAB GroundTruth Extraction
+# HAB Datacube Extraction
 
 This project is separated into training and testing tasks
 
-The training task takes a MATLAB .mat file containing all of the lat, long, date
-and count information of a HAB.  This then generates an H5 file per sample 
-line in the ground truth file.  This H5 file contains all of the imaging 
-data from the satelites.  Thse H5 files can then be used for machine 
-learning (cross validation etc.).
+The training task takes a groundtruth MATLAB .mat file containing all of 
+the lat, long, date and (HAB) count information of a HAB.  This then 
+generates an H5 file per sample line in the ground truth file.  
+This H5 file contains all of the imaging data from the satelites.  
+Thse H5 files can then be used for machine learning (cross validation etc.).
 
 The testing task separates a geographical region into a test grid.  
 Datacubes are then generated for each position within the test grid.
@@ -129,7 +129,6 @@ The configuration of the datacube extraction is contained within an xml file (co
    <preLoadMinMax>1</preLoadMinMax>
 </confgData>
 ```
-
 
 The XML elements are:
 

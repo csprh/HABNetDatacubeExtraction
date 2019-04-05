@@ -10,7 +10,7 @@ function train_genAllH5s
     %   -
     % THE UNIVERSITY OF BRISTOL: HAB PROJECT
     % Author Dr Paul Hill 26th June 2018
-    % Updated Aoril 2019 PRH
+    % Updated March 2019 PRH
     % Updates for WIN compatibility: JVillegas 21 Feb 2019, Khalifa University
     clear; close all;
 
@@ -57,6 +57,7 @@ function train_genAllH5s
             
             inStruc.h5name = [confgData.outDir fileName];
             
+            % Get single datacube H5
             genSingleH5s(inStruc, confgData);
             
             % Zip up the data and delete the original

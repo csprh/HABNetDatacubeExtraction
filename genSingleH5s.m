@@ -1,5 +1,5 @@
 function genSingleH5s(inStruc, confgData)
-%% Code that inputs inStruc and confgData to generate single 
+%% Code that inputs inStruc and confgData to generate single
 %% H5 datacube.
 %  Searches for all relevant .nc granules (using fd_matchup.py and NASA's
 %  CMR interface).  Datacubes are formed from all the local .nc granules
@@ -121,7 +121,7 @@ for modIndex = 1:numberOfMods
     % sst: sstref, sst4, sst 1Km resolution for all sst
     % Search for "granules" at a particular lat, long and date range (output goes in Output.txt)
     
-
+    
     pyOpt = [' --data_type=' subMods{1} ' --sat=' subMods{2} ' --slat=' num2str(thisLat) ...
         ' --slon=' num2str(thisLon) ' --stime=' dayStartS UTCTime ' --etime=' dayEndS UTCTime];
     disp(['Searching granules for: --mod=',subMods{3}, pyOpt])

@@ -2,10 +2,11 @@ function land = isLandGEBCO(inStruc, config, thisThresh)
 % Input lat and lon (defined in inStruc), output if is land (bathymetry > 10m)
 %
 % USAGE:
-%   land = isLandGEBCO(inStruc, config)
+%   isLandGEBCO(inStruc, config, thisThresh)
 % INPUT:
 %   inStruc - contains lat and lon
 %   config - contains gebcoFilename of gebco netCDF file
+%   thisThresh - optional threshold.  Default = 10m
 % OUTPUT:
 %   land - boolean is land variable
 

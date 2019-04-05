@@ -1,6 +1,6 @@
 function test_genAllH5s
-%% Top level code that loads xml config, loads .mat ground truth file,
-%  then loops through all datapoints and calls genSingleH5s.m to form all H5 datacubes
+%% Top level code that generates test Lat and Lon points according to test_getLatLonArray
+%% then loops through all datapoints and calls genSingleH5s.m to form all H5 datacubes
 %
 % USAGE:
 %   test_genAllH5s;
@@ -14,6 +14,10 @@ function test_genAllH5s
 % Updates for WIN compatibility: JVillegas 21 Feb 2019, Khalifa University
 clear; close all;
 
+% Settings
+% Gulf....can be 0 (Florida) or 1 (Gulf)
+% deltaran....resolution of lat and lon range
+% removeFreq....the number of samples processed before all .nc are deleted
 
 gulf = 1;    deltaran = 0.5;  removeFreq= 500;  
 [rmcommand, pythonStr, tmpStruct] = getHABConfig;
@@ -57,7 +61,7 @@ for ii = startIndex: numberOfSamples %Loop through all the ground truth entries
         inStruc.thisLat = latitude(ii);
         inStruc.thisLon = longitude(ii);
         inStruc.dayEnd = sample_date;
-        inStruc.thisCount = 0;
+        inStruc.thisCount = 0; %these are test points therefore no counts
         
         fileName = ['Cube_' sprintf('%05d',outputIndex) '_' sprintf('%05d',ii) '_' num2str(sample_date) '.h5'];
            
