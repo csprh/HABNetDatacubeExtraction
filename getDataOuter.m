@@ -39,7 +39,6 @@ function getDataOuter
     for ii = startIndex: confgData.numberOfSamples %Loop through all the ground truth entries
          try
             if rem(ii,10) == 1 && ii>startIndex       % Delete the .nc files (every tenth one)
-                system([rmcommand confgData.downloadDir '*.nc']);
                 system([confgData.command.rm confgData.downloadDir '*.nc']);
             end
 
