@@ -127,7 +127,7 @@ function getModData(inStruc, confgData)
         
         fid = fopen('Output.txt');   
         tline = fgetl(fid);
-        indInput = 1;  clear thisInput; clear thisList;
+        indInput = 1;  thisInput = []; clear thisList;
         while ischar(tline)
             [~,nc_name,~] = fileparts(tline);
             if nc_name(end) ~= '4'   %ignore SST4
@@ -148,7 +148,7 @@ function getModData(inStruc, confgData)
         [~, sortIndex] = sort(thisList);
         listLength = length(sortIndex);
         
-        if strcmp(subMods{1},'sst') 
+        if strcmp(subMods{1},'sst')&& ~isempty(thisList) 
             sortIndex = sortIndex(1); 
             listLength = 1;
         end % Needed to prevent issues with SST4
@@ -167,7 +167,7 @@ function getModData(inStruc, confgData)
         %normal for loop.
         tic
         cluster = parcluster('local'); nworkers = cluster.NumWorkers;
-        parfor (iii = 1:listLength),nworkers)
+        parfor (iii = 1:listLength ,nworkers)
             thisIndex = sortIndex(iii);
             thisLine = thisInput(thisIndex).line;
             thisDate = thisInput(thisIndex).date;
@@ -208,55 +208,57 @@ function getModData(inStruc, confgData)
         end
         disp(['Time taken to process granules: ', num2str(toc)]);
         
-        addToH5(inStruc.h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsProjOutput);
-        %h5disp(inStruc.h5name);
+        if ~isempty(thesePointsOutput)
+            addToH5(inStruc.h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsProjOutput);
+        end
+            %h5disp(inStruc.h5name);
     end
 end
 
 function t=julian2time(str)
-%% julian2time takes the julian day of the year contained in the .nc granule
-%  and converts it to integer datenum (as output by datestr).
-%  convert NASA yyyydddHHMMSS to datenum
-%  ddd starts with 1 (therefore we have to take 1 away
-%
-% USAGE:
-%   t=julian2time(str)
-% INPUT:
-%   str - input string containing time in julian format
-% OUTPUT:
-%   t - output time
-ddd=str2double(str(5:7));
-jan1=[str(1:4),'0101',str(8:13)];  % day 1
-t=datenum(jan1,'yyyymmddHHMMSS')+ddd-1;
+    %% julian2time takes the julian day of the year contained in the .nc granule
+    %  and converts it to integer datenum (as output by datestr).
+    %  convert NASA yyyydddHHMMSS to datenum
+    %  ddd starts with 1 (therefore we have to take 1 away
+    %
+    % USAGE:
+    %   t=julian2time(str)
+    % INPUT:
+    %   str - input string containing time in julian format
+    % OUTPUT:
+    %   t - output time
+    ddd=str2double(str(5:7));
+    jan1=[str(1:4),'0101',str(8:13)];  % day 1
+    t=datenum(jan1,'yyyymmddHHMMSS')+ddd-1;
 end
 
 function addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsOutputProj)
-%% add Ims, theseDates, theseDeltaDates and Points to output H5 file
-%
-% USAGE:
-%   addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput)
-% INPUT:
-%   h5name - name of H5 name to be output
-%   thisMod = Name of the output modality
-%   theseImages - Cell array of output binned images (for this modality)
-%   theseDates - The actual capture dates of the points and images output
-%   theseDeltaDates - The delta dates (difference from capture date) of the points and images output
-%   thesePointsOutput - 4D Array of points output
-%   thesePointsOutputProj - 4D Array of projected points output
-% OUTPUT:
-%   -
-hdf5write(h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/theseDates'],theseDates, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/theseDeltaDates'],theseDeltaDates, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/Points'],thesePointsOutput, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/PointsProj'],thesePointsOutputProj, 'WriteMode','append');
+    %% add Ims, theseDates, theseDeltaDates and Points to output H5 file
+    %
+    % USAGE:
+    %   addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput)
+    % INPUT:
+    %   h5name - name of H5 name to be output
+    %   thisMod = Name of the output modality
+    %   theseImages - Cell array of output binned images (for this modality)
+    %   theseDates - The actual capture dates of the points and images output
+    %   theseDeltaDates - The delta dates (difference from capture date) of the points and images output
+    %   thesePointsOutput - 4D Array of points output
+    %   thesePointsOutputProj - 4D Array of projected points output
+    % OUTPUT:
+    %   -
+    hdf5write(h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
+    hdf5write(h5name,['/' thisMod  '/theseDates'],theseDates, 'WriteMode','append');
+    hdf5write(h5name,['/' thisMod  '/theseDeltaDates'],theseDeltaDates, 'WriteMode','append');
+    hdf5write(h5name,['/' thisMod  '/Points'],thesePointsOutput, 'WriteMode','append');
+    hdf5write(h5name,['/' thisMod  '/PointsProj'],thesePointsOutputProj, 'WriteMode','append');
 end
 
 function logErr(e,str_iden)
-%fileID = fopen('errors.txt','at');
-%identifier = ['Error procesing sample ',str_iden, ' at ', datestr(now)];
-%text = [e.identifier, '::', e.message];
-%fprintf(fileID,'%s\n\r ',identifier);
-%fprintf(fileID,'%s\n\r ',text);
-%fclose(fileID);
+    %fileID = fopen('errors.txt','at');
+    %identifier = ['Error procesing sample ',str_iden, ' at ', datestr(now)];
+    %text = [e.identifier, '::', e.message];
+    %fprintf(fileID,'%s\n\r ',identifier);
+    %fprintf(fileID,'%s\n\r ',text);
+    %fclose(fileID);
 end

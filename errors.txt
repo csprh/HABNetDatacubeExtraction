@@ -25727,4 +25727,104 @@ Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback
 
 Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('getDataOuter', '\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m', 58)" style="font-weight:bold">getDataOuter</a> (<a href="matlab: opentoline('\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m',58,0)">line 58</a>)
             genSingleH5s(inStruc, confgData);
+ Error procesing sample 1 time: 03-Apr-2019 15:31:35
+ MATLAB:m_improper_grouping::Error: <a href="matlab: opentoline('\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m',170,45)">File: genSingleH5s.m Line: 170 Column: 45
+</a>Invalid expression. When calling a function or indexing a variable, use parentheses. Otherwise, check for mismatched delimiters.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('getDataOuter', '\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m', 57)" style="font-weight:bold">getDataOuter</a> (<a href="matlab: opentoline('\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m',57,0)">line 57</a>)
+            genSingleH5s(inStruc, confgData);
+ Error procesing sample 1 time: 03-Apr-2019 15:32:29
+ MATLAB:imagesci:hdf5lib:libraryError::Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('hdf5lib2')" style="font-weight:bold">hdf5lib2</a>
+The HDF5 library encountered an error and produced the following stack trace information: 
+
+    H5FD_sec2_open    unable to open file: name = '\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\..\data\AUH\Cube_00001_00001_732484.h5', errno = 2, error message = 'No such file or directory', flags = 15, o_flags = 502
+    H5FD_open         open failed
+    H5F_open          unable to open file: time = Wed Apr 03 15:32:29 2019
+, name = '\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\..\data\AUH\Cube_00001_00001_732484.h5', tent_flags = 15
+    H5Fcreate         unable to create file
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('H5F.create', 'D:\Matlab\toolbox\matlab\imagesci\+H5F\create.m', 44)" style="font-weight:bold">H5F.create</a> (<a href="matlab: opentoline('D:\Matlab\toolbox\matlab\imagesci\+H5F\create.m',44,0)">line 44</a>)
+file_id = H5ML.hdf5lib2('H5Fcreate', varargin{:});
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('genSingleH5s>addDataH5', '\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m', 49)" style="font-weight:bold">genSingleH5s>addDataH5</a> (<a href="matlab: opentoline('\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m',49,0)">line 49</a>)
+fid = H5F.create(inStruc.h5name);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('genSingleH5s', '\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m', 33)" style="font-weight:bold">genSingleH5s</a> (<a href="matlab: opentoline('\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m',33,0)">line 33</a>)
+    addDataH5(inStruc, confgData);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('getDataOuter', '\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m', 57)" style="font-weight:bold">getDataOuter</a> (<a href="matlab: opentoline('\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m',57,0)">line 57</a>)
+            genSingleH5s(inStruc, confgData);
+ Error procesing sample 1 time: 03-Apr-2019 15:35:30
+ MATLAB:badsubscript::Index exceeds array bounds.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('hdf5write>verify_cell_data', 'D:\Matlab\toolbox\matlab\imagesci\hdf5write.m', 378)" style="font-weight:bold">hdf5write>verify_cell_data</a> (<a href="matlab: opentoline('D:\Matlab\toolbox\matlab\imagesci\hdf5write.m',378,0)">line 378</a>)
+class1 = class(data{1});
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('hdf5write>verify_data', 'D:\Matlab\toolbox\matlab\imagesci\hdf5write.m', 317)" style="font-weight:bold">hdf5write>verify_data</a> (<a href="matlab: opentoline('D:\Matlab\toolbox\matlab\imagesci\hdf5write.m',317,0)">line 317</a>)
+    verify_cell_data(data);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('hdf5write', 'D:\Matlab\toolbox\matlab\imagesci\hdf5write.m', 142)" style="font-weight:bold">hdf5write</a> (<a href="matlab: opentoline('D:\Matlab\toolbox\matlab\imagesci\hdf5write.m',142,0)">line 142</a>)
+        verify_data(varargin{dset_idx(p)})
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('genSingleH5s>addToH5', '\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m', 248)" style="font-weight:bold">genSingleH5s>addToH5</a> (<a href="matlab: opentoline('\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m',248,0)">line 248</a>)
+hdf5write(h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('genSingleH5s>getModData', '\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m', 211)" style="font-weight:bold">genSingleH5s>getModData</a> (<a href="matlab: opentoline('\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m',211,0)">line 211</a>)
+        addToH5(inStruc.h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsProjOutput);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('genSingleH5s', '\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m', 34)" style="font-weight:bold">genSingleH5s</a> (<a href="matlab: opentoline('\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m',34,0)">line 34</a>)
+    getModData(inStruc, confgData);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('getDataOuter', '\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m', 57)" style="font-weight:bold">getDataOuter</a> (<a href="matlab: opentoline('\\masdar-fog\mtg\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m',57,0)">line 57</a>)
+            genSingleH5s(inStruc, confgData);
+ Error procesing sample 11 time: 03-Apr-2019 16:22:46
+ MATLAB:UndefinedFunction::Undefined function or variable 'rmcommand'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('getDataOuter', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m', 42)" style="font-weight:bold">getDataOuter</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m',42,0)">line 42</a>)
+                system([rmcommand confgData.downloadDir '*.nc']);
+ Error procesing sample 149 time: 04-Apr-2019 04:25:15
+ MATLAB:UndefinedFunction::Undefined function or variable 'thisInput'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('genSingleH5s>getModData', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m', 143)" style="font-weight:bold">genSingleH5s>getModData</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m',143,0)">line 143</a>)
+        disp(['Found ', num2str(length(thisInput)), ' granules.' ])
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('genSingleH5s', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m', 34)" style="font-weight:bold">genSingleH5s</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m',34,0)">line 34</a>)
+    getModData(inStruc, confgData);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('getDataOuter', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m', 57)" style="font-weight:bold">getDataOuter</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m',57,0)">line 57</a>)
+            genSingleH5s(inStruc, confgData);
+ Error procesing sample 149 time: 04-Apr-2019 09:32:12
+ MATLAB:badsubscript::Index exceeds array bounds.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('hdf5write>verify_cell_data', 'C:\Program Files\MATLAB\R2018b\toolbox\matlab\imagesci\hdf5write.m', 378)" style="font-weight:bold">hdf5write>verify_cell_data</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2018b\toolbox\matlab\imagesci\hdf5write.m',378,0)">line 378</a>)
+class1 = class(data{1});
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('hdf5write>verify_data', 'C:\Program Files\MATLAB\R2018b\toolbox\matlab\imagesci\hdf5write.m', 317)" style="font-weight:bold">hdf5write>verify_data</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2018b\toolbox\matlab\imagesci\hdf5write.m',317,0)">line 317</a>)
+    verify_cell_data(data);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('hdf5write', 'C:\Program Files\MATLAB\R2018b\toolbox\matlab\imagesci\hdf5write.m', 142)" style="font-weight:bold">hdf5write</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2018b\toolbox\matlab\imagesci\hdf5write.m',142,0)">line 142</a>)
+        verify_data(varargin{dset_idx(p)})
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('genSingleH5s>addToH5', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m', 248)" style="font-weight:bold">genSingleH5s>addToH5</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m',248,0)">line 248</a>)
+hdf5write(h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('genSingleH5s>getModData', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m', 211)" style="font-weight:bold">genSingleH5s>getModData</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m',211,0)">line 211</a>)
+        addToH5(inStruc.h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsProjOutput);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('genSingleH5s', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m', 34)" style="font-weight:bold">genSingleH5s</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m',34,0)">line 34</a>)
+    getModData(inStruc, confgData);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('getDataOuter', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m', 57)" style="font-weight:bold">getDataOuter</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m',57,0)">line 57</a>)
+            genSingleH5s(inStruc, confgData);
+ Error procesing sample 149 time: 04-Apr-2019 09:40:02
+ MATLAB:badsubscript::Index exceeds the number of array elements (0).
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('genSingleH5s>getModData', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m', 152)" style="font-weight:bold">genSingleH5s>getModData</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m',152,0)">line 152</a>)
+            sortIndex = sortIndex(1); 
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('genSingleH5s', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m', 34)" style="font-weight:bold">genSingleH5s</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\genSingleH5s.m',34,0)">line 34</a>)
+    getModData(inStruc, confgData);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('getDataOuter', 'Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m', 57)" style="font-weight:bold">getDataOuter</a> (<a href="matlab: opentoline('Z:\_SHARED_FOLDERS\HABS\repository\extractData\getDataOuter.m',57,0)">line 57</a>)
+            genSingleH5s(inStruc, confgData);
  

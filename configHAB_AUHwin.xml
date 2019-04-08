@@ -4,7 +4,7 @@
    <gebcoFilename>..\GEBCO.nc</gebcoFilename>
    <downloadFolder>..\downloads\</downloadFolder>
    <wgetStringBase>..\wget.exe</wgetStringBase>
-   <outDir>..\data\AUH\</outDir>
+   <outDir>..\data\AbuDhabi\</outDir>
    <resolution>2000</resolution>
    <distance1>100000</distance1>
    <numberOfDaysInPast>10</numberOfDaysInPast>
