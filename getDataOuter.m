@@ -13,6 +13,8 @@ function getDataOuter
     % Author Dr Paul Hill 26th June 2018
     % Updated March 2019 PRH
     % Updates for WIN compatibility: JVillegas 21 Feb 2019, Khalifa University
+    %%%%%%%%%%
+    
     clear; close all;
 
     %% load all config from XML file
