@@ -76,7 +76,7 @@ lonMinMax = [-88.0453 -79.8748];
 lonGrid = 0.01;
 latLonRangeS = [' --slat=' num2str(latMinMax(1)) ' --elat=' num2str(latMinMax(2)) ' --slon=' num2str(lonMinMax(1)) ' --elon=' num2str(lonMinMax(2))];
 
-num2str(latMinMax(1))
+
 dayStartS = '2003-11-06';
 dayEndS = '2019-01-01';
 biMonthlyOffset = 61; %(two months approx)
@@ -128,7 +128,7 @@ while thisDay <  dayEnd
         
         numberOfNCs=length(thisInput);
         outputTriple = [];
-        numberOfNCs = 2;
+
         
         cluster = parcluster('local'); nworkers = cluster.NumWorkers;
         parfor (iii = 1:numberOfNCs,nworkers)
