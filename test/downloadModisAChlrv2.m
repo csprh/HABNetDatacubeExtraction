@@ -84,6 +84,7 @@ removeFreq = 300;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Loop from start day to end day%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+OO = [];
 while thisDay <  dayEnd
     ind = ind +1;
     try
@@ -151,6 +152,14 @@ while thisDay <  dayEnd
            latDD = ncread(fileName, '/navigation_data/latitude'); latDD = latDD(:);
            inVar = ncread(fileName, '/geophysical_data/chlor_a'); inVar = inVar(:);
   
+           maxlt = max(lonDD);
+           maxln = max(latDD);
+           
+           minlt = max(lonDD);
+           minln = max(latDD);
+           
+           outMinMax = [minlt maxlt minln maxln];
+           OO = [OO ;outMinMax];
             ind = (lonDD>=lonMinMax(1) & lonDD<=lonMinMax(2) & latDD>=latMinMax(1) &latDD<=latMinMax(2));
             
             outLat = latDD(ind);
@@ -159,6 +168,7 @@ while thisDay <  dayEnd
             thisTriple = [outLat outLon outVal];
             outputTriple = [thisTriple; outputTriple];
         end
+        
         
         h5name = [outDir '/Bimonthly_Chlor_a_' num2str(thisDay) '_' num2str(thisEndDay) '.h5'];
         if exist(h5name, 'file')==2;  delete(h5name);  end
