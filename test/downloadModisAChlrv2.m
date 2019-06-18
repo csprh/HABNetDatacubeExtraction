@@ -89,7 +89,6 @@ removeFreq = 500;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Loop from start day to end day%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-OO = [];
 while thisDay <  dayEnd
     ind = ind +1;
     try
@@ -131,9 +130,9 @@ while thisDay <  dayEnd
         outputTriple = [];
         numberOfNCs = 2;
         
-        %cluster = parcluster('local'); nworkers = cluster.NumWorkers;
-        %parfor (iii = 1:numberOfNCs,nworkers)
-        for iii = 1:numberOfNCs
+        cluster = parcluster('local'); nworkers = cluster.NumWorkers;
+        parfor (iii = 1:numberOfNCs,nworkers)
+        %for iii = 1:numberOfNCs
            thisIndex = iii;
            thisLine = thisInput(thisIndex).line;
            thisDate = thisInput(thisIndex).date;
