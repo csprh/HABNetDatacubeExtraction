@@ -1,0 +1,20 @@
+Error procesing sample 731891 at 17-Jun-2019 12:41:37
+MATLAB:UndefinedFunction::Undefined function or variable 'thisLat'.
+Error procesing sample 731899 at 17-Jun-2019 12:41:47
+MATLAB:UndefinedFunction::Undefined function or variable 'thisLat'.
+Error procesing sample 731891 at 17-Jun-2019 12:42:46
+MATLAB:nonExistentField::Reference to non-existent field 'pythonStr'.
+Error procesing sample 731891 at 18-Jun-2019 11:05:16
+MATLAB:FileIO:InvalidFid::Invalid file identifier. Use fopen to generate a valid file identifier.
+Error procesing sample 731891 at 18-Jun-2019 11:05:47
+MATLAB:FileIO:InvalidFid::Invalid file identifier. Use fopen to generate a valid file identifier.
+Error procesing sample 731891 at 18-Jun-2019 11:06:57
+MATLAB:FileIO:InvalidFid::Invalid file identifier. Use fopen to generate a valid file identifier.
+Error procesing sample 731899 at 18-Jun-2019 11:07:06
+MATLAB:FileIO:InvalidFid::Invalid file identifier. Use fopen to generate a valid file identifier.
+Error procesing sample 731891 at 18-Jun-2019 11:08:40
+MATLAB:UndefinedFunction::Undefined function 'julian2time' for input arguments of type 'char'.
+Error procesing sample 731891 at 18-Jun-2019 11:09:43
+MATLAB:UndefinedFunction::Undefined function 'julian2time' for input arguments of type 'char'.
+Error procesing sample 731891 at 18-Jun-2019 11:10:13
+MATLAB:UndefinedFunction::Undefined function 'julian2time' for input arguments of type 'char'.
