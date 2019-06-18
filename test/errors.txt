@@ -18,3 +18,7 @@ Error procesing sample 731891 at 18-Jun-2019 11:09:43
 MATLAB:UndefinedFunction::Undefined function 'julian2time' for input arguments of type 'char'.
 Error procesing sample 731891 at 18-Jun-2019 11:10:13
 MATLAB:UndefinedFunction::Undefined function 'julian2time' for input arguments of type 'char'.
+Error procesing sample 731891 at 18-Jun-2019 19:19:48
+MATLAB:imagesci:netcdf:fileOpenErr::Unable to open file. File may be corrupt or filename may have invalid characters. If the data source was an OPeNDAP URL, see the OPeNDAP Troubleshooting section in the Users Guide.
+Error procesing sample 731891 at 18-Jun-2019 19:38:19
+stats:hist3:WrongNumCols::X must be a matrix with two columns.

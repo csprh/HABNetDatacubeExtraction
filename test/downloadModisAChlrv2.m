@@ -71,7 +71,12 @@ mkdir(outDir);
 
 ind = 0;
 latMinMax = [24.0864 30.8012];
+latGrid = 0.05;
 lonMinMax = [-88.0453 -79.8748];
+lonGrid = 0.01;
+latLonRangeS = [' --slat=' num2str(latMinMax(1)) ' --elat=' num2str(latMinMax(2)) ' --slon=' num2str(lonMinMax(1)) ' --elon=' num2str(lonMinMax(2))];
+
+num2str(latMinMax(1))
 dayStartS = '2003-11-06';
 dayEndS = '2019-01-01';
 biMonthlyOffset = 61; %(two months approx)
@@ -80,7 +85,7 @@ dayEnd = datenum(dayEndS);
 zoneHrDiff = timezone(mean(lonMinMax));
 [rmcommand, pythonStr, tmpStruct] = getHABConfig;
 thisDay = dayStart;
-removeFreq = 300;
+removeFreq = 500;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Loop from start day to end day%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -102,8 +107,7 @@ while thisDay <  dayEnd
         thisDayS   =  datestr(thisDay,29);
         thisEndDayS = datestr(thisEndDay,29);
          
-        pyOpt = [' --data_type=' subMods{1} ' --sat=' subMods{2} ' --slat=' num2str(mean(latMinMax)) ...
-            ' --slon=' num2str(mean(lonMinMax)) ' --stime=' thisDayS UTCTime ' --etime=' thisEndDayS UTCTime];
+        pyOpt = [' --data_type=' subMods{1} ' --sat=' subMods{2} latLonRangeS ' --stime=' thisDayS UTCTime ' --etime=' thisEndDayS UTCTime];
         disp(['Searching granules for: --mod=',subMods{3}, pyOpt])
         exeName = [pythonStr ' ../fd_matchup.py', pyOpt,' > cmdOut.txt'];
         system(exeName);
@@ -125,11 +129,11 @@ while thisDay <  dayEnd
         
         numberOfNCs=length(thisInput);
         outputTriple = [];
+        numberOfNCs = 2;
         
-        
-        cluster = parcluster('local'); nworkers = cluster.NumWorkers;
-        parfor (iii = 1:numberOfNCs,nworkers)
-        %for (iii = 1:numberOfNCs)
+        %cluster = parcluster('local'); nworkers = cluster.NumWorkers;
+        %parfor (iii = 1:numberOfNCs,nworkers)
+        for iii = 1:numberOfNCs
            thisIndex = iii;
            thisLine = thisInput(thisIndex).line;
            thisDate = thisInput(thisIndex).date;
@@ -152,33 +156,43 @@ while thisDay <  dayEnd
            latDD = ncread(fileName, '/navigation_data/latitude'); latDD = latDD(:);
            inVar = ncread(fileName, '/geophysical_data/chlor_a'); inVar = inVar(:);
   
-           maxlt = max(lonDD);
-           maxln = max(latDD);
-           
-           minlt = max(lonDD);
-           minln = max(latDD);
-           
-           outMinMax = [minlt maxlt minln maxln];
-           OO = [OO ;outMinMax];
-            ind = (lonDD>=lonMinMax(1) & lonDD<=lonMinMax(2) & latDD>=latMinMax(1) &latDD<=latMinMax(2));
+           thisInd = (lonDD>=lonMinMax(1) & lonDD<=lonMinMax(2) & latDD>=latMinMax(1) &latDD<=latMinMax(2));
             
-            outLat = latDD(ind);
-            outLon = lonDD(ind);
-            outVal = inVar(ind);
-            thisTriple = [outLat outLon outVal];
-            outputTriple = [thisTriple; outputTriple];
+           outLat = latDD(thisInd);
+           outLon = lonDD(thisInd);
+           outVal = inVar(thisInd);
+           thisTriple = [outLat outLon outVal];
+           outputTriple = [thisTriple; outputTriple];
         end
+        LatCntrs = latMinMax(1):latGrid:latMinMax(2);
+        LonCntrs = lonMinMax(1):lonGrid:lonMinMax(2);
         
+        [LAT LON] = meshgrid(LatCntrs,LonCntrs);
+
+        LatCntrs = latMinMax(1)-latGrid:latGrid:latMinMax(2)+latGrid;
+        LonCntrs = lonMinMax(1)-lonGrid:lonGrid:lonMinMax(2)+lonGrid;
+        % Count number of datapoints in bins.  Then accumulate their values
+        cnt = hist3([outputTriple(:,2), outputTriple(:,1)], {LonCntrs LatCntrs});
+        weightsH = hist2w([outputTriple(:,2), outputTriple(:,1)], outputTriple(:,3) ,LonCntrs,LatCntrs);
+
+        % We must then reduce the size of the output to get rid of the edge bins
+        weightsH = weightsH(2:end-1,2:end-1);
+        cnt = cnt(2:end-1,2:end-1);
+        %If cnt is 0 then no datapoints in bin
+        %If weightsH is NaN then no datapoint 
+        %Normalise output and set no data to -1 (for tensorflow etc.)
+        ign = ((cnt==0)|(isnan(weightsH)));
+        outputIm = weightsH./cnt;
+
+        outputIm(ign) = 0;
         
         h5name = [outDir '/Bimonthly_Chlor_a_' num2str(thisDay) '_' num2str(thisEndDay) '.h5'];
         if exist(h5name, 'file')==2;  delete(h5name);  end
         fid = H5F.create(h5name);
         H5F.close(fid);
-        hdf5write(h5name,'/biMonthTriple', outputTriple, 'WriteMode','append');
-        h5writeatt(h5name, '/','thisDayS', thisDayS);
-        h5writeatt(h5name, '/','thisEndDayS', thisEndDayS);
-        h5writeatt(h5name,'/', 'thisDay', thisDay);
-        h5writeatt(h5name, '/','thisEndDay', thisEndDay);
+        hdf5write(h5name,'/BiMonth_Chlor_a', outputIm, 'WriteMode','append');
+        h5writeatt(h5name, '/','lon', LON);
+        h5writeatt(h5name, '/','lat', LAT);
 
         thisDay = thisDay+1;
     catch err
