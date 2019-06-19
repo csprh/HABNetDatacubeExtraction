@@ -214,6 +214,7 @@ end
 thisDay = dayStart;
 while thisDay <  dayEnd
 
+    
     for ii = 1: biMonthlyOffset
         h5name = [outDirDaily '/Daily_Chlor_a_' num2str(thisDay) '_' num2str(thisDay+1) '.h5'];
 
@@ -223,7 +224,7 @@ while thisDay <  dayEnd
     end
     
     outputIm(outputIm==0) = NaN;
-    outputIm = meannan(outputIm);
+    outputIm = nanmean(outputIm,3);
     
     h5name = [outDirBimonth '/Bimonthly_Chlor_a_' num2str(thisDay) '_' num2str(thisDay+biMonthlyOffset) '.h5'];
     if exist(h5name, 'file')==2;  delete(h5name);  end
