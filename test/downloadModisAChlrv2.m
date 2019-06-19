@@ -73,9 +73,9 @@ downloadDir = tmpStruct.confgData.downloadFolder.Text;
 
 ind = 0;
 latMinMax = [24.0864 30.8012];
-latGrid = 0.02;
+latGrid = 0.05;
 lonMinMax = [-88.0453 -79.8748];
-lonGrid = 0.02;
+lonGrid = 0.05;
 latLonRangeS = [' --slat=' num2str(latMinMax(1)) ' --elat=' num2str(latMinMax(2)) ' --slon=' num2str(lonMinMax(1)) ' --elon=' num2str(lonMinMax(2))];
 
 
