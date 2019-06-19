@@ -71,9 +71,9 @@ mkdir(outDir);
 
 ind = 0;
 latMinMax = [24.0864 30.8012];
-latGrid = 0.05;
+latGrid = 0.02;
 lonMinMax = [-88.0453 -79.8748];
-lonGrid = 0.01;
+lonGrid = 0.02;
 latLonRangeS = [' --slat=' num2str(latMinMax(1)) ' --elat=' num2str(latMinMax(2)) ' --slon=' num2str(lonMinMax(1)) ' --elon=' num2str(lonMinMax(2))];
 
 
@@ -160,6 +160,11 @@ while thisDay <  dayEnd
            outLat = latDD(thisInd);
            outLon = lonDD(thisInd);
            outVal = inVar(thisInd);
+           nanInd = isnan(outVal);
+           outLat = outLat(~nanInd);
+           outLon = outLon(~nanInd);
+           outVal = outVal(~nanInd);
+           
            thisTriple = [outLat outLon outVal];
            outputTriple = [thisTriple; outputTriple];
         end
@@ -171,8 +176,8 @@ while thisDay <  dayEnd
         LatCntrs = latMinMax(1)-latGrid:latGrid:latMinMax(2)+latGrid;
         LonCntrs = lonMinMax(1)-lonGrid:lonGrid:lonMinMax(2)+lonGrid;
         % Count number of datapoints in bins.  Then accumulate their values
-        cnt = hist3([outputTriple(:,2), outputTriple(:,1)], {LonCntrs LatCntrs});
-        weightsH = hist2w([outputTriple(:,2), outputTriple(:,1)], outputTriple(:,3) ,LonCntrs,LatCntrs);
+        cnt = hist3([outputTriple(:,1), outputTriple(:,2)], {LatCntrs LonCntrs});
+        weightsH = hist2w([outputTriple(:,1), outputTriple(:,2)], outputTriple(:,3) ,LatCntrs,  LonCntrs);
 
         % We must then reduce the size of the output to get rid of the edge bins
         weightsH = weightsH(2:end-1,2:end-1);
