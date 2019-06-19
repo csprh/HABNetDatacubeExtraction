@@ -43,7 +43,9 @@ else
 end
 %% load all config from XML file
 BimonthlyAverageDirectory = 'BimonthlyAverageDirectory';
-outDir = [tmpStruct.confgData.trainDir.Text BimonthlyAverageDirectory];
+DailyAverageDirectory = 'DailyAverageDirectory';
+outDirDaily = [tmpStruct.confgData.trainDir.Text DailyAverageDirectory];
+outDirBimonth = [tmpStruct.confgData.trainDir.Text BimonthlyAverageDirectory];
 wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;
 downloadDir = tmpStruct.confgData.downloadFolder.Text;
 %mkdir(outDir);
@@ -80,7 +82,7 @@ latLonRangeS = [' --slat=' num2str(latMinMax(1)) ' --elat=' num2str(latMinMax(2)
 dayStartS = '2003-11-06';
 dayEndS = '2019-01-01';
 biMonthlyOffset = 61; %(two months approx)
-biMonthlyOffset = 1;
+dailyOffset = 1;
 dayStart = datenum(dayStartS);
 dayEnd = datenum(dayEndS);
 zoneHrDiff = timezone(mean(lonMinMax));
@@ -103,7 +105,7 @@ while thisDay <  dayEnd
 
         UTCTime = sprintf('T%02d:00:00Z', zoneHrDiff);
 
-        thisEndDay =  thisDay+biMonthlyOffset;
+        thisEndDay =  thisDay+dailyOffset;
         thisDayS   =  datestr(thisDay,29);
         thisEndDayS = datestr(thisEndDay,29);
          
@@ -191,11 +193,11 @@ while thisDay <  dayEnd
 
         outputIm(ign) = 0;
         
-        h5name = [outDir '/Bimonthly_Chlor_a_' num2str(thisDay) '_' num2str(thisEndDay) '.h5'];
+        h5name = [outDirDaily '/Daily_Chlor_a_' num2str(thisDay) '_' num2str(thisEndDay) '.h5'];
         if exist(h5name, 'file')==2;  delete(h5name);  end
         fid = H5F.create(h5name);
         H5F.close(fid);
-        hdf5write(h5name,'/BiMonth_Chlor_a', outputIm, 'WriteMode','append');
+        hdf5write(h5name,'/Chlor_a', outputIm, 'WriteMode','append');
         h5writeatt(h5name, '/','lon', LON);
         h5writeatt(h5name, '/','lat', LAT);
 
@@ -205,6 +207,33 @@ while thisDay <  dayEnd
         thisDay = thisDay+1;
     end
 end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Loop from start day to end day%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+thisDay = dayStart;
+while thisDay <  dayEnd
+
+    for ii = 1: biMonthlyOffset
+        h5name = [outDirDaily '/Daily_Chlor_a_' num2str(thisDay) '_' num2str(thisDay+1) '.h5'];
+
+        outputIm(:,:,ii) = h5read(h5name,'/Chlor_a');
+        LON = h5read(h5name,'/lon');
+        LAT = h5read(h5name,'/lat');
+    end
+    
+    outputIm(outputIm==0) = NaN;
+    outputIm = meannan(outputIm);
+    
+    h5name = [outDirBimonth '/Bimonthly_Chlor_a_' num2str(thisDay) '_' num2str(thisDay+biMonthlyOffset) '.h5'];
+    if exist(h5name, 'file')==2;  delete(h5name);  end
+    fid = H5F.create(h5name);
+    H5F.close(fid);
+    hdf5write(h5name,'/Chlor_a', outputIm, 'WriteMode','append');
+    h5writeatt(h5name, '/','lon', LON);
+    h5writeatt(h5name, '/','lat', LAT);
+end
+
 
 function logErr(e,strIden)
     fileID = fopen('errors.txt','at');
