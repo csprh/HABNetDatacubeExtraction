@@ -46,7 +46,7 @@ BimonthlyAverageDirectory = 'BimonthlyAverageDirectory';
 outDir = [tmpStruct.confgData.trainDir.Text BimonthlyAverageDirectory];
 wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;
 downloadDir = tmpStruct.confgData.downloadFolder.Text;
-mkdir(outDir);
+%mkdir(outDir);
 
 
 %Get max/min (original excel file)
