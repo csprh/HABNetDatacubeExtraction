@@ -80,6 +80,7 @@ latLonRangeS = [' --slat=' num2str(latMinMax(1)) ' --elat=' num2str(latMinMax(2)
 dayStartS = '2003-11-06';
 dayEndS = '2019-01-01';
 biMonthlyOffset = 61; %(two months approx)
+biMonthlyOffset = 1;
 dayStart = datenum(dayStartS);
 dayEnd = datenum(dayEndS);
 zoneHrDiff = timezone(mean(lonMinMax));
