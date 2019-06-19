@@ -198,8 +198,8 @@ while thisDay <  dayEnd
         fid = H5F.create(h5name);
         H5F.close(fid);
         hdf5write(h5name,'/Chlor_a', outputIm, 'WriteMode','append');
-        h5writeatt(h5name, '/','lon', LON);
-        h5writeatt(h5name, '/','lat', LAT);
+        hdf5write(h5name, '/lon', LON , 'WriteMode','append');
+        hdf5write(h5name, '/lat', LAT , 'WriteMode','append');
 
         thisDay = thisDay+1;
     catch err
