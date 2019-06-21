@@ -224,11 +224,12 @@ while thisDay <  dayEnd
 
         try
             outputIm(:,:,ii) = h5read(h5name,'/Chlor_a');
+            LON = h5read(h5name,'/lon');
+            LAT = h5read(h5name,'/lat');
         catch
             %Do Nowt
         end
-        LON = h5read(h5name,'/lon');
-        LAT = h5read(h5name,'/lat');
+
     end
     
     outputIm(outputIm==0) = NaN;
