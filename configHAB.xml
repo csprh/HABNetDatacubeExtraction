@@ -2,7 +2,7 @@
 <confgData>
    <inputFilename>/mnt/storage/home/csprh/code/HAB/extractData/work/florida_2003-2018-50K</inputFilename>
    <gebcoFilename>/mnt/storage/home/csprh/scratch/HAB/GEBCO/GEBCO.nc</gebcoFilename>
-   <downloadFolder>/mnt/storage/home/csprh/scratch/HAB/downloads</downloadFolder>
+   <downloadFolder>/mnt/storage/home/csprh/scratch/HAB/downloads/</downloadFolder>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
    <trainDir>/mnt/storage/home/csprh/scratch/HAB/florida/train/</trainDir>
    <trainImsDir>/mnt/storage/home/csprh/scratch/HAB/CNNIms/florida/train</trainImsDir>
