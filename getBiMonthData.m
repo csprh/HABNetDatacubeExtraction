@@ -27,59 +27,43 @@ h5name = [biDir '/Bimonthly_Chlor_a_' num2str(thisDay-biMonthlyOffset) '_' num2s
 
 
 biChlor = h5read(h5name,'/Chlor_a');
-lon1D = h5read(h5name, '/lon');
-lat1D = h5read(h5name, '/lat');
+lonDD = h5read(h5name, '/lon');
+latDD = h5read(h5name, '/lat');
 
-lon1D = lon1D(:);
-lat1D = lat1D(:);
+lonDD = lonDD(:);
+latDD = latDD(:);
 
-biChlor = biChlor(:);
-
-distance1 = config.distance1;
-resolution = config.resolution;
-
- 
+inVar = biChlor(:);
+[centerXProj, centerYProj] = mfwdtran( utmstruct, outLat,outLon);
 
 %Define the projected coordinate ROI
-[centerX, centerY] = mfwdtran( utmstruct, outLat,outLon);
-e = centerX + distance1; w = centerX - distance1;
-n = centerY + distance1; s = centerY - distance1;
-
-%is of length 1 and starts at 0.
-destShape = [round(abs(e - w) /double(resolution)); round(abs(n - s) / double(resolution))];
-aff = affine2d([resolution 0.0 w; 0.0 resolution s; 0 0 1]');
-
-%Define the projected coordianate 2*ROI that's double the size (to retain
-%data)
-e2 = centerX + distance1*2; w2 = centerX - distance1*2;
-n2 = centerY + distance1*2; s2 = centerY - distance1*2;
-
-%Inverse trans ROI to get max and min lat and lon
-[minLon, maxLon, maxLat, minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct);
-[thislon, lonIndx] = getIndx(minLon, maxLon, lon1D);
-[thislat, latIndx] = getIndx(minLat, maxLat, lat1D);
-
+eProj = centerXProj + round(distance1/2); wProj = centerXProj - round(distance1/2);
+nProj = centerYProj + round(distance1/2); sProj = centerYProj - round(distance1/2);
 
 %Determine output shape, normalise the projected data so each output pixel
-[meshlon, meshlat] = meshgrid(thislon, thislat);
-meshlon = meshlon(:); meshlat=meshlat(:); 
+%is of length 1 and starts at 0.
+destShape = [round(abs(eProj - wProj) /double(resolution)); round(abs(nProj - sProj) / double(resolution))];
+aff = affine2d([resolution 0.0 wProj; 0.0 resolution sProj; 0 0 1]');
 
-%Inverse trans ROI*2 to get max and min lat and lon
-indROI = getMinMaxLatLonROI(e, w, n, s, meshlon, meshlat, utmstruct);
+%Define the projected coordianate 1.2*ROI that's double the size (to retain
+%data)
+eProj2 = centerXProj + round(distance1/2)*1.2; wProj2 = centerXProj - round(distance1/2)*1.2;
+nProj2 = centerYProj + round(distance1/2)*1.2;  sProj2 = centerYProj - round(distance1/2)*1.2;
 
-%Get all the lat and lon data points within 2*ROI then project back
-lon_ddROI1 = meshlon(indROI);
-lat_ddROI1 = meshlat(indROI);
-inVarROI1 = biChlor(indROI);
+%Inverse trans ROI to get max and min lat and lon
+indROI = getMinMaxLatLon(eProj, wProj, nProj, sProj, lonDD, latDD, utmstruct);
 
-[lon_projROI2,lat_projROI2] = mfwdtran( utmstruct, lat_ddROI1,lon_ddROI1);
-[destIds1,destIds2] = transformPointsInverse(aff,lon_projROI2,lat_projROI2);
+[lonDDROI, latDDROI, inVarROI, destIds1, destIds2] = getProjs(aff,utmstruct, latDD, lonDD, inVar, indROI);  
+%Get all the lat and lon data points within ROI then project back
 
-tripleOut =     [lon_ddROI1 lat_ddROI1 inVarROI1];
-tripleOutProj = [destIds1 destIds2 inVarROI1];
+tripleOut = [lonDDROI latDDROI inVarROI];
+tripleOutProj = [destIds1 destIds2 inVarROI];
 
-[lon_projROI3,lat_projROI3] = mfwdtran(utmstruct, meshlat,meshlon);
-[destIds1,destIds2] = transformPointsInverse(aff,lon_projROI3,lat_projROI3);
+indROI = getMinMaxLatLon(eProj2, wProj2, nProj2, sProj2, lonDD, latDD, utmstruct);
+%Inverse trans ROI*1.2 to get max and min lat and lon
+
+%Get all the lat and lon data points within 1.2*ROI then project back
+[lonDDROI, latDDROI, inVarROI, destIds1, destIds2] = getProjs(aff,utmstruct, latDD, lonDD, inVar, indROI);  
 
 % Define bin centers.  Must leave a center outside the ROI to mop up the
 % values outside the ROI
@@ -88,7 +72,7 @@ YbnCntrs = -0.5:destShape(2)+0.5;
 
 % Count number of datapoints in bins.  Then accumulate their values
 cnt = hist3([destIds2, destIds1], {YbnCntrs XbnCntrs});
-weightsH = hist2w([destIds2, destIds1], biChlor,YbnCntrs,XbnCntrs);
+weightsH = hist2w([destIds2, destIds1], inVarROI ,YbnCntrs,XbnCntrs);
 
 % We must then reduce the size of the output to get rid of the edge bins
 weightsH = weightsH(2:end-1,2:end-1);
