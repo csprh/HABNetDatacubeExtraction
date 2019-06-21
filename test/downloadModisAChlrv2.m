@@ -78,7 +78,7 @@ lonMinMax = [-88.0453 -79.8748];
 lonGrid = 0.05;
 latLonRangeS = [' --slat=' num2str(latMinMax(1)) ' --elat=' num2str(latMinMax(2)) ' --slon=' num2str(lonMinMax(1)) ' --elon=' num2str(lonMinMax(2))];
 
-doDailyFirst = 1;
+doDailyFirst = 0;
 
 dayStartS = '2003-01-01';
 dayEndS = '2019-01-01';
