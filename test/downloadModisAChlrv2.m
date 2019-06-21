@@ -136,9 +136,9 @@ while thisDay <  dayEnd
         outputTriple = [];
 
         
-        cluster = parcluster('local'); nworkers = cluster.NumWorkers;
-        parfor (iii = 1:numberOfNCs,nworkers)
-        %for iii = 1:numberOfNCs
+        %cluster = parcluster('local'); nworkers = cluster.NumWorkers;
+        %parfor (iii = 1:numberOfNCs,nworkers)
+        for iii = 1:numberOfNCs
            thisIndex = iii;
            thisLine = thisInput(thisIndex).line;
            thisDate = thisInput(thisIndex).date;
