@@ -78,7 +78,7 @@ lonMinMax = [-88.0453 -79.8748];
 lonGrid = 0.05;
 latLonRangeS = [' --slat=' num2str(latMinMax(1)) ' --elat=' num2str(latMinMax(2)) ' --slon=' num2str(lonMinMax(1)) ' --elon=' num2str(lonMinMax(2))];
 
-doDailyFirst = 1;
+doDailyFirst = 0;
 
 dayStartS = '2005-01-01';
 dayEndS = '2019-03-03';
@@ -222,7 +222,11 @@ while thisDay <  dayEnd
     for ii = 1: biMonthlyOffset
         h5name = [outDirDaily '/Daily_Chlor_a_' num2str(thisDay) '_' num2str(thisDay+1) '.h5'];
 
-        outputIm(:,:,ii) = h5read(h5name,'/Chlor_a');
+        try
+            outputIm(:,:,ii) = h5read(h5name,'/Chlor_a');
+        catch
+            %Do Nowt
+        end
         LON = h5read(h5name,'/lon');
         LAT = h5read(h5name,'/lat');
     end
