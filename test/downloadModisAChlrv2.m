@@ -237,6 +237,7 @@ while thisDay <  dayEnd
     hdf5write(h5name,'/Chlor_a', outputIm, 'WriteMode','append');
     hdf5write(h5name, '/lon', LON , 'WriteMode','append');
     hdf5write(h5name, '/lat', LAT , 'WriteMode','append');
+    thisDay = thisDay+1;
 end
 
 
