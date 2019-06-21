@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <confgData>
-   <inputFilename>/home/cosc/csprh/linux/HABCODE/code/HAB/extractData/work/florida_2003-2018-50K</inputFilename>
-   <gebcoFilename>/space/csprh/HAB/GEBCO/GEBCO.nc</gebcoFilename>
+   <inputFilename>/mnt/storage/home/csprh/code/HAB/extractData/work/florida_2003-2018-50K</inputFilename>
+   <gebcoFilename>/mnt/storage/home/csprh/scratch/HAB/GEBCO/GEBCO.nc</gebcoFilename>
    <downloadFolder>/mnt/storage/home/csprh/scratch/HAB/downloads</downloadFolder>
    <wgetStringBase>/usr/bin/wget</wgetStringBase>
    <trainDir>/mnt/storage/home/csprh/scratch/HAB/florida/train/</trainDir>
-   <trainImsDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/CNNIms/florida/train</trainImsDir>
-   <testDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/florida/test/</testDir>
-   <testImsDir>/home/cosc/csprh/linux/HABCODE/scratch/HAB/CNNIms/florida/test</testImsDir>
+   <trainImsDir>/mnt/storage/home/csprh/scratch/HAB/CNNIms/florida/train</trainImsDir>
+   <testDir>/mnt/storage/home/csprh/scratch/HAB/florida/test/</testDir>
+   <testImsDir>/mnt/storage/home/csprh/scratch/HAB/CNNIms/florida/test</testImsDir>
    <testDate>737173</testDate>
    <resolution>2000</resolution>
    <distance1>100000</distance1>
@@ -23,6 +23,7 @@
    <Modality>oc-modisa-par</Modality>
    <Modality>sst-modisa-sstref</Modality>
    <Modality>oc-modist-chlor_a</Modality>
+   <Modality>bimonth</Modality>
    <outputRes>1000</outputRes>
    <alphaSize>2</alphaSize>
    <threshCentrePoint>0.5</threshCentrePoint>
