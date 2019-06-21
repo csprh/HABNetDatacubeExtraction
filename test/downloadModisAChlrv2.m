@@ -80,7 +80,7 @@ latLonRangeS = [' --slat=' num2str(latMinMax(1)) ' --elat=' num2str(latMinMax(2)
 
 doDailyFirst = 1;
 
-dayStartS = '2002-12-23';
+dayStartS = '2005-01-01';
 dayEndS = '2019-03-03';
 biMonthlyOffset = 61; %(two months approx)
 dailyOffset = 1;
