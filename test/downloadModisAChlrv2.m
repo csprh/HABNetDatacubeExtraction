@@ -78,8 +78,9 @@ lonMinMax = [-88.0453 -79.8748];
 lonGrid = 0.05;
 latLonRangeS = [' --slat=' num2str(latMinMax(1)) ' --elat=' num2str(latMinMax(2)) ' --slon=' num2str(lonMinMax(1)) ' --elon=' num2str(lonMinMax(2))];
 
+doDailyFirst = 1;
 
-dayStartS = '2003-11-06';
+dayStartS = '2003-01-01';
 dayEndS = '2019-01-01';
 biMonthlyOffset = 61; %(two months approx)
 dailyOffset = 1;
@@ -92,6 +93,8 @@ removeFreq = 500;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Loop from start day to end day%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if doDailyFirst == 1
 while thisDay <  dayEnd
     ind = ind +1;
     try
@@ -208,6 +211,7 @@ while thisDay <  dayEnd
     end
 end
 
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Loop from start day to end day%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -231,8 +235,8 @@ while thisDay <  dayEnd
     fid = H5F.create(h5name);
     H5F.close(fid);
     hdf5write(h5name,'/Chlor_a', outputIm, 'WriteMode','append');
-    h5writeatt(h5name, '/','lon', LON);
-    h5writeatt(h5name, '/','lat', LAT);
+    hdf5write(h5name, '/lon', LON , 'WriteMode','append');
+    hdf5write(h5name, '/lat', LAT , 'WriteMode','append');
 end
 
 

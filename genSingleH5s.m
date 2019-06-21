@@ -116,6 +116,12 @@ for modIndex = 1:numberOfMods
         addToH5(inStruc.h5name, thisMod, elevationIm, 0, 0, elevationPoints, elevationPointsProj);
         continue;
     end
+    
+    if strcmp(subMods{1},'bimonth')
+        [Im, Points, PointsProj] = getBiMonthData(inStruc.dayEnd, confgData, thisLat, thisLon, utmstruct);
+        addToH5(inStruc.h5name, thisMod, Im, 0, 0, Points, PointsProj);
+        continue;
+    end
     % product suites are either oc, iop or sst
     % sensors are either modisa,modist,viirsn,goci,meris,czcs,octs or 'seawifs'
     % sst: sstref, sst4, sst 1Km resolution for all sst

@@ -23,6 +23,7 @@
    <Modality>oc-modisa-par</Modality>
    <Modality>sst-modisa-sstref</Modality>
    <Modality>oc-modist-chlor_a</Modality>
+   <Modality>bimonth</Modality>
    <outputRes>1000</outputRes>
    <alphaSize>2</alphaSize>
    <threshCentrePoint>0.5</threshCentrePoint>
