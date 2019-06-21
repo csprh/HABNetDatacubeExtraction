@@ -20,9 +20,10 @@ function train_genAllH5s
     %% load all config from XML file
     confgData.inputFilename = tmpStruct.confgData.inputFilename.Text;
     confgData.gebcoFilename = tmpStruct.confgData.gebcoFilename.Text;
-    confgData.biDir =  [confgData.outDir 'BimonthlyAverageDirectory'];
+    
     confgData.wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;
     confgData.outDir = tmpStruct.confgData.trainDir.Text;
+    confgData.biDir =  [confgData.outDir 'BimonthlyAverageDirectory'];
     confgData.downloadDir = tmpStruct.confgData.downloadFolder.Text; 
     confgData.distance1 = str2double(tmpStruct.confgData.distance1.Text);
     confgData.resolution = str2double(tmpStruct.confgData.resolution.Text);
