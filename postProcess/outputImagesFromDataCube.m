@@ -36,7 +36,7 @@ yq = inputRangeY(1) + fract/2 : fract : inputRangeY(2) - fract/2;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Loop through all modalities              %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-for groupIndex = 2: numberOfGroups
+for groupIndex = 2: numberOfGroups + 1
     thisGroupIndex = groupIndex-1;
     thisBaseDirectory = [baseDirectory '/' num2str(thisGroupIndex) '/'];
     mkdir(thisBaseDirectory);
@@ -44,7 +44,11 @@ for groupIndex = 2: numberOfGroups
     %Get projected points (on 50x50 grid), if not exist then
     %generate blank output
     try
-        PointsProj = h5read(h5name, [thisH5Groups(groupIndex).Name '/PointsProj']);
+        thisInd = numberOfGroups;
+        if (groupIndex == numberOfGroups + 1)
+            thisInd = 3;
+        end
+        PointsProj = h5read(h5name, [thisH5Groups(thisInd).Name '/PointsProj']);
     catch
         
     end
@@ -59,6 +63,16 @@ for groupIndex = 2: numberOfGroups
                 outputImage = griddata(input.xp, input.yp,  input.up, output.xq, output.yq);
                 landInd = outputImage>0;
                 outputImage(landInd) = 0;
+                thisMin = groupMinMax(1,1);    thisMax = groupMinMax(1,2);
+            elseif thisGroupIndex == 2 %Bimonth
+                input.xp = PointsProj(:,1);
+                input.yp = PointsProj(:,2);
+                input.up = PointsProj(:,3);
+                outputImage = griddata(input.xp, input.yp,  input.up, output.xq, output.yq);
+
+                outputImage(landInd) = 0;
+                biMonthImage = outputImage;
+                thisMin = groupMinMax(3,1);    thisMax = groupMinMax(3,2); %Standardise the minmax from Chlor_a              
             else
                 zp = PointsProj(:,4);
                 quantEdge1 = thisDay-1; quantEdge2 = thisDay;
@@ -74,10 +88,16 @@ for groupIndex = 2: numberOfGroups
                     
                     outputImage = getImage(output, input, alphaSize);
                 end
+                thisMin = groupMinMax(thisGroupIndex,1);   thisMax = groupMinMax(thisGroupIndex,2);
             end
             
-            outputImage = outputImage-groupMinMax(thisGroupIndex,1);
-            outputImage = 255*(outputImage./(groupMinMax(thisGroupIndex,2)-groupMinMax(thisGroupIndex,1)));
+            if thisGroupIndex == (numberOfGroups + 1) % Make Differnce
+                outputImage = biMonthImage - outputImage;
+                thisMin = groupMinMax(3,1)-groupMinMax(3,2);   thisMax = groupMinMax(3,2)-groupMinMax(3,1); 
+            end
+            
+            outputImage = outputImage-thisMin;
+            outputImage = 255*(outputImage./(thisMin-thisMax));
             outputImage(outputImage < 0) = 0; outputImage(outputImage > 255) = 255;
             
             imwrite(uint8(outputImage),[thisBaseDirectory  sprintf('%02d',thisDay),'.png']);

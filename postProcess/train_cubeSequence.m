@@ -77,7 +77,7 @@ for ii = 1: numberOfH5s
         thisH5Groups = thisH5Info.Groups;
 
         % Loop through all groups (apart from GEBCO) and discount
-        groupIndex = 3;  %Just choose one.  This should reflect typical sizes
+        groupIndex = 4;  %Just choose one.  This should reflect typical sizes
         theseIms = h5read(h5name, [thisH5Groups(groupIndex).Name '/Ims']);
         
         numberOfIms = size(theseIms,3);
