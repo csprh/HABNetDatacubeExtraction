@@ -65,6 +65,9 @@ indROI = getMinMaxLatLon(eProj2, wProj2, nProj2, sProj2, lonDD, latDD, utmstruct
 %Get all the lat and lon data points within 1.2*ROI then project back
 [lonDDROI, latDDROI, inVarROI, destIds1, destIds2] = getProjs(aff,utmstruct, latDD, lonDD, inVar, indROI);  
 
+tripleOut = [lonDDROI latDDROI inVarROI];
+tripleOutProj = [destIds1 destIds2 inVarROI];
+
 % Define bin centers.  Must leave a center outside the ROI to mop up the
 % values outside the ROI
 XbnCntrs = -0.5:destShape(1)+0.5;
@@ -87,25 +90,40 @@ outputIm = weightsH./cnt;
 outputIm(ign) = 0;
 
 
-function indROI = getMinMaxLatLonROI(e2, w2, n2, s2, lon_dd, lat_dd, utmstruct)
-% Generate Region of Interest (ROI) index from input parameters
+function [lonDDROI, latDDROI, inVarROI, destIds1, destIds2] = getProjs(aff, utmstruct, latDD, lonDD, inVar, indROI)  
+% Generateregion of interest indices and projected outputs
 %
 % USAGE:
-%   indROI = getMinMaxLatLon(e2, w2, n2, s2, lon_dd, lat_dd, utmstruct)
+%   [lonDDROI, latDDROI, inVarROI, destIds1, destIds2] = getProjs(aff, utmstruct, latDD, lonDD, inVar, indROI) 
 % INPUT:
-%   e2 - minimum east
-%   w2 - maximum west
-%   n2 - minimum north
-%   s2 - maximum south
-%   lon_dd - input lattitude index array
-%   lat_dd - input longitude index array
-%   utmstruct - reprojection definition
+%   aff       - forward transform
+%   utmstruct - utm projection transform
+%   lonDD     - input longitude values
+%   latDD     - input latitude values
+%   inVar     - actual variable values
+%   inROI     - region of interest indexed values
 % OUTPUT:
-%   indROI - index output
-[minLon maxLon maxLat minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct);
-indROI = (lon_dd>=minLon)&(lon_dd<=maxLon)&(lat_dd>=minLat)&(lat_dd<=maxLat);
+%   lonDDROI  - output lon values
+%   latDDROI  - output lat values
+%   inVarROI  - output var values
+%   destIds1  - transformed positions
+%   destIds2  - transformed positions
 
-function [minLon maxLon maxLat minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct)
+%Get all the lat and lon data points within ROI then project back
+lonDDROI = lonDD(indROI);
+latDDROI = latDD(indROI);
+inVarROI = inVar(indROI);
+
+%discount any missing datapoints
+indROINaN = ~isnan(inVarROI);
+lonDDROI = lonDDROI(indROINaN);
+latDDROI = latDDROI(indROINaN);
+inVarROI = inVarROI(indROINaN);
+[lonProjROI,latProjROI] = mfwdtran(utmstruct, latDDROI,lonDDROI);
+[destIds1,destIds2] = transformPointsInverse(aff,lonProjROI,latProjROI);
+
+
+function [minLon, maxLon, maxLat, minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct)
 % Obtain min and max lat and lon of ROI
 %
 % USAGE:
