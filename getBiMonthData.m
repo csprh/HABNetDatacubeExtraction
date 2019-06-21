@@ -125,25 +125,23 @@ inVarROI = inVarROI(indROINaN);
 [destIds1,destIds2] = transformPointsInverse(aff,lonProjROI,latProjROI);
 
 
-function [minLon, maxLon, maxLat, minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct)
-% Obtain min and max lat and lon of ROI
+function indROI = getMinMaxLatLon(eProj, wProj, nProj, sProj, lonDD, latDD, utmstruct)
+% Generate Region of Interest (ROI) index from input parameters
 %
 % USAGE:
-%   [minLon maxLon maxLat minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct)
+%   indROI = getMinMaxLatLon(eProj, wProj, nProj, sProj, lonDD, latDD, utmstruct)
 % INPUT:
-%   e2 - minimum east
-%   w2 - maximum west
-%   n2 - minimum north
-%   s2 - maximum south
+%   eProj - minimum east in projected 
+%   wProj - maximum west ..
+%   nProj - minimum north ..
+%   sProj - maximum south ..
+%   lonDD - input lattitude index array
+%   latDD - input longitude index array
 %   utmstruct - reprojection definition
 % OUTPUT:
-%   minLon - minimum lon
-%   maxLon - maximum lon
-%   minLat - minimum lat
-%   maxLat - maximum lat
-
-tl = [w2 n2]; bl = [w2 s2];
-tr = [e2 n2]; br = [e2 s2];
+%   indROI - index output
+tl = [wProj nProj]; bl = [wProj sProj];
+tr = [eProj nProj]; br = [eProj sProj];
 [tlLat, tlLon] = minvtran(utmstruct, tl(1), tl(2));
 [blLat, blLon] = minvtran(utmstruct, bl(1), bl(2));
 [trLat, trLon] = minvtran(utmstruct, tr(1), tr(2));
@@ -153,14 +151,7 @@ maxLon = max([tlLon blLon trLon brLon]);
 minLat = min([tlLat blLat trLat brLat]);
 maxLat = max([tlLat blLat trLat brLat]);
 
-
-function [thislatlon, lonlatIndx] = getIndx(minlonlat, maxlonlat, lonlat1D)
-thisIndx = (lonlat1D>=minlonlat) & (lonlat1D<=maxlonlat);
-lonlatIndx = 1:length(lonlat1D);
-lonlatIndx = lonlatIndx(thisIndx);
-thislatlon = lonlat1D(thisIndx);
-
-
+indROI = (lonDD>=minLon)&(lonDD<=maxLon)&(latDD>=minLat)&(latDD<=maxLat);
 
 
 
