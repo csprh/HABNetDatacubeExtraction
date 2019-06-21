@@ -19,6 +19,8 @@ function [outputIm, tripleOut, tripleOutProj ] = getBiMonthData(thisDay, config,
 % THE UNIVERSITY OF BRISTOL: HAB PROJECT
 % Author Dr Paul Hill 26th June 2019
 
+distance1 = config.distance1;
+resolution = config.resolution;
 biDir = config.biDir;
 biMonthlyOffset = 61;
 thisDay = thisDay -14;
