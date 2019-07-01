@@ -22,9 +22,8 @@ function outputImagesFromDataCube(baseDirectory,  numberOfDays, groupMinMax, inp
 % Author Dr Paul Hill March 2019
 
 thisH5Info = h5info(h5name);
-thisH5Groups = thisH5Info.Groups;
-numberOfGroups = size(thisH5Groups,1);
-
+modNames = h5read(h5name, '/Modnames');
+modNo = size(modNames,1);
 % Generate Output Interpolation Variables
 inputRes = thisH5Info.Groups(1).Attributes(10);
 inputRes = inputRes.Value;
@@ -36,19 +35,19 @@ yq = inputRangeY(1) + fract/2 : fract : inputRangeY(2) - fract/2;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Loop through all modalities              %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-for groupIndex = 2: numberOfGroups + 1
-    thisGroupIndex = groupIndex-1;
+for thisGroupIndex = 1: modNo + 1
     thisBaseDirectory = [baseDirectory '/' num2str(thisGroupIndex) '/'];
     mkdir(thisBaseDirectory);
     
-    %Get projected points (on 50x50 grid), if not exist then
-    %generate blank output
     try
-        thisInd = numberOfGroups;
-        if (groupIndex == numberOfGroups + 1)
-            thisInd = 3;
+        thisInd = thisGroupIndex;
+        if (thisGroupIndex == modNo + 1)
+            thisInd = 2;
         end
-        PointsProj = h5read(h5name, [thisH5Groups(thisInd).Name '/PointsProj']);
+        thisModName = strtrim(modNames{thisInd}); %Remove whitespaces
+        thisModName(thisModName==0) = ' ';
+        thisModName = strtrim(thisModName);
+        PointsProj = h5read(h5name, ['/' thisModName '/PointsProj']);
     catch
         
     end
@@ -60,7 +59,9 @@ for groupIndex = 2: numberOfGroups + 1
                 input.xp = PointsProj(:,1);
                 input.yp = PointsProj(:,2);
                 input.up = PointsProj(:,3);
-                outputImage = griddata(input.xp, input.yp,  input.up, output.xq, output.yq);
+                outputImage = griddata(input.yp, input.xp,  input.up, output.xq, output.yq);
+                F = scatteredInterpolant(input.xp, input.yp,  input.up);
+                outputImage = F(output.xq, output.yq);
                 landInd = outputImage>0;
                 outputImage(landInd) = 0;
                 thisMin = groupMinMax(1,1);    thisMax = groupMinMax(1,2);
@@ -68,7 +69,7 @@ for groupIndex = 2: numberOfGroups + 1
                 input.xp = PointsProj(:,1);
                 input.yp = PointsProj(:,2);
                 input.up = PointsProj(:,3);
-                outputImage = griddata(input.xp, input.yp,  input.up, output.xq, output.yq);
+                outputImage = griddata(input.yp, input.xp,  input.up, output.xq, output.yq, 'nearest');
 
                 outputImage(landInd) = 0;
                 biMonthImage = outputImage;
@@ -91,7 +92,7 @@ for groupIndex = 2: numberOfGroups + 1
                 thisMin = groupMinMax(thisGroupIndex,1);   thisMax = groupMinMax(thisGroupIndex,2);
             end
             
-            if thisGroupIndex == (numberOfGroups + 1) % Make Differnce
+            if thisGroupIndex == (modNo + 1) % Make Differnce
                 outputImage = biMonthImage - outputImage;
                 thisMin = groupMinMax(3,1)-groupMinMax(3,2);   thisMax = groupMinMax(3,2)-groupMinMax(3,1); 
             end

@@ -1,41 +1,28 @@
-function [outputIm, tripleOut, tripleOutProj ] = getBiMonthData(thisDay, config,  outLat, outLon, utmstruct)
-% Extract binned image and value triplet array from BiMonthly H5 files
+function [outputIm, tripleOut, tripleOutProj ] = getGEBCOData(thisDay, config,  outLat, outLon, utmstruct)
+% Extract binned image and value triplet array from GEBCO netCDF file
 %
 % USAGE:
-%   [outputIm, tripleOut, tripleOutProj ] = getBiMonthData(thisDay, config,  outLat, outLon, utmstruct)
+%   [outputIm tripleOutProj] = getGEBCOData(config,  outLat, outLon)
 % INPUT:
-%   thisDay - the day the datacube is to be created
 %   config - input configuration
-%     confgData.biDir: Directory containing bimonth H5 files
+%      config.gebcoFilename: H5 file containing gebco bathymetry
 %   outLat - latitude centre of the HAB
 %   outLon - longitude centre of the HAB
-%   utmstruct - projection def
 
 % OUTPUT:
-%   outputIm - Image of the biMonth data at the resolution defined in config
-%   tripleOut - x,y and biMonth data triplet  output
-%   tripleOutProj - projected x,y and biMonth data output
+%   outputIm - Image of the bathymetry at the resolution defined in config
+%   tripleOut - x,y and depth triplet bathymetry output
 %
 % THE UNIVERSITY OF BRISTOL: HAB PROJECT
-% Author Dr Paul Hill 26th June 2019
+% Author Dr Paul Hill 26th June 2018
 
 distance1 = config.distance1;
 resolution = config.resolution;
-biDir = config.biDir;
-biMonthlyOffset = 61;
-thisDay = thisDay -14;
 
-h5name = [biDir '/Bimonthly_Chlor_a_' num2str(thisDay-biMonthlyOffset) '_' num2str(thisDay) '.h5'];
+%gebco nc lat and lon are 1D arrays (not as 2D in NASA .nc files)
+lon1D = ncread(config.gebcoFilename, '/lon'); 
+lat1D = ncread(config.gebcoFilename, '/lat'); 
 
-
-biChlor = h5read(h5name,'/Chlor_a');
-lonDD = h5read(h5name, '/lon');
-latDD = h5read(h5name, '/lat');
-
-lonDD = lonDD(:);
-latDD = latDD(:);
-
-inVar = biChlor(:);
 [centerXProj, centerYProj] = mfwdtran( utmstruct, outLat,outLon);
 
 %Define the projected coordinate ROI
@@ -52,17 +39,22 @@ aff = affine2d([resolution 0.0 wProj; 0.0 resolution sProj; 0 0 1]');
 eProj2 = centerXProj + round(distance1/2)*1.2; wProj2 = centerXProj - round(distance1/2)*1.2;
 nProj2 = centerYProj + round(distance1/2)*1.2;  sProj2 = centerYProj - round(distance1/2)*1.2;
 
-%Inverse trans ROI to get max and min lat and lon
-indROI = getMinMaxLatLon(eProj, wProj, nProj, sProj, lonDD, latDD, utmstruct);
-
-[lonDDROI, latDDROI, inVarROI, destIds1, destIds2] = getProjs(aff,utmstruct, latDD, lonDD, inVar, indROI);  
-%Get all the lat and lon data points within ROI then project back
-
-tripleOut = [lonDDROI latDDROI inVarROI];
-tripleOutProj = [destIds1 destIds2 inVarROI];
-
-indROI = getMinMaxLatLon(eProj2, wProj2, nProj2, sProj2, lonDD, latDD, utmstruct);
+[indROI, minLon, maxLon, maxLat, minLat] = getMinMaxLatLon(eProj2, wProj2, nProj2, sProj2, lonDD, latDD, utmstruct);
 %Inverse trans ROI*1.2 to get max and min lat and lon
+
+[thislon, lonIndx] = getIndx(minLon, maxLon, lon1D);
+[thislat, latIndx] = getIndx(minLat, maxLat, lat1D);
+
+start_row = min(latIndx);
+start_col = min(lonIndx);
+height = max(latIndx)-min(latIndx)+1;
+width = max(lonIndx)-min(lonIndx)+1;
+
+inVar = ncread(config.gebcoFilename, '/elevation', [start_col start_row], [width height]);
+inVar = inVar';
+%Determine output shape, normalise the projected data so each output pixel
+[meshlon, meshlat] = meshgrid(thislon, thislat);
+meshlon = meshlon(:); meshlat=meshlat(:); inVar = inVar(:);
 
 %Get all the lat and lon data points within 1.2*ROI then project back
 [lonDDROI, latDDROI, inVarROI, destIds1, destIds2] = getProjs(aff,utmstruct, latDD, lonDD, inVar, indROI);  
@@ -91,7 +83,7 @@ outputIm = weightsH./cnt;
 
 outputIm(ign) = 0;
 
-function indROI = getMinMaxLatLon(eProj, wProj, nProj, sProj, lonDD, latDD, utmstruct)
+function [indROI, minLon, maxLon, maxLat, minLat] = getMinMaxLatLon(eProj, wProj, nProj, sProj, lonDD, latDD, utmstruct)
 % Generate Region of Interest (ROI) index from input parameters
 %
 % USAGE:
@@ -106,6 +98,11 @@ function indROI = getMinMaxLatLon(eProj, wProj, nProj, sProj, lonDD, latDD, utms
 %   utmstruct - reprojection definition
 % OUTPUT:
 %   indROI - index output
+%   minLon - minimum lon
+%   maxLon - maximum lon
+%   minLat - minimum lat
+%   maxLat - maximum lat
+
 tl = [wProj nProj]; bl = [wProj sProj];
 tr = [eProj nProj]; br = [eProj sProj];
 [tlLat, tlLon] = minvtran(utmstruct, tl(1), tl(2));
@@ -151,5 +148,11 @@ latDDROI = latDDROI(indROINaN);
 inVarROI = inVarROI(indROINaN);
 [lonProjROI,latProjROI] = mfwdtran(utmstruct, latDDROI,lonDDROI);
 [destIds1,destIds2] = transformPointsInverse(aff,lonProjROI,latProjROI);
+
+function [thislatlon, lonlatIndx] = getIndx(minlonlat, maxlonlat, lonlat1D)
+thisIndx = (lonlat1D>=minlonlat) & (lonlat1D<=maxlonlat);
+lonlatIndx = 1:length(lonlat1D);
+lonlatIndx = lonlatIndx(thisIndx);
+thislatlon = lonlat1D(thisIndx);
 
 
