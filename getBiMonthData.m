@@ -119,7 +119,6 @@ maxLat = max([tlLat blLat trLat brLat]);
 
 indROI = (lonDD>=minLon)&(lonDD<=maxLon)&(latDD>=minLat)&(latDD<=maxLat);
 
-
 function [lonDDROI, latDDROI, inVarROI, destIds1, destIds2] = getProjs(aff, utmstruct, latDD, lonDD, inVar, indROI)  
 % Generateregion of interest indices and projected outputs
 %

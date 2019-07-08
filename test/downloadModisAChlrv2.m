@@ -1,6 +1,5 @@
 function downloadModisAChlrv2
 %% Function that integrates all the Chloraphyl data on a bi-monthly basis
-% from level-3 8 day products
 %
 % USAGE:
 %   downloadModisAChlrv2
@@ -78,7 +77,7 @@ lonMinMax = [-88.0453 -79.8748];
 lonGrid = 0.05;
 latLonRangeS = [' --slat=' num2str(latMinMax(1)) ' --elat=' num2str(latMinMax(2)) ' --slon=' num2str(lonMinMax(1)) ' --elon=' num2str(lonMinMax(2))];
 
-doDailyFirst = 1;
+doDailyFirst = 0;
 
 dayStartS = '2002-10-24';
 dayEndS = '2019-03-03';
