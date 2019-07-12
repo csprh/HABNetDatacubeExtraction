@@ -41,7 +41,7 @@ function train_genAllH5s
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     startIndex = 1;
     outputIndex = startIndex;
-    startIndex = 5788;    outputIndex = 5764;
+    startIndex = 8314;    outputIndex = 8287;
     for ii = startIndex: confgData.numberOfSamples %Loop through all the ground truth entries
          try
             if rem(ii,removeFreq) == 1 && ii>startIndex       % Delete the .nc files (every tenth one)
