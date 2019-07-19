@@ -22,6 +22,7 @@ numberOfH5s=size(h5files,1);
 %%Loop through all the ground truth entries%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for ii = 1: numberOfH5s
+    ii
     try
         %% Process input h5 file
         system(['rm ' filenameBase '*.h5']);
@@ -33,13 +34,13 @@ for ii = 1: numberOfH5s
 
         if ii == 1
             % Initalise
-            thisMax = ones(modNo,numberOfH5s)*NaN;
-            thisMin = ones(modNo,numberOfH5s)*NaN;
+            thisMax = ones(numberOfH5s, modNo)*NaN;
+            thisMin = ones(numberOfH5s, modNo)*NaN;
         end
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%Loop through all modalities              %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        for thisGroupIndex = 1: modNo + 1
+        for thisGroupIndex = 1: modNo
             thisModName = strtrim(modNames{thisGroupIndex}); %Remove whitespaces
             thisModName(thisModName==0) = ' ';
             thisModName = strtrim(thisModName);
