@@ -78,7 +78,7 @@ for ii = 1: numberOfH5s
 
         % Loop through all groups (apart from GEBCO) and discount
         %Just choose one.  This should reflect typical sizes
-        theseIms = h5read(h5name, 'oc-modisa-chlor_a/Ims');
+        theseIms = h5read(h5name, '/oc-modisa-chlor_a/Ims');
         
         numberOfIms = size(theseIms,3);
         
