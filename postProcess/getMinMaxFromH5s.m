@@ -34,8 +34,8 @@ for ii = 1: numberOfH5s
 
         if ii == 1
             % Initalise
-            thisMax = ones(numberOfH5s, modNo)*NaN;
-            thisMin = ones(numberOfH5s, modNo)*NaN;
+            thisMax = ones(modNo, numberOfH5s)*NaN;
+            thisMin = ones(modNo, numberOfH5s)*NaN;
         end
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%Loop through all modalities              %%
