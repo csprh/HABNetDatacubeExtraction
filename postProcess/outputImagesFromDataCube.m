@@ -98,7 +98,7 @@ for thisGroupIndex = 1: modNo + 1
             end
             
             outputImage = outputImage-thisMin;
-            outputImage = 255*(outputImage./(thisMin-thisMax));
+            outputImage = round(255.*(outputImage./(thisMax-thisMin)));
             outputImage(outputImage < 0) = 0; outputImage(outputImage > 255) = 255;
             
             imwrite(uint8(outputImage),[thisBaseDirectory  sprintf('%02d',thisDay),'.png']);
