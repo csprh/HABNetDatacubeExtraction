@@ -217,9 +217,9 @@ end
 thisDay = dayStart;
 while thisDay <  dayEnd
 
-    
+    clear outputIm LON LAT
     for ii = 1: biMonthlyOffset
-        h5name = [outDirDaily '/Daily_Chlor_a_' num2str(thisDay) '_' num2str(thisDay+1) '.h5'];
+        h5name = [outDirDaily '/Daily_Chlor_a_' num2str(thisDay+ii-1) '_' num2str(thisDay+ii) '.h5'];
 
         try
             outputIm(:,:,ii) = h5read(h5name,'/Chlor_a');

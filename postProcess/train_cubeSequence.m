@@ -48,7 +48,7 @@ h5files=dir([cubesDir '*.h5.gz']);
 numberOfH5s=size(h5files,1);
 
 totalDiscount = 0;  %Number of discounted datapoints
-
+preLoadMinMax = 0;
 if preLoadMinMax ~= 1
     [thisMax, thisMin] = getMinMaxFromH5s(cubesDir);
     groupMinMax = getMinMax(thisMax, thisMin);
