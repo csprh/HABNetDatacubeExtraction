@@ -19,7 +19,7 @@ addpath('./..');
 
 %% load all config from XML file
 confgData.outDir = tmpStruct.confgData.trainDir.Text;
-biDir =  [confgData.outDir '/BimonthlyAverageDirectory'];
+biDir =  [confgData.outDir 'BimonthlyAverageDirectory'];
 
 biDirOut = [biDir '/Ims/'];
 
@@ -36,7 +36,7 @@ thisMax = 400;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for ii = 1: numberOfH5s
     
-    h5name = [biDir h5files(ii).name];
+    h5name = [biDir '/' h5files(ii).name];
     outputImage = h5read(h5name,'/Chlor_a');
     outputImage = outputImage-thisMin;
     outputImage = round(255.*(outputImage./(thisMax-thisMin)));
