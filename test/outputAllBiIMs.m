@@ -29,8 +29,10 @@ biDirOut = [biDir '/Ims/'];
 h5files=dir([biDir '/*.h5']);
 numberOfH5s=size(h5files,1);
 
-thisMin = 0;
+thisMin = 1;
 thisMax = 400;
+thisMin = log(thisMin);
+thisMax = log(thisMax);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Loop through all the ground truth entries%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -42,6 +44,8 @@ for ii = 1: numberOfH5s
     
     h5name = [biDir '/' h5files(ii).name];
     outputImage = h5read(h5name,'/Chlor_a');
+    outputImage = outputImage +1;
+    outputImage = log(outputImage);
     outputImage = outputImage-thisMin;
     outputImage = round(255.*(outputImage./(thisMax-thisMin)));
     outputImage(outputImage < 0) = 0; outputImage(outputImage > 255) = 255;
