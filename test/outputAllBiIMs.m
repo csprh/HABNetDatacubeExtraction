@@ -13,8 +13,8 @@ function outputAllBiIMs
 % Updated March 2019 PRH
 % Updates for WIN compatibility: JVillegas 21 Feb 2019, Khalifa University
 clear; close all;
-
-[rmcommand, pythonStr, tmpStruct] = getHABConfig;
+addpath('./..');
+[~, ~, tmpStruct] = getHABConfig;
 
 
 %% load all config from XML file
