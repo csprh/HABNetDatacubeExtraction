@@ -1,4 +1,4 @@
-function [outputIm, tripleOut, tripleOutProj ] = getGEBCOData_OLD(config,  outLat, outLon, utmstruct)
+function [outputIm, tripleOut, tripleOutProj ] = getGEBCOData(config,  outLat, outLon, utmstruct)
 % Extract binned image and value triplet array from GEBCO netCDF file
 %
 % USAGE:

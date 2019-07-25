@@ -1,4 +1,4 @@
-function [outputIm, tripleOut, tripleOutProj ] = getGEBCOData(config,  outLat, outLon, utmstruct)
+function [outputIm, tripleOut, tripleOutProj ] = getGEBCOData_OLD(config,  outLat, outLon, utmstruct)
 % Extract binned image and value triplet array from GEBCO netCDF file
 %
 % USAGE:
@@ -23,22 +23,24 @@ resolution = config.resolution;
 lon1D = ncread(config.gebcoFilename, '/lon'); 
 lat1D = ncread(config.gebcoFilename, '/lat');  
 
+[centerXProj, centerYProj] = mfwdtran( utmstruct, outLat,outLon);
+
 %Define the projected coordinate ROI
-[centerX, centerY] = mfwdtran( utmstruct, outLat,outLon);
-e = centerX + distance1; w = centerX - distance1;
-n = centerY + distance1; s = centerY - distance1;
+eProj = centerXProj + round(distance1/2); wProj = centerXProj - round(distance1/2);
+nProj = centerYProj + round(distance1/2); sProj = centerYProj - round(distance1/2);
 
+%Determine output shape, normalise the projected data so each output pixel
 %is of length 1 and starts at 0.
-destShape = [round(abs(e - w) /double(resolution)); round(abs(n - s) / double(resolution))];
-aff = affine2d([resolution 0.0 w; 0.0 resolution s; 0 0 1]');
+destShape = [round(abs(eProj - wProj) /double(resolution)); round(abs(nProj - sProj) / double(resolution))];
+aff = affine2d([resolution 0.0 wProj; 0.0 resolution sProj; 0 0 1]');
 
-%Define the projected coordianate 2*ROI that's double the size (to retain
+%Define the projected coordianate 1.2*ROI that's double the size (to retain
 %data)
-e2 = centerX + distance1*2; w2 = centerX - distance1*2;
-n2 = centerY + distance1*2; s2 = centerY - distance1*2;
+eProj2 = centerXProj + round(distance1/2)*2; wProj2 = centerXProj - round(distance1/2)*2;
+nProj2 = centerYProj + round(distance1/2)*2;  sProj2 = centerYProj - round(distance1/2)*2;
 
 %Inverse trans ROI to get max and min lat and lon
-[minLon, maxLon, maxLat, minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct);
+[minLon, maxLon, maxLat, minLat] = getMinMaxLatLon(eProj2, wProj2, nProj2, sProj2, utmstruct);
 [thislon, lonIndx] = getIndx(minLon, maxLon, lon1D);
 [thislat, latIndx] = getIndx(minLat, maxLat, lat1D);
 
@@ -53,10 +55,10 @@ bathPatch = bathPatch';
 [meshlon, meshlat] = meshgrid(thislon, thislat);
 meshlon = meshlon(:); meshlat=meshlat(:); bathPatch = bathPatch(:);
 
-%Inverse trans ROI*2 to get max and min lat and lon
-indROI = getMinMaxLatLonROI(e, w, n, s, meshlon, meshlat, utmstruct);
+%Inverse trans ROI to get max and min lat and lon
+indROI = getMinMaxLatLonROI(eProj, wProj, nProj, sProj, meshlon, meshlat, utmstruct);
 
-%Get all the lat and lon data points within 2*ROI then project back
+%Get all the lat and lon data points within ROI then project back
 lon_ddROI1 = meshlon(indROI);
 lat_ddROI1 = meshlat(indROI);
 inVarROI1 = bathPatch(indROI);
@@ -107,10 +109,10 @@ function indROI = getMinMaxLatLonROI(e2, w2, n2, s2, lon_dd, lat_dd, utmstruct)
 %   utmstruct - reprojection definition
 % OUTPUT:
 %   indROI - index output
-[minLon maxLon maxLat minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct);
+[minLon, maxLon, maxLat, minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct);
 indROI = (lon_dd>=minLon)&(lon_dd<=maxLon)&(lat_dd>=minLat)&(lat_dd<=maxLat);
 
-function [minLon maxLon maxLat minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct)
+function [minLon, maxLon, maxLat, minLat] = getMinMaxLatLon(e2, w2, n2, s2, utmstruct)
 % Obtain min and max lat and lon of ROI
 %
 % USAGE:
@@ -144,12 +146,3 @@ thisIndx = (lonlat1D>=minlonlat) & (lonlat1D<=maxlonlat);
 lonlatIndx = 1:length(lonlat1D);
 lonlatIndx = lonlatIndx(thisIndx);
 thislatlon = lonlat1D(thisIndx);
-
-
-
-
-
-
-
-
-
