@@ -34,6 +34,10 @@ thisMax = 400;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Loop through all the ground truth entries%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+outputVideo = VideoWriter([biDirOut 'bimonthly.avi']);
+outputVideo.FrameRate = 25;
+open(outputVideo)
 for ii = 1: numberOfH5s
     
     h5name = [biDir '/' h5files(ii).name];
@@ -45,4 +49,7 @@ for ii = 1: numberOfH5s
     thisName = h5files(ii).name;
     thisName = thisName(1:end-3);
     imwrite(uint8(outputImage),[biDirOut thisName '.png']);
+    img = imread([biDirOut thisName '.png']);
+    writeVideo(outputVideo,img);
 end
+close(outputVideo);
