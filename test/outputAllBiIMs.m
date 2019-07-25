@@ -19,7 +19,7 @@ addpath('./..');
 
 %% load all config from XML file
 confgData.outDir = tmpStruct.confgData.trainDir.Text;
-biDir =  [confgData.outDir 'BimonthlyAverageDirectory'];
+biDir =  [confgData.outDir '/BimonthlyAverageDirectory'];
 
 biDirOut = [biDir '/Ims/'];
 
