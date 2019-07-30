@@ -50,15 +50,14 @@ indROI = getMinMaxLatLon(eProj, wProj, nProj, sProj, lonDD, latDD, utmstruct);
 [lonDDROI, latDDROI, inVarROI, destIds1, destIds2] = getProjs(aff,utmstruct, latDD, lonDD, inVar, indROI);  
 %Get all the lat and lon data points within ROI then project back
 
-tripleOut = [lonDDROI latDDROI inVarROI];
-tripleOutProj = [destIds1 destIds2 inVarROI];
-
 indROI = getMinMaxLatLon(eProj2, wProj2, nProj2, sProj2, lonDD, latDD, utmstruct);
 %Inverse trans ROI*1.2 to get max and min lat and lon
 
 %Get all the lat and lon data points within 1.2*ROI then project back
 [lonDDROI, latDDROI, inVarROI, destIds1, destIds2] = getProjs(aff,utmstruct, latDD, lonDD, inVar, indROI);  
 
+tripleOut = [lonDDROI latDDROI inVarROI];
+tripleOutProj = [destIds1 destIds2 inVarROI];
 % Define bin centers.  Must leave a center outside the ROI to mop up the
 % values outside the ROI
 XbnCntrs = -0.5:destShape(1)+0.5;

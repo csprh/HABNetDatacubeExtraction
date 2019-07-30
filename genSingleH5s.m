@@ -179,6 +179,7 @@ for modIndex = 1:numberOfMods
     tic
     cluster = parcluster('local'); nworkers = cluster.NumWorkers;
     parfor (iii = 1:listLength,nworkers)
+    %for iii = 1:listLength
         thisIndex = sortIndex(iii);
         thisLine = thisInput(thisIndex).line;
         thisDate = thisInput(thisIndex).date;

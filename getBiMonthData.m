@@ -31,6 +31,8 @@ h5name = [biDir '/Bimonthly_Chlor_a_' num2str(thisDay-biMonthlyOffset) '_' num2s
 biChlor = h5read(h5name,'/Chlor_a');
 lonDD = h5read(h5name, '/lon');
 latDD = h5read(h5name, '/lat');
+lonDD = lonDD';
+latDD = latDD';
 
 lonDD = lonDD(:);
 latDD = latDD(:);
