@@ -28,6 +28,6 @@
    <alphaSize>2</alphaSize>
    <threshCentrePoint>0.5</threshCentrePoint>
    <threshAll>0.2</threshAll>
-   <preLoadMinMax>0</preLoadMinMax>
+   <preLoadMinMax>1</preLoadMinMax>
 </confgData>
 
