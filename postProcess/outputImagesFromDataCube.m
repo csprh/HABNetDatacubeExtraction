@@ -19,7 +19,7 @@ function outputImagesFromDataCube(baseDirectory,  numberOfDays, groupMinMax, inp
 % OUTPUT:
 %   -
 % THE UNIVERSITY OF BRISTOL: HAB PROJECT
-% Author Dr Paul Hill March 2019
+% Author Dr Paul Hill July 2019
 
 thisH5Info = h5info(h5name);
 modNames = h5read(h5name, '/Modnames');
@@ -42,7 +42,7 @@ for thisGroupIndex = 1: modNo + 1
     try
         thisInd = thisGroupIndex;
         if (thisGroupIndex == modNo + 1)
-            thisInd = 2;
+            thisInd = 3;
         end
         thisModName = strtrim(modNames{thisInd}); %Remove whitespaces
         thisModName(thisModName==0) = ' ';
@@ -89,7 +89,7 @@ for thisGroupIndex = 1: modNo + 1
                     
                     outputImage = getImage(output, input, alphaSize);
                 end
-                thisMin = groupMinMax(thisGroupIndex,1);   thisMax = groupMinMax(thisGroupIndex,2);
+                thisMin = groupMinMax(thisInd,1);   thisMax = groupMinMax(thisInd,2);
             end
             
             if thisGroupIndex == (modNo + 1) % Make Differnce

@@ -19,7 +19,7 @@ function train_cubeSequence
 % OUTPUT:
 %   -
 % THE UNIVERSITY OF BRISTOL: HAB PROJECT
-% Author Dr Paul Hill March 2019
+% Author Dr Paul Hill July 2019
 clear; close all;
 addpath('..');
 [rmcommand, ~, tmpStruct] = getHABConfig;
@@ -48,7 +48,7 @@ h5files=dir([cubesDir '*.h5.gz']);
 numberOfH5s=size(h5files,1);
 
 totalDiscount = 0;  %Number of discounted datapoints
-preLoadMinMax = 0;
+
 if preLoadMinMax ~= 1
     [thisMax, thisMin] = getMinMaxFromH5s(cubesDir);
     groupMinMax = getMinMax(thisMax, thisMin);
