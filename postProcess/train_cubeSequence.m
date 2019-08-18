@@ -113,7 +113,7 @@ for ii = 1: numberOfH5s
         if thisDiscount == 1
             totalDiscount= totalDiscount+1;
             totalDiscount
-            %continue;
+            continue;
         end
         
         %Split output into train/test, HAB Class directory, Ground truth line
