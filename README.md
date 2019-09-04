@@ -43,6 +43,9 @@ The second one labels any count above 5,000 (as indicated in an email from the F
 ## Datacube Extaction
 
 Data cube extraction is achieved using the MATLAB file:
+* BiMonModisAChlr.m
+
+This file pre processes all the Chlr data and integrates over 2 months.
 
 * train_genAllH5s.m
 
