@@ -101,12 +101,19 @@ if doDailyFirst == 1
             
             thisMod = 'oc-modisa-chlor_a';
             subMods = strsplit(thisMod,'-');
-            
-            UTCTime = sprintf('T%02d:00:00Z', zoneHrDiff);
+
             
             thisEndDay =  thisDay+dailyOffset;
+
+            
+            if zoneHrDiff <0 
+                zoneHrDiff = 24+zoneHrDiff;
+                thisEndDay = thisEndDay - 1;
+                thisDay = thisDay -1;
+            end
             thisDayS   =  datestr(thisDay,29);
             thisEndDayS = datestr(thisEndDay,29);
+            UTCTime = sprintf('T%02d:00:00Z', zoneHrDiff);
             
             pyOpt = [' --data_type=' subMods{1} ' --sat=' subMods{2} latLonRangeS ' --stime=' thisDayS UTCTime ' --etime=' thisEndDayS UTCTime];
             disp(['Searching granules for: --mod=',subMods{3}, pyOpt])
