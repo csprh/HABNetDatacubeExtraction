@@ -12,6 +12,7 @@ The testing task separates a geographical region into a test grid.
 Datacubes are then generated for each position within the test grid.
 
 ## Files
+* **BiMonModisAChlr.m**: Generate the bimontly averages (Preprocessing)
 * **train_genAllH5s.m**: Input the xml config file, then load the .mat ground truth
 file.  Then calls genSingleH5s to form all H5 datacubes.
 * **test_genAllH5s.m**: Defines a grid of locations to test.  Then calls
