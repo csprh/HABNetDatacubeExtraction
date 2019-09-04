@@ -19,6 +19,7 @@ function BiMonModisAChlrv
 
 % Author Dr Paul Hill July 2019
 close all; clear all;
+GULF = 1;
 
 if ismac
     rmcommand = 'rm ';
@@ -28,7 +29,11 @@ elseif isunix
     [~, thisCmd] = system('rpm --query centos-release');
     isUnderDesk = strcmp(thisCmd(1:end-1),'centos-release-7-6.1810.2.el7.centos.x86_64');
     if isUnderDesk == 1
-        tmpStruct = xml2struct('configHABunderDesk.xml');
+        if GULF == 0
+            tmpStruct = xml2struct('configHABunderDesk.xml');
+        else
+            tmpStruct = xml2struct('configHABunderDeskGULF.xml');
+        end
     else
         tmpStruct = xml2struct('configHAB.xml');
     end
@@ -46,17 +51,24 @@ outDirDaily = [tmpStruct.confgData.trainDir.Text DailyAverageDirectory];
 outDirBimonth = [tmpStruct.confgData.trainDir.Text BimonthlyAverageDirectory];
 wgetStringBase = tmpStruct.confgData.wgetStringBase.Text;
 downloadDir = tmpStruct.confgData.downloadFolder.Text;
-mkdir(outDir);
+mkdir(tmpStruct.confgData.trainDir.Text);
+mkdir(outDirDaily);
+mkdir(outDirBimonth);
+mkdir(downloadDir);
 
-
-% FROM MASDAR Stuff
 %lonMinMax = [-87.9897 -79.6979];
 %latMinMax = [24.0416 30.2500];
 
 ind = 0;
-latMinMax = [24.0864 30.8012];
+
+if GULF == 1
+    latMinMax =  [23 30.42];
+    lonMinMax =  [47.69 58]; %Gulf
+else
+    latMinMax = [24.0864 30.8012];
+    lonMinMax = [-88.0453 -79.8748];
+end
 latGrid = 0.05;
-lonMinMax = [-88.0453 -79.8748];
 lonGrid = 0.05;
 latLonRangeS = [' --slat=' num2str(latMinMax(1)) ' --elat=' num2str(latMinMax(2)) ' --slon=' num2str(lonMinMax(1)) ' --elon=' num2str(lonMinMax(2))];
 
