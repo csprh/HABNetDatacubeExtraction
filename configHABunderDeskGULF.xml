@@ -26,7 +26,7 @@
    <Modality>oc-modist-chlor_a</Modality>
    <outputRes>1000</outputRes>
    <alphaSize>2</alphaSize>
-   <threshCentrePoint>0.125</threshCentrePoint>
-   <threshAll>0.05</threshAll>
+   <threshCentrePoint>0</threshCentrePoint>
+   <threshAll>0</threshAll>
    <preLoadMinMax>1</preLoadMinMax>
 </confgData>
