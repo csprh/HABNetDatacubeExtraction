@@ -54,7 +54,7 @@ if preLoadMinMax ~= 1
     groupMinMax = getMinMax(thisMax, thisMin);
     groupMinMax(1,2)  = 0;    %Gebco Bathymetry max (discount land)
     groupMinMax(1,1)  = -380; %Gebco Bathymetry min (discount anything under 500m depth)
-    save([imsDir '/groupMaxAndMin'], groupMinMax);
+    save([imsDir '/groupMaxAndMin'], 'groupMinMax');
 else
     load([imsDir '/groupMaxAndMin']); %load the max and minima of the mods
 end
