@@ -101,7 +101,7 @@ for ii = 1: numberOfH5s
   
         [isHABSS, isHABBP1, isHABBP2, bpQuotient, cvAnom] = getBBANDSSFromDataCube(h5name, inputRangeX, inputRangeY);
         
-        isHABOut(indOut,:) = [isHABSS isHABBP1 isHABBP2 bpQuotient cvAnom];
+        isHABOut(indOut,:) = [isHAB isHABSS isHABBP1 isHABBP2 bpQuotient cvAnom];
         indOut = indOut+1;
         clear totNumberCP zNumberCP quotCP totNumber zNumber quot
     catch
@@ -112,12 +112,12 @@ save isHABOut isHABOut
 
 function [isHABSS, isHABBP1, isHABBP2, bpQuotient, cvAnom] = getBBANDSSFromDataCube(h5name, inputRangeX, inputRangeY)
 
-cvChlM = getCentralPoint2(h5read(h5name, ['/bimonth/PointsProj']), inputRangeX, inputRangeY);
-cvChl = getCentralPoint(h5read(h5name, ['/oc-modisa-chlor_a/PointsProj']), inputRangeX, inputRangeY);
-cv443 = getCentralPoint(h5read(h5name, ['/oc-modisa-Rrs_443/PointsProj']), inputRangeX, inputRangeY);
-cv488 = getCentralPoint(h5read(h5name, ['/oc-modisa-Rrs_488/PointsProj']), inputRangeX, inputRangeY);
-cv531 = getCentralPoint(h5read(h5name, ['/oc-modisa-Rrs_531/PointsProj']), inputRangeX, inputRangeY);
-cv555 = getCentralPoint(h5read(h5name, ['/oc-modisa-Rrs_555/PointsProj']), inputRangeX, inputRangeY);
+cvChlM = getCentralPoint2(h5read(h5name, '/bimonth/PointsProj'), inputRangeX, inputRangeY);
+cvChl = getCentralPoint(h5read(h5name, '/oc-modisa-chlor_a/PointsProj'), inputRangeX, inputRangeY);
+cv443 = getCentralPoint(h5read(h5name, '/oc-modisa-Rrs_443/PointsProj'), inputRangeX, inputRangeY);
+cv488 = getCentralPoint(h5read(h5name, '/oc-modisa-Rrs_488/PointsProj'), inputRangeX, inputRangeY);
+cv531 = getCentralPoint(h5read(h5name, '/oc-modisa-Rrs_531/PointsProj'), inputRangeX, inputRangeY);
+cv555 = getCentralPoint(h5read(h5name, '/oc-modisa-Rrs_555/PointsProj'), inputRangeX, inputRangeY);
 
 cvAnom = cvChl-cvChlM;
 bp555 = -0.00182+2.058*cv555;
@@ -126,8 +126,12 @@ bpQuotient = bp555/bp555Morel;
 isHABBP1 = bpQuotient < 1.0;
 isHABBP2 = bpQuotient < 2.0;
 
+nLm443 = cv443*188.755463;
+nLm488 = cv488*194.179092;
+nLm531 = cv488*185.945450;
+
 %Convert from RRS to nLW: https://oceancolor.gsfc.nasa.gov/forum/oceancolor/topic_show.pl?tid=948
-SSLambda = cv488*194.179092 - cv443*188.755463 - (cv531*185.945450 - cv443*188.755463)*((cv488*194.179092 - cv443*188.755463)/(cv531*185.945450 - cv443*188.755463));
+SSLambda = nLm488  - nlm443 - (nLm531 - nLm443)*((nLm488 - nLm443)/(nLm531 - nLm443));
 isHABSS = SSLambda < 0.0;
 
 
