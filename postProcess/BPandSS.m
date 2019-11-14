@@ -133,13 +133,17 @@ midX = mean(inputRangeX);
 midY = mean(inputRangeY);
 
 zp = PointsProj(:,4);
-theseIndices = (zp>=0) & (zp<1);
+%theseIndices = (zp>=0) & (zp<1);
 
-xp = PointsProj(theseIndices,1);
-yp = PointsProj(theseIndices,2);
-valp = PointsProj(theseIndices,3);
+%xp = PointsProj(theseIndices,1);
+%yp = PointsProj(theseIndices,2);
+%valp = PointsProj(theseIndices,3);
+xp = PointsProj(:,1);
+yp = PointsProj(:,2);
+valp = PointsProj(:,3);
 
-distToCentre = sqrt((xp-midX).^2+(yp-midY).^2);
+
+distToCentre = sqrt((xp-midX).^2+(yp-midY).^2+100*zp^2);
 [~, indMin] = min(distToCentre);
 centralValueDay0 = valp(indMin);
 
