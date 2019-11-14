@@ -14,7 +14,7 @@ function [rmcommand, pythonStr, tmpStruct] = getHABConfig
 % THE UNIVERSITY OF BRISTOL: HAB PROJECT
 % Author Dr Paul Hill April 2019
 
-GULF = 1;
+GULF = 0;
 
 if ismac
     rmcommand = 'rm ';
@@ -24,7 +24,7 @@ elseif isunix
     pythonStr = 'python';
     rmcommand = 'rm ';
     [~, thisCmd] = system('rpm --query centos-release');
-    isUnderDesk = strcmp(thisCmd(1:end-1),'centos-release-7-6.1810.2.el7.centos.x86_64');
+    isUnderDesk = strcmp(thisCmd(1:end-1),'centos-release-7-7.1908.0.el7.centos.x86_64');
     if isUnderDesk == 1
         if GULF == 0
             tmpStruct = xml2struct('configHABunderDesk.xml');
