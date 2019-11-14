@@ -143,7 +143,7 @@ yp = PointsProj(:,2);
 valp = PointsProj(:,3);
 
 
-distToCentre = sqrt((xp-midX).^2+(yp-midY).^2+100*zp^2);
+distToCentre = sqrt((xp-midX).^2+(yp-midY).^2+100*zp.^2);
 [~, indMin] = min(distToCentre);
 centralValueDay0 = valp(indMin);
 
