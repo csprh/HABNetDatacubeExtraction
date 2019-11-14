@@ -112,7 +112,7 @@ save isHABOut isHABOut
 
 function [isHABSS, isHABBP1, isHABBP2, bpQuotient, cvAnom] = getBBANDSSFromDataCube(h5name, inputRangeX, inputRangeY)
 
-cvChlM = getCentralPoint(h5read(h5name, ['/bimonth/PointsProj']), inputRangeX, inputRangeY);
+cvChlM = getCentralPoint2(h5read(h5name, ['/bimonth/PointsProj']), inputRangeX, inputRangeY);
 cvChl = getCentralPoint(h5read(h5name, ['/oc-modisa-chlor_a/PointsProj']), inputRangeX, inputRangeY);
 cv443 = getCentralPoint(h5read(h5name, ['/oc-modisa-Rrs_443/PointsProj']), inputRangeX, inputRangeY);
 cv488 = getCentralPoint(h5read(h5name, ['/oc-modisa-Rrs_488/PointsProj']), inputRangeX, inputRangeY);
@@ -148,6 +148,20 @@ valp = PointsProj(:,3);
 
 %0.846690
 distToCentre = sqrt((xp-midX).^2+(yp-midY).^2+100*zp.^2);
+[~, indMin] = min(distToCentre);
+centralValueDay0 = valp(indMin);
+
+function centralValueDay0 = getCentralPoint2(PointsProj, inputRangeX, inputRangeY)
+
+midX = mean(inputRangeX);
+midY = mean(inputRangeY);
+
+xp = PointsProj(:,1);
+yp = PointsProj(:,2);
+valp = PointsProj(:,3);
+
+%0.846690
+distToCentre = sqrt((xp-midX).^2+(yp-midY).^2);
 [~, indMin] = min(distToCentre);
 centralValueDay0 = valp(indMin);
 
