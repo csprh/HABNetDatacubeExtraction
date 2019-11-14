@@ -99,9 +99,9 @@ for ii = 1: numberOfH5s
         %number, Group Index
         baseDirectory = [ imsDir filesep num2str(isHAB) '/' num2str(ii)] ;
   
-        [isHABSS, isHABBP] = getBBANDSSFromDataCube(h5name, inputRangeX, inputRangeY);
+        [isHABSS, isHABBP1, isHABBP2, bpQuotient, cvAnom] = getBBANDSSFromDataCube(h5name, inputRangeX, inputRangeY);
         
-        isHABOut(indOut,:) = [isHAB isHABSS isHABBP];
+        isHABOut(indOut,:) = [isHABSS isHABBP1 isHABBP2 bpQuotient cvAnom];
         indOut = indOut+1;
         clear totNumberCP zNumberCP quotCP totNumber zNumber quot
     catch
@@ -110,22 +110,26 @@ for ii = 1: numberOfH5s
 end
 save isHABOut isHABOut
 
-function [isHABSS, isHABBP] = getBBANDSSFromDataCube(h5name, inputRangeX, inputRangeY)
+function [isHABSS, isHABBP1, isHABBP2, bpQuotient, cvAnom] = getBBANDSSFromDataCube(h5name, inputRangeX, inputRangeY)
 
-
+cvChlM = getCentralPoint(h5read(h5name, ['/bimonth/PointsProj']), inputRangeX, inputRangeY);
 cvChl = getCentralPoint(h5read(h5name, ['/oc-modisa-chlor_a/PointsProj']), inputRangeX, inputRangeY);
 cv443 = getCentralPoint(h5read(h5name, ['/oc-modisa-Rrs_443/PointsProj']), inputRangeX, inputRangeY);
 cv488 = getCentralPoint(h5read(h5name, ['/oc-modisa-Rrs_488/PointsProj']), inputRangeX, inputRangeY);
 cv531 = getCentralPoint(h5read(h5name, ['/oc-modisa-Rrs_531/PointsProj']), inputRangeX, inputRangeY);
 cv555 = getCentralPoint(h5read(h5name, ['/oc-modisa-Rrs_555/PointsProj']), inputRangeX, inputRangeY);
 
+cvAnom = cvChl-cvChlM;
 bp555 = -0.00182+2.058*cv555;
 bp555Morel = 0.3*(cvChl^0.62)*(0.002+0.02*(0.5-0.25*log10(cvChl)));
 bpQuotient = bp555/bp555Morel;
-isHABBP = bpQuotient > 1.0;
+isHABBP1 = bpQuotient < 1.0;
+isHABBP2 = bpQuotient < 2.0;
 
-SSLambda = cv488 - cv443 - (cv531 - cv443)*((cv488 - cv443)/(cv531 - cv443));
+%Convert from RRS to nLW: https://oceancolor.gsfc.nasa.gov/forum/oceancolor/topic_show.pl?tid=948
+SSLambda = cv488*194.179092 - cv443*188.755463 - (cv531*185.945450 - cv443*188.755463)*((cv488*194.179092 - cv443*188.755463)/(cv531*185.945450 - cv443*188.755463));
 isHABSS = SSLambda < 0.0;
+
 
 function centralValueDay0 = getCentralPoint(PointsProj, inputRangeX, inputRangeY)
 
@@ -142,7 +146,7 @@ xp = PointsProj(:,1);
 yp = PointsProj(:,2);
 valp = PointsProj(:,3);
 
-
+%0.846690
 distToCentre = sqrt((xp-midX).^2+(yp-midY).^2+100*zp.^2);
 [~, indMin] = min(distToCentre);
 centralValueDay0 = valp(indMin);
