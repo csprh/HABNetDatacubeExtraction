@@ -131,7 +131,7 @@ nLm488 = cv488*194.179092;
 nLm531 = cv488*185.945450;
 
 %Convert from RRS to nLW: https://oceancolor.gsfc.nasa.gov/forum/oceancolor/topic_show.pl?tid=948
-SSLambda = nLm488  - nlm443 - (nLm531 - nLm443)*((nLm488 - nLm443)/(nLm531 - nLm443));
+SSLambda = nLm488  - nLm443 - (nLm531 - nLm443)*((nLm488 - nLm443)/(nLm531 - nLm443));
 isHABSS = SSLambda < 0.0;
 
 
