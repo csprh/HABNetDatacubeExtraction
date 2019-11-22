@@ -14,7 +14,7 @@ function [rmcommand, pythonStr, tmpStruct] = getHABConfig
 % THE UNIVERSITY OF BRISTOL: HAB PROJECT
 % Author Dr Paul Hill April 2019
 
-GULF = 0;
+GULF = 1;
 
 if ismac
     rmcommand = 'rm ';
