@@ -1,5 +1,5 @@
-function [F1,precision,recall,accuracy, kappa] = printClassMetrics (pred_val , yval, verbose = 1)
-
+function [F1,precision,recall,accuracy, kappa] = printClassMetrics (pred_val , yval)
+  verbose = 1;
   accuracy = mean(double(pred_val == yval));
   acc_all0 = mean(double(0 == yval));
   if (verbose)
