@@ -2,9 +2,6 @@ function [F1,precision,recall,accuracy, kappa] = printClassMetrics (pred_val , y
   verbose = 1;
   accuracy = mean(double(pred_val == yval));
   acc_all0 = mean(double(0 == yval));
-  if (verbose)
-    printf("|--> accuracy == %f vs accuracy_all0 == %f \n",accuracy,acc_all0);
-  end 
 
   actual_positives = sum(yval == 1);
   actual_negatives = sum(yval == 0);
@@ -36,13 +33,16 @@ function [F1,precision,recall,accuracy, kappa] = printClassMetrics (pred_val , y
   end
  
   if (verbose) 
-    printf("|-->  true_positives == %i  (actual positive =%i) \n",true_positives,actual_positives);
-    printf("|-->  false_positives == %i \n",false_positives);
-    printf("|-->  false_negatives == %i \n",false_negatives);
-    printf("|-->  precision == %f \n",precision);
-    printf("|-->  recall == %f \n",recall);
-    printf("|-->  F1 == %f \n",F1);
-    printf("|-->  kappa = %f \n",kappa);
+    ['|--> accuracy == ' num2str(accuracy)] 
+    ['|--> F1 == ' num2str(F1)]  
+    ['|--> kappa == ' num2str(kappa)] 
+    %printf("|-->  true_positives == %i  (actual positive =%i) \n",true_positives,actual_positives);
+    %printf("|-->  false_positives == %i \n",false_positives);
+    %printf("|-->  false_negatives == %i \n",false_negatives);
+    %printf("|-->  precision == %f \n",precision);
+    %printf("|-->  recall == %f \n",recall);
+    %printf("|-->  F1 == %f \n",F1);
+    %printf("|-->  kappa = %f \n",kappa);
   end 
   
 end
