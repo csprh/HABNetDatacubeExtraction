@@ -4,7 +4,7 @@ function [F1,precision,recall,accuracy, kappa] = printClassMetrics (pred_val , y
   acc_all0 = mean(double(0 == yval));
   if (verbose)
     printf("|--> accuracy == %f vs accuracy_all0 == %f \n",accuracy,acc_all0);
-  endif 
+  end 
 
   actual_positives = sum(yval == 1);
   actual_negatives = sum(yval == 0);
@@ -23,17 +23,17 @@ function [F1,precision,recall,accuracy, kappa] = printClassMetrics (pred_val , y
 
   if ( (true_positives + false_positives) > 0)
     precision = true_positives / (true_positives + false_positives);
-  endif 
+  end 
 
   recall = 0; 
   if ( (true_positives + false_negatives) > 0 )
     recall = true_positives / (true_positives + false_negatives);
-  endif 
+  end 
 
   F1 = 0; 
   if ( (precision + recall) > 0) 
     F1 = 2 * precision * recall / (precision + recall);
-  endif
+  end
  
   if (verbose) 
     printf("|-->  true_positives == %i  (actual positive =%i) \n",true_positives,actual_positives);
@@ -43,6 +43,6 @@ function [F1,precision,recall,accuracy, kappa] = printClassMetrics (pred_val , y
     printf("|-->  recall == %f \n",recall);
     printf("|-->  F1 == %f \n",F1);
     printf("|-->  kappa = %f \n",kappa);
-  endif 
+  end 
   
 end
