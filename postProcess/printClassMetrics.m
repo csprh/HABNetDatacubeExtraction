@@ -42,6 +42,7 @@ function [F1,precision,recall,accuracy, kappa] = printClassMetrics (pred_val , y
     printf("|-->  precision == %f \n",precision);
     printf("|-->  recall == %f \n",recall);
     printf("|-->  F1 == %f \n",F1);
+    printf("|-->  kappa = %f \n",kappa);
   endif 
   
 end
