@@ -128,7 +128,7 @@ isHABBP2 = bpQuotient < 2.0;
 
 nLm443 = cv443*188.755463;
 nLm488 = cv488*194.179092;
-nLm531 = cv488*185.945450;
+nLm531 = cv531*185.945450;
 
 %Convert from RRS to nLW: https://oceancolor.gsfc.nasa.gov/forum/oceancolor/topic_show.pl?tid=948
 SSLambda = nLm488  - nLm443 - (nLm531 - nLm443)*((nLm488 - nLm443)/(nLm531 - nLm443));
