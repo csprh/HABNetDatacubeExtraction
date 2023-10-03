@@ -1,9 +1,9 @@
 # HAB Datacube Extraction
 
 This repository contains the code to extract datacubes for the HABNet Project [HABNet: Machine Learning, Remote Sensing Based Detection and Prediction of Harmful Algal Blooms](https://arxiv.org/abs/1912.02305).  
-[Models (for training and testing) are available here](https://github.com/csprh/HABNetModelling)
 
 ### [Project Page](https://csprh.github.io/HABNET) | [Arxiv](https://arxiv.org/abs/1912.02305)
+[Models (for training and testing) are available here](https://github.com/csprh/HABNetModelling)
 
 This project is separated into training and testing tasks
 
